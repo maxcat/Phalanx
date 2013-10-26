@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerPhalanxControl : MonoBehaviour {
 	
-	
+	// test
 	#region Fields
 	Phalanx m_phalanx;
 	#endregion
