@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerPhalanxControl : MonoBehaviour {
 	
-	// test
+	// test hello
 	#region Fields
 	Phalanx m_phalanx;
 	#endregion
@@ -35,8 +35,9 @@ public class PlayerPhalanxControl : MonoBehaviour {
 	{
 		string prefabName = "skeletonNormal";
 		
-		float unitSize = 1f;
-		float interval = 0;
+		//float unitSize = 1f;
+		float unitSize = AppConstant.UNIT_SIZE;
+		float interval = AppConstant.UNIT_INTERVAL;
 		// vector3.zero as center
 		
 		int colCnt = 5;

@@ -7,6 +7,7 @@ public class EnemyPhalnaxControl : MonoBehaviour {
 	#region Field
 	[SerializeField] float m_speed;
 	Phalanx m_phalanx;
+	public int			m_dataIndex;
 	#endregion
 	
 	#region Mono
@@ -31,14 +32,22 @@ public class EnemyPhalnaxControl : MonoBehaviour {
 	
 	#endregion
 	
+	#region Public
+	public void UpdatePhalanx(int infoIndex)
+	{
+		// tan li, pending
+		m_dataIndex = infoIndex;
+	}
+	#endregion
+	
 	
 	#region Test Purpose
 	public void Test()
 	{
 		string prefabName = "skeletonDark";
 		
-		float unitSize = 1f;
-		float interval = 0;
+		float unitSize = AppConstant.UNIT_SIZE;
+		float interval = AppConstant.UNIT_INTERVAL;
 		// vector3.zero as center
 		
 		int colCnt = 5;
