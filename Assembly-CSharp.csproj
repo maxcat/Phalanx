@@ -52,6 +52,8 @@
      <Compile Include="Assets\Scripts\Phalanx.cs" />
      <Compile Include="Assets\Scripts\PhalanxFormation.cs" />
      <Compile Include="Assets\Scripts\PlayerPhalanxControl.cs" />
+     <Compile Include="Assets\Scripts\UnitControl.cs" />
+     <Compile Include="Assets\Scripts\UnitData.cs" />
      <None Include="Assets\SkeletonData\animations.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

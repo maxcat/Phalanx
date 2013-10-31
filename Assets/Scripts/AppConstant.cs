@@ -15,6 +15,7 @@ public class AppConstant  {
 	/// </summary>
 	public static readonly float 	UNIT_INTERVAL				=		0.3f;		
 	public static readonly int 		MAX_COL						= 		5;
+	public static readonly int		MAX_ROW						= 		5;
 	public static readonly float 	ENEMY_UPDATE_BOUNDARY		=		-20f;
 	#endregion
 	
