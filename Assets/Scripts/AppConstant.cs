@@ -17,6 +17,9 @@ public class AppConstant  {
 	public static readonly int 		MAX_COL						= 		5;
 	public static readonly int		MAX_ROW						= 		5;
 	public static readonly float 	ENEMY_UPDATE_BOUNDARY		=		-20f;
+	
+	
+	public static readonly int		GROUND_LAYER				= 		8;
 	#endregion
 	
 }

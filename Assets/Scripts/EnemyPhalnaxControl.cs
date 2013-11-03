@@ -27,6 +27,9 @@ public class EnemyPhalnaxControl : MonoBehaviour {
 		// get the phalanx component
 		m_phalanx = GetComponent<Phalanx>();
 		
+		// update the phalanx type
+		m_phalanx.isPlayerPhalanx = false;
+		
 		Test();
 	}
 	

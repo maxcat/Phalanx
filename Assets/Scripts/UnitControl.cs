@@ -4,6 +4,12 @@ using System.Collections;
 public class UnitControl : MonoBehaviour {
 	
 	
+	#region Field
+	UnitData				m_data;
+	Phalanx					m_phalanx;
+	#endregion
+	
+	
 	#region Mono
 	// Use this for initialization
 	void Start () {
@@ -12,21 +18,63 @@ public class UnitControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		// get the unit data
+		m_data = GetComponent<UnitData>();
+		
+		// get the parent phalanx
+		m_phalanx = transform.parent.GetComponent<Phalanx>();
 	
 	}
 	
 	
 	// on collision enter
-	void OnCollisionEnter(Collision collision)
+	void OnCollisionEnter(Collision collisionInfo)
 	{
-		Debug.Log("++++++enter collision with " + collision.gameObject.name);
+		// filter the ground plane
+		GameObject collisionObj = collisionInfo.gameObject;
+		if(collisionObj.layer == AppConstant.GROUND_LAYER)
+		{
+			return;
+		} 
+		
+		// get the unit data
+		UnitData collisionData = collisionObj.GetComponent<UnitData>();
+		
+		if(m_phalanx.isPlayerPhalanx == 
+			collisionObj.transform.parent.GetComponent<Phalanx>().isPlayerPhalanx)
+		{
+			OnCollideWithFriend(collisionObj);
+		}
+		else
+		{
+			OnCollideWithOpponent(collisionObj);
+		}
+		
+		
 	}
 	
-	void OnTriggerEnter(Collider other)
+	void OnCollisionStay(Collision collisionInfo)
 	{
-		Debug.Log("+++++on " + gameObject.name + " trigger enter++++" + other.transform.parent.gameObject.name);
+		
 	}
 	
+	void OnCollisionExit(Collision collisionInfo)
+	{
+	}
+	
+	
+	#endregion
+	
+	#region Internal
+	void OnCollideWithOpponent(GameObject opponent)
+	{
+		Debug.Log("++++++" + this.name + " enter collision with opponent" + opponent.name);
+	}
+	
+	void OnCollideWithFriend(GameObject friend)
+	{
+		Debug.Log("++++++" + this.name + " enter collision with friend" + friend.name);
+	}
 	
 	#endregion
 }

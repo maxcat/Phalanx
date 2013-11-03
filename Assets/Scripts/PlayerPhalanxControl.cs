@@ -22,9 +22,11 @@ public class PlayerPhalanxControl : MonoBehaviour {
 	
 	void Awake () 
 	{
-		Debug.Log("++++player control awake+++");
 		// create the phalanx
 		m_phalanx = GetComponent<Phalanx>();
+		
+		// update the phalanx type
+		m_phalanx.isPlayerPhalanx = true;
 		Test();
 	}
 	

@@ -13,6 +13,22 @@ public class Phalanx : MonoBehaviour {
 	float 						m_phalanxWidth;
 	float						m_phalanxHeight;
 	
+	int 						m_unitCount;
+	
+	bool						m_isPlayerPhalanx;
+	
+	public bool isPlayerPhalanx {
+		get
+		{
+			return this.m_isPlayerPhalanx;
+		}
+		set
+		{
+			m_isPlayerPhalanx = value;
+		}
+	}
+		
+	
 	#endregion
 	
 	
@@ -29,10 +45,8 @@ public class Phalanx : MonoBehaviour {
 	
 	void Awake() {
 		// init the matrix
-		Debug.Log("++++init matrix+++");
 		InitUnitMatirx();
 		
-		Debug.Log("++++calculate the phalanx dimeosion+++");
 		// calculate the width of the height of the phalanx
 		m_phalanxWidth = AppConstant.MAX_COL * AppConstant.UNIT_SIZE + 
 			(AppConstant.MAX_COL - 1) * AppConstant.UNIT_INTERVAL;		
@@ -71,6 +85,13 @@ public class Phalanx : MonoBehaviour {
 		// update the matrix
 		m_UnitMatrix[colIndex][rowIndex] = unit;
 		
+		// update the unit data
+		unit.GetComponent<UnitData>().colIndex = colIndex;
+		unit.GetComponent<UnitData>().rowIndex = rowIndex;
+		
+		// update count
+		m_unitCount ++;
+		
 	}
 	
 	//public void PlayAnimation(int index, string animationName)
@@ -101,6 +122,10 @@ public class Phalanx : MonoBehaviour {
 	
 	private void InitUnitMatirx()
 	{
+		// init the unit count
+		m_unitCount = 0;
+		
+		// init the matrix
 		m_UnitMatrix = new List<List<GameObject>>();
 		for(int col = 0; col < AppConstant.MAX_COL; col ++)
 		{
