@@ -10,6 +10,7 @@ public class Phalanx : MonoBehaviour {
 	// store the unit in columns
 	List<List<GameObject>>		m_UnitMatrix;
 	
+	
 	float 						m_phalanxWidth;
 	float						m_phalanxHeight;
 	

@@ -4,6 +4,11 @@ using System.Collections;
 public class UnitData : MonoBehaviour {
 	
 	#region Fields
+	[SerializeField] float		m_mass;
+	[SerializeField] float		m_strength;
+	[SerializeField] int		m_width;
+	[SerializeField] int 		m_length;
+	
 	int					m_colIndex;
 	int					m_rowIndex;
 	#endregion
@@ -31,6 +36,37 @@ public class UnitData : MonoBehaviour {
 		set
 		{
 			m_colIndex = value;
+		}
+	}
+	
+	public float mass
+	{
+		get
+		{
+			return m_mass;
+		}
+	}
+	
+	public float strength
+	{
+		get
+		{
+			return m_strength;
+		}
+	}
+	
+	public int width
+	{
+		get 
+		{
+			return m_width;
+		}
+	}
+	public int length
+	{
+		get
+		{
+			return m_length;
 		}
 	}
 	#endregion

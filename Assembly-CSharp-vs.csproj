@@ -45,12 +45,14 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\AppConstant.cs" />
+     <Compile Include="Assets\Scripts\CollidedUnits.cs" />
      <Compile Include="Assets\Scripts\EnemyControl.cs" />
      <Compile Include="Assets\Scripts\EnemyPhalnaxControl.cs" />
      <Compile Include="Assets\Scripts\GoundItem.cs" />
      <Compile Include="Assets\Scripts\GroundControl.cs" />
      <Compile Include="Assets\Scripts\Phalanx.cs" />
      <Compile Include="Assets\Scripts\PhalanxFormation.cs" />
+     <Compile Include="Assets\Scripts\PlayerData.cs" />
      <Compile Include="Assets\Scripts\PlayerPhalanxControl.cs" />
      <Compile Include="Assets\Scripts\UnitControl.cs" />
      <Compile Include="Assets\Scripts\UnitData.cs" />

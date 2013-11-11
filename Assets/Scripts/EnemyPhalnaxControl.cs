@@ -5,7 +5,7 @@ public class EnemyPhalnaxControl : MonoBehaviour {
 	
 	
 	#region Field
-	[SerializeField] float m_speed;
+	[SerializeField] PlayerData	m_playerData;
 	Phalanx m_phalanx;
 	public int			m_dataIndex;
 	#endregion
@@ -18,9 +18,8 @@ public class EnemyPhalnaxControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
 		// update the position of the enemy
-		transform.Translate(new Vector3(0, 0, -m_speed));
+		transform.Translate(new Vector3(0, 0, -m_playerData.playerSpeed));
 	}
 	
 	void Awake () {

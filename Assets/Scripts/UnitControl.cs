@@ -7,23 +7,37 @@ public class UnitControl : MonoBehaviour {
 	#region Field
 	UnitData				m_data;
 	Phalanx					m_phalanx;
+	
+	public float 			m_colStrength;
+	public float			m_colMass;
+	
+	float					m_acceleration;
 	#endregion
 	
 	
 	#region Mono
 	// Use this for initialization
 	void Start () {
-	
+		// get the parent phalanx
+		m_phalanx = transform.parent.GetComponent<Phalanx>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(m_acceleration == 0)
+			return;
+		
+		
+	}
+	
+	
+	void Awake () {
 		// get the unit data
 		m_data = GetComponent<UnitData>();
 		
-		// get the parent phalanx
-		m_phalanx = transform.parent.GetComponent<Phalanx>();
-	
+		// init the col strength and mass
+		m_colMass = m_data.mass;
+		m_colStrength = m_data.strength;
 	}
 	
 	
@@ -36,9 +50,6 @@ public class UnitControl : MonoBehaviour {
 		{
 			return;
 		} 
-		
-		// get the unit data
-		UnitData collisionData = collisionObj.GetComponent<UnitData>();
 		
 		if(m_phalanx.isPlayerPhalanx == 
 			collisionObj.transform.parent.GetComponent<Phalanx>().isPlayerPhalanx)
@@ -68,13 +79,51 @@ public class UnitControl : MonoBehaviour {
 	#region Internal
 	void OnCollideWithOpponent(GameObject opponent)
 	{
-		Debug.Log("++++++" + this.name + " enter collision with opponent" + opponent.name);
+		// get the unit data
+		UnitData collisionData = opponent.GetComponent<UnitData>();
+		// this unit is the head of the column
+		// only handle the player unit
+		if(m_phalanx.isPlayerPhalanx)
+		{
+			// only move the player unit
+			// calculate the player unit position
+			transform.localPosition =  new Vector3(opponent.transform.localPosition.x,
+				opponent.transform.localPosition.y,
+				opponent.transform.localPosition.z - 
+				opponent.GetComponent<UnitData>().length * AppConstant.UNIT_SIZE / 2);
+		}
+		
 	}
 	
 	void OnCollideWithFriend(GameObject friend)
 	{
+		// get the unit data
+		UnitData collisionData = friend.GetComponent<UnitData>();
 		Debug.Log("++++++" + this.name + " enter collision with friend" + friend.name);
+		// player unit collide with player unit
+		if(m_data.rowIndex < collisionData.rowIndex)
+		{
+			// only handle the collision with the unit behind
+			if(m_phalanx.isPlayerPhalanx)
+			{
+				// player collide with player
+				CollidedUnits.shared().collidedWithPlayer(collisionData.colIndex, friend);
+			}
+			else
+			{
+				// enemy unit collide with the enemy unit
+				CollidedUnits.shared().collidedWithEnemy(collisionData.colIndex, friend);
+			}
+		}
+		
 	}
 	
+	#endregion
+	
+	#region Public API
+	public bool isPlayerUnit()
+	{
+		return m_phalanx.isPlayerPhalanx;
+	}
 	#endregion
 }
