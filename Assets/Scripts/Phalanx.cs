@@ -59,8 +59,13 @@ public class Phalanx : MonoBehaviour {
 	#endregion
 	
 	#region Public API
+	
+	public GameObject getUnit(int row, int col)
+	{
+		return m_UnitMatrix[col][row];
+	}
 	//public void AddUnit(string prefabName, Vector3 position, Vector3 rotation, Vector3 scale)
-	public void AddUnit(string prefabName, bool isPlayerUnit, Vector3 scale, int rowIndex, int colIndex)
+	public void AddUnit(string prefabName, bool isPlayerUnit, Vector3 scale, int rowIndex, int colIndex, float abSpeed)
 	{
 		//GameObject unit = Instantiate(Resources.Load(prefabName), position, Quaternion.identity) as GameObject;
 		GameObject unit = Instantiate(Resources.Load(prefabName)) as GameObject;
@@ -89,6 +94,9 @@ public class Phalanx : MonoBehaviour {
 		// update the unit data
 		unit.GetComponent<UnitData>().colIndex = colIndex;
 		unit.GetComponent<UnitData>().rowIndex = rowIndex;
+		
+		// update the absolute speed of the unit
+		unit.GetComponent<UnitControl>().m_speed = abSpeed;
 		
 		// update count
 		m_unitCount ++;

@@ -4,12 +4,7 @@ using System.Collections;
 public class GroundControl : MonoBehaviour {
 	
 	#region Fields
-	[SerializeField] PlayerData m_data;
-	
-	
 	private int m_lastGroundItemIndex;
-	
-	
 	
 	static readonly float BOUNDARY_Z = -10f;
 	static readonly float ITEM_WIDTH = 10f;
@@ -31,7 +26,7 @@ public class GroundControl : MonoBehaviour {
 		// use speed as speed per frame, might need to change to per sec
 		
 		// get the speed from the player data
-		float speed = m_data.playerSpeed;
+		float speed = GlobalData.Shared().speed;
 		Vector3 delta = new Vector3(0, 0, speed);
 		
 		// move the all ground item towards -z direction

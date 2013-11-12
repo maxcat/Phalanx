@@ -7,11 +7,8 @@ public class UnitControl : MonoBehaviour {
 	#region Field
 	UnitData				m_data;
 	Phalanx					m_phalanx;
-	
-	public float 			m_colStrength;
-	public float			m_colMass;
-	
-	float					m_acceleration;
+	public float 			m_speed;	// absolute speed of the unit
+	public float 			m_acceleration;
 	#endregion
 	
 	
@@ -34,10 +31,6 @@ public class UnitControl : MonoBehaviour {
 	void Awake () {
 		// get the unit data
 		m_data = GetComponent<UnitData>();
-		
-		// init the col strength and mass
-		m_colMass = m_data.mass;
-		m_colStrength = m_data.strength;
 	}
 	
 	
@@ -124,6 +117,12 @@ public class UnitControl : MonoBehaviour {
 	public bool isPlayerUnit()
 	{
 		return m_phalanx.isPlayerPhalanx;
+	}
+	
+	public void updateUnitState(float acceleration, float speed)
+	{
+		m_speed = speed;
+		m_acceleration = acceleration;
 	}
 	#endregion
 }

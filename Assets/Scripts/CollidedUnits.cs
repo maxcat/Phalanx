@@ -5,12 +5,16 @@ using System.Collections.Generic;
 public class CollidedCol
 {
 	public float 						m_mass;
+	public float						m_force; // force in direction of z, player advancing direction
 	public List<GameObject>				m_units;
+	public float						m_speed;
 	
 	public CollidedCol()
 	{
 		// defautl constructor
 		m_mass = 0;
+		m_force = 0;
+		m_speed = 0;
 		m_units = new List<GameObject>();
 	}
 	
@@ -24,6 +28,7 @@ public class CollidedCol
 	{
 		// add to the tail
 		m_mass += player.GetComponent<UnitData>().mass;
+		m_force += player.GetComponent<UnitData>().strength;
 		m_units.Add(player);
 	}
 	
@@ -31,7 +36,16 @@ public class CollidedCol
 	{
 		// add to the head
 		m_mass += enemy.GetComponent<UnitData>().mass;
+		m_force -= enemy.GetComponent<UnitData>().strength;
 		m_units.Insert(0, enemy);
+	}
+	
+	public void updateUnitState(float acceleration, float speed)
+	{
+		foreach(GameObject unit in m_units)
+		{
+			unit.GetComponent<UnitControl>().updateUnitState(acceleration, speed);
+		}
 	}
 	
 	
@@ -111,19 +125,76 @@ public class CollidedUnits : MonoBehaviour {
 		return m_collidedDic[col].m_mass;
 	}
 	
+	public float getColForce(int col)
+	{
+		return m_collidedDic[col].m_force;
+	}
+	
+	public void init(int col, GameObject player)
+	{
+		// calcluate the init speed
+		float initSpeed = calculateInitialSpeed(m_collidedDic[col].m_mass, 
+			m_collidedDic[col].m_speed, 
+			player.GetComponent<UnitData>().mass, 
+			player.GetComponent<UnitControl>().m_speed);
+		
+		m_collidedDic[col].addPlayerUnit(player);
+		
+		onCollision(col, initSpeed);
+	}
+	
+	
 	public void collidedWithPlayer(int col, GameObject player)
 	{
+		// calculate the init speed
+		float initSpeed = calculateInitialSpeed(m_collidedDic[col].m_mass, 
+			m_collidedDic[col].m_speed, 
+			player.GetComponent<UnitData>().mass, 
+			player.GetComponent<UnitControl>().m_speed);
+			
 		m_collidedDic[col].addPlayerUnit(player);
+		
+		onCollision(col, initSpeed);
 	}
 	
 	public void collidedWithEnemy(int col, GameObject enemy)
 	{
+		// calcluate the init speed
+		float initSpeed = calculateInitialSpeed(m_collidedDic[col].m_mass, 
+			m_collidedDic[col].m_speed, 
+			enemy.GetComponent<UnitData>().mass, 
+			enemy.GetComponent<UnitControl>().m_speed);
+		
 		m_collidedDic[col].addEnemyUnit(enemy);
+		
+		onCollision(col, initSpeed);
 	}
 	
 	#endregion
 	
 	#region Call back functions
 
+	#endregion
+	
+	#region Internal
+	float calculateAcceleration(float mass, float force)
+	{
+		return force / mass;
+	}
+	
+	float calculateInitialSpeed(float mass1, float speed1, float mass2, float speed2)
+	{
+		return (mass1 * speed1 + mass2 * speed2) / (mass1 + mass2);
+	}
+	
+	
+	void onCollision(int col, float speed)
+	{
+		// calculate acceleration
+		float acceleration = calculateAcceleration(m_collidedDic[col].m_mass, 
+			m_collidedDic[col].m_force);
+		m_collidedDic[col].updateUnitState(acceleration, speed);
+	}
+	
 	#endregion
 }

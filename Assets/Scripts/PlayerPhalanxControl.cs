@@ -6,6 +6,7 @@ public class PlayerPhalanxControl : MonoBehaviour {
 	// test hello
 	#region Fields
 	Phalanx m_phalanx;
+	[SerializeField] float m_speed;
 	#endregion
 	
 	
@@ -28,6 +29,9 @@ public class PlayerPhalanxControl : MonoBehaviour {
 		// update the phalanx type
 		m_phalanx.isPlayerPhalanx = true;
 		Test();
+		
+		// init the speed of the player phalanx
+		GlobalData.Shared().speed = m_speed;
 	}
 	
 	#endregion
@@ -45,9 +49,15 @@ public class PlayerPhalanxControl : MonoBehaviour {
 		{
 			for(int col = 0; col < AppConstant.MAX_COL; col ++)
 			{
-				m_phalanx.AddUnit(prefabName, true, scale, row, col);
+				m_phalanx.AddUnit(prefabName, true, scale, row, col, m_speed);
 				m_phalanx.PlayAnimation(row, col, "run");
+				
+				// add the first row to the collided units
+				if(row == 0)
+					CollidedUnits.shared().init(col, m_phalanx.getUnit(row, col));
 			}
+			
+			
 			
 		}
 		

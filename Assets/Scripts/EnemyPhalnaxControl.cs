@@ -5,9 +5,9 @@ public class EnemyPhalnaxControl : MonoBehaviour {
 	
 	
 	#region Field
-	[SerializeField] PlayerData	m_playerData;
 	Phalanx m_phalanx;
 	public int			m_dataIndex;
+	
 	#endregion
 	
 	#region Mono
@@ -19,7 +19,9 @@ public class EnemyPhalnaxControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// update the position of the enemy
-		transform.Translate(new Vector3(0, 0, -m_playerData.playerSpeed));
+		// update the speed 
+		float speed = GlobalData.Shared().speed;
+		transform.Translate(new Vector3(0, 0, -speed));
 	}
 	
 	void Awake () {
@@ -28,6 +30,7 @@ public class EnemyPhalnaxControl : MonoBehaviour {
 		
 		// update the phalanx type
 		m_phalanx.isPlayerPhalanx = false;
+		
 		
 		Test();
 	}
@@ -55,7 +58,7 @@ public class EnemyPhalnaxControl : MonoBehaviour {
 		{
 			for(int col = 0; col < AppConstant.MAX_COL; col ++)
 			{
-				m_phalanx.AddUnit(prefabName, false, scale, row, col);
+				m_phalanx.AddUnit(prefabName, false, scale, row, col, 0);
 				m_phalanx.PlayAnimation(row, col, "waitingforbattle");
 			}
 	

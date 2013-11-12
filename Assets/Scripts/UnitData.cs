@@ -69,6 +69,7 @@ public class UnitData : MonoBehaviour {
 			return m_length;
 		}
 	}
+	
 	#endregion
 	
 	
