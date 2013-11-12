@@ -3,3 +3,11 @@ Library/*
 !Library/*.asset
 *.userprefs
 *.pidb
+obj
+*.tmproj
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+
