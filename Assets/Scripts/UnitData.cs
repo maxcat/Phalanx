@@ -9,8 +9,8 @@ public class UnitData : MonoBehaviour {
 	[SerializeField] int		m_width;
 	[SerializeField] int 		m_length;
 	
-	int					m_colIndex;
-	int					m_rowIndex;
+	[SerializeField] int		m_colIndex;
+	[SerializeField] int		m_rowIndex;
 	#endregion
 	
 	#region Accessor
@@ -22,7 +22,7 @@ public class UnitData : MonoBehaviour {
 		}
 		set
 		{
-			m_rowIndex = value;
+			m_colIndex = value;
 		}
 			
 	}
@@ -35,7 +35,7 @@ public class UnitData : MonoBehaviour {
 		}
 		set
 		{
-			m_colIndex = value;
+			m_rowIndex = value;
 		}
 	}
 	

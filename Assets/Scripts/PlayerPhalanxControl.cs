@@ -45,9 +45,9 @@ public class PlayerPhalanxControl : MonoBehaviour {
 		Vector3 scale = new Vector3(3, 3, 3);
 		
 		// x direction
-		for(int row = 0; row < AppConstant.MAX_ROW; row ++)
+		for(int row = 0; row < 1; row ++)
 		{
-			for(int col = 0; col < AppConstant.MAX_COL; col ++)
+			for(int col = 0; col < 	1; col ++)
 			{
 				m_phalanx.AddUnit(prefabName, true, scale, row, col, m_speed);
 				m_phalanx.PlayAnimation(row, col, "run");

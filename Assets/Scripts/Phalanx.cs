@@ -76,9 +76,6 @@ public class Phalanx : MonoBehaviour {
 		// update the position, rotation and scale
 		unit.transform.localScale = scale;
 		
-		// tan li, pending
-		// need to implement according to the size and the shape of the unit
-		unit.transform.localPosition = CalculateUnitPosition(rowIndex, colIndex);
 		
 		// set the facing direction of the unit
 		Quaternion rotationQ = new Quaternion();
@@ -87,6 +84,11 @@ public class Phalanx : MonoBehaviour {
 		else
 			rotationQ.SetLookRotation(Vector3.back);
 		unit.transform.localRotation = rotationQ;
+		
+		
+		// tan li, pending
+		// need to implement according to the size and the shape of the unit
+		unit.transform.localPosition = CalculateUnitPosition(rowIndex, colIndex, isPlayerUnit);
 		
 		// update the matrix
 		m_UnitMatrix[colIndex][rowIndex] = unit;
@@ -116,15 +118,28 @@ public class Phalanx : MonoBehaviour {
 	
 	#region Internal
 	
-	private Vector3 CalculateUnitPosition(int row, int col)
+	private Vector3 CalculateUnitPosition(int row, int col, bool isPlayerUnit)
 	{
 		float startX = - (m_phalanxWidth / 2 - AppConstant.UNIT_SIZE / 2);
+		float startZ;
+		Vector3 result;
+		if(isPlayerUnit)
+		{
+			startZ = m_phalanxHeight / 2 - AppConstant.UNIT_SIZE /  2;
+			result = new Vector3(startX + col * (AppConstant.UNIT_SIZE + AppConstant.UNIT_INTERVAL),
+				0,
+				startZ - row * (AppConstant.UNIT_SIZE + AppConstant.UNIT_INTERVAL));
+		}
+		else
+		{
+			startZ = - m_phalanxHeight / 2 + AppConstant.UNIT_SIZE /  2;
+			result = new Vector3(startX + col * (AppConstant.UNIT_SIZE + AppConstant.UNIT_INTERVAL),
+				0,
+				startZ + row * (AppConstant.UNIT_SIZE + AppConstant.UNIT_INTERVAL));
+		}
 		
-		float startZ = m_phalanxHeight / 2 - AppConstant.UNIT_SIZE /  2;
 		
-		Vector3 result = new Vector3(startX + col * (AppConstant.UNIT_SIZE + AppConstant.UNIT_INTERVAL),
-			0,
-			startZ - row * (AppConstant.UNIT_SIZE + AppConstant.UNIT_INTERVAL));
+		
 		
 		return result;
 	}

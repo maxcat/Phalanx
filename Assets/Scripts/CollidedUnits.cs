@@ -8,6 +8,7 @@ public class CollidedCol
 	public float						m_force; // force in direction of z, player advancing direction
 	public List<GameObject>				m_units;
 	public float						m_speed;
+	public string						m_name;
 	
 	public CollidedCol()
 	{
@@ -42,12 +43,19 @@ public class CollidedCol
 	
 	public void updateUnitState(float acceleration, float speed)
 	{
+		m_speed = speed;
 		foreach(GameObject unit in m_units)
 		{
 			unit.GetComponent<UnitControl>().updateUnitState(acceleration, speed);
 		}
+		
+		//Debug.Log("++++update collided units state, speed is " + speed + " acceleration is " + acceleration);
 	}
 	
+	public bool isInTheSameCollider(GameObject obj1, GameObject obj2)
+	{
+		return m_units.Contains(obj1) && m_units.Contains(obj2);
+	}
 	
 	public void removeUnit(GameObject unit)
 	{
@@ -66,7 +74,7 @@ public class CollidedCol
 	}
 }
 
-public class CollidedUnits : MonoBehaviour {
+public class CollidedUnits {
 	
 	// collision units list per column
 	// tan li, pending
@@ -130,6 +138,11 @@ public class CollidedUnits : MonoBehaviour {
 		return m_collidedDic[col].m_force;
 	}
 	
+	public bool isInSameColliderCol(int col, GameObject obj1, GameObject obj2)
+	{
+		return m_collidedDic[col].isInTheSameCollider(obj1, obj2);
+	}
+	
 	public void init(int col, GameObject player)
 	{
 		// calcluate the init speed
@@ -140,7 +153,7 @@ public class CollidedUnits : MonoBehaviour {
 		
 		m_collidedDic[col].addPlayerUnit(player);
 		
-		onCollision(col, initSpeed);
+		m_collidedDic[col].updateUnitState(0, initSpeed);
 	}
 	
 	
@@ -163,7 +176,7 @@ public class CollidedUnits : MonoBehaviour {
 		float initSpeed = calculateInitialSpeed(m_collidedDic[col].m_mass, 
 			m_collidedDic[col].m_speed, 
 			enemy.GetComponent<UnitData>().mass, 
-			enemy.GetComponent<UnitControl>().m_speed);
+			enemy.GetComponent<UnitControl>().m_speed);	
 		
 		m_collidedDic[col].addEnemyUnit(enemy);
 		
@@ -184,6 +197,7 @@ public class CollidedUnits : MonoBehaviour {
 	
 	float calculateInitialSpeed(float mass1, float speed1, float mass2, float speed2)
 	{
+		//Debug.Log("+++mass 1 is " + mass1 + " mass 2 is " + mass2 + " speed 1 is " + speed1 + " speed 2 is " + speed2);
 		return (mass1 * speed1 + mass2 * speed2) / (mass1 + mass2);
 	}
 	

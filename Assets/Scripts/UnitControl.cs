@@ -21,10 +21,29 @@ public class UnitControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(m_acceleration == 0)
-			return;
+		// get the phalanx speed
+		float phalanxSpeed = GlobalData.Shared().speed;
+		// calculate the relative speed
+		float relativeSpeed;
 		
+		if(isPlayerUnit())
+		{
+			relativeSpeed = m_speed - phalanxSpeed;
+			updatePlayerUnitPosition();
+			Debug.Log ("+++player  speed is " + relativeSpeed + " " + m_acceleration);
+		}
+		else
+		{
+			relativeSpeed = -m_speed;
+			updateEnemyUnitPosition();
+			Debug.Log ("+++enemy  speed is " + relativeSpeed + " " + m_acceleration);
+		}
 		
+		// update position
+		transform.Translate(new Vector3(0, 0, relativeSpeed));
+		
+		// update speed
+		m_speed += m_acceleration * 0.01f;
 	}
 	
 	
@@ -38,11 +57,16 @@ public class UnitControl : MonoBehaviour {
 	void OnCollisionEnter(Collision collisionInfo)
 	{
 		// filter the ground plane
+		// or inside the same collider
 		GameObject collisionObj = collisionInfo.gameObject;
-		if(collisionObj.layer == AppConstant.GROUND_LAYER)
+		if(collisionObj.layer == AppConstant.GROUND_LAYER || 
+			CollidedUnits.shared().isInSameColliderCol(collisionObj.GetComponent<UnitData>().colIndex, 
+			gameObject, 
+			collisionObj))
 		{
 			return;
 		} 
+		
 		
 		if(m_phalanx.isPlayerPhalanx == 
 			collisionObj.transform.parent.GetComponent<Phalanx>().isPlayerPhalanx)
@@ -72,6 +96,7 @@ public class UnitControl : MonoBehaviour {
 	#region Internal
 	void OnCollideWithOpponent(GameObject opponent)
 	{
+		
 		// get the unit data
 		UnitData collisionData = opponent.GetComponent<UnitData>();
 		// this unit is the head of the column
@@ -80,10 +105,14 @@ public class UnitControl : MonoBehaviour {
 		{
 			// only move the player unit
 			// calculate the player unit position
+			/*
 			transform.localPosition =  new Vector3(opponent.transform.localPosition.x,
 				opponent.transform.localPosition.y,
 				opponent.transform.localPosition.z - 
 				opponent.GetComponent<UnitData>().length * AppConstant.UNIT_SIZE / 2);
+				*/
+			CollidedUnits.shared().collidedWithEnemy(collisionData.colIndex, opponent);
+			
 		}
 		
 	}
@@ -92,7 +121,6 @@ public class UnitControl : MonoBehaviour {
 	{
 		// get the unit data
 		UnitData collisionData = friend.GetComponent<UnitData>();
-		Debug.Log("++++++" + this.name + " enter collision with friend" + friend.name);
 		// player unit collide with player unit
 		if(m_data.rowIndex < collisionData.rowIndex)
 		{
@@ -109,6 +137,17 @@ public class UnitControl : MonoBehaviour {
 			}
 		}
 		
+	}
+	
+	void updatePlayerUnitPosition()
+	{
+		
+		
+	}
+	
+	
+	void updateEnemyUnitPosition()
+	{
 	}
 	
 	#endregion
