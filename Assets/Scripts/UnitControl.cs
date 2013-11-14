@@ -43,7 +43,7 @@ public class UnitControl : MonoBehaviour {
 		transform.Translate(new Vector3(0, 0, relativeSpeed));
 		
 		// update speed
-		m_speed += m_acceleration * 0.01f;
+		m_speed += m_acceleration;
 	}
 	
 	

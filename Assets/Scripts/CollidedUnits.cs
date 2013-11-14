@@ -192,7 +192,7 @@ public class CollidedUnits {
 	#region Internal
 	float calculateAcceleration(float mass, float force)
 	{
-		return force / mass;
+		return force / (mass + 10000);
 	}
 	
 	float calculateInitialSpeed(float mass1, float speed1, float mass2, float speed2)

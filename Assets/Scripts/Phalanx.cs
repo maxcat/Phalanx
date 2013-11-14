@@ -18,6 +18,13 @@ public class Phalanx : MonoBehaviour {
 	
 	bool						m_isPlayerPhalanx;
 	
+	// debug purpose
+	Vector3						m_LTVertex;
+	Vector3						m_RTVertex;
+	Vector3						m_LBVertex;
+	Vector3						m_RBVertex;
+	Color						m_color;
+	
 	public bool isPlayerPhalanx {
 		get
 		{
@@ -41,6 +48,34 @@ public class Phalanx : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		// draw the phalanx for debug 
+		m_LTVertex = new Vector3(transform.localPosition.x - m_phalanxWidth / 2, 
+			0, 
+			transform.localPosition.z + m_phalanxHeight / 2);
+		m_RTVertex = new Vector3(transform.localPosition.x + m_phalanxWidth / 2, 
+			0, 
+			transform.localPosition.z + m_phalanxHeight / 2);
+		m_LBVertex = new Vector3(transform.localPosition.x - m_phalanxWidth / 2, 
+			0, 
+			transform.localPosition.z - m_phalanxHeight / 2);
+		m_RBVertex = new Vector3(transform.localPosition.x + m_phalanxWidth / 2,
+			0,
+			transform.localPosition.z - m_phalanxHeight / 2);
+		
+		if(isPlayerPhalanx)
+		{
+			m_color = Color.red;
+			Debug.DrawLine(m_LTVertex, m_RTVertex, m_color);
+			Debug.DrawLine(m_RTVertex, m_RBVertex, m_color);
+			Debug.DrawLine(m_RBVertex, m_LBVertex, m_color);
+			Debug.DrawLine(m_LBVertex, m_LTVertex, m_color);
+		}
+		else
+			m_color = Color.blue;
+		
+		
+		
+		
 	
 	}
 	
@@ -53,6 +88,11 @@ public class Phalanx : MonoBehaviour {
 			(AppConstant.MAX_COL - 1) * AppConstant.UNIT_INTERVAL;		
 		m_phalanxHeight = AppConstant.MAX_ROW * AppConstant.UNIT_SIZE + 
 			(AppConstant.MAX_ROW - 1) * AppConstant.UNIT_INTERVAL;
+		
+		
+		
+		
+		
 	}
 	
 	

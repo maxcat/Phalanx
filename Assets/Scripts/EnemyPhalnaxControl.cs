@@ -61,9 +61,9 @@ public class EnemyPhalnaxControl : MonoBehaviour {
 		Vector3 scale = new Vector3(3, 3, 3);
 		
 		// x direction
-		for(int row = 0; row < 1; row ++)
+		for(int row = 0; row < AppConstant.MAX_ROW; row ++)
 		{
-			for(int col = 0; col < 1; col ++)
+			for(int col = 0; col < AppConstant.MAX_COL; col ++)
 			{
 				// enemy speed will be 0
 				m_phalanx.AddUnit(prefabName, false, scale, row, col, 0);
