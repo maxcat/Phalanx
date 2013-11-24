@@ -26,11 +26,19 @@ public class UnitControl : MonoBehaviour {
 		// calculate the relative speed
 		float relativeSpeed;
 		
+		// set the up limit of the speed
+		if(m_speed >= phalanxSpeed)
+		{
+			m_acceleration = 0;
+			m_speed = phalanxSpeed;
+		}
+		
 		if(isPlayerUnit())
 		{
 			relativeSpeed = m_speed - phalanxSpeed;
 			updatePlayerUnitPosition();
 			Debug.Log ("+++player  speed is " + relativeSpeed + " " + m_acceleration);
+			
 		}
 		else
 		{
@@ -38,6 +46,9 @@ public class UnitControl : MonoBehaviour {
 			updateEnemyUnitPosition();
 			Debug.Log ("+++enemy  speed is " + relativeSpeed + " " + m_acceleration);
 		}
+		
+		
+		
 		
 		// update position
 		transform.Translate(new Vector3(0, 0, relativeSpeed));

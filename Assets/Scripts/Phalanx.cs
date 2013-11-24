@@ -128,7 +128,8 @@ public class Phalanx : MonoBehaviour {
 		
 		// tan li, pending
 		// need to implement according to the size and the shape of the unit
-		unit.transform.localPosition = CalculateUnitPosition(rowIndex, colIndex, isPlayerUnit);
+		Vector3 localPosition = CalculateUnitPosition(rowIndex, colIndex, isPlayerUnit);
+		unit.transform.localPosition = localPosition;
 		
 		// update the matrix
 		m_UnitMatrix[colIndex][rowIndex] = unit;
@@ -136,6 +137,9 @@ public class Phalanx : MonoBehaviour {
 		// update the unit data
 		unit.GetComponent<UnitData>().colIndex = colIndex;
 		unit.GetComponent<UnitData>().rowIndex = rowIndex;
+		
+		// update the orginal relative postion the phalanx
+		unit.GetComponent<UnitData>().orginPhalanxPos = localPosition;
 		
 		// update the absolute speed of the unit
 		unit.GetComponent<UnitControl>().m_speed = abSpeed;

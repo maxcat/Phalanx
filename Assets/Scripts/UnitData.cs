@@ -11,9 +11,23 @@ public class UnitData : MonoBehaviour {
 	
 	[SerializeField] int		m_colIndex;
 	[SerializeField] int		m_rowIndex;
+	
+	[SerializeField] Vector3	m_orignPhalanxPos;
 	#endregion
 	
 	#region Accessor
+	public Vector3 orginPhalanxPos
+	{
+		get
+		{
+			return m_orignPhalanxPos;
+		}
+		set
+		{
+			m_orignPhalanxPos = value;
+		}
+	}
+	
 	public int colIndex
 	{
 		get

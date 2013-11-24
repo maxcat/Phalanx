@@ -7,6 +7,8 @@ public class PlayerPhalanxControl : MonoBehaviour {
 	#region Fields
 	Phalanx m_phalanx;
 	[SerializeField] float m_speed;
+	[SerializeField] float m_thrustSpeed;
+	
 	#endregion
 	
 	
@@ -31,9 +33,22 @@ public class PlayerPhalanxControl : MonoBehaviour {
 		Test();
 		
 		// init the speed of the player phalanx
-		GlobalData.Shared().speed = m_speed;
+		updateSpeed();
 	}
 	
+	#endregion
+	
+	#region Pulbic API
+	
+	#endregion
+	
+	#region Internal
+	void updateSpeed()
+	{
+		// tan li, pending
+		// might need to calculate the speed
+		GlobalData.Shared().speed = m_speed;
+	}
 	#endregion
 	
 	#region Test purpose
