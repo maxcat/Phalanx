@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// collided units in column.
+/// </summary>
 public class CollidedCol
 {
 	public float 						m_mass;
@@ -46,6 +49,8 @@ public class CollidedCol
 		m_speed = speed;
 		foreach(GameObject unit in m_units)
 		{
+			if(unit == null)
+				Debug.Log("+++++unit is null++++++");
 			unit.GetComponent<UnitControl>().updateUnitState(acceleration, speed);
 		}
 		
@@ -74,6 +79,10 @@ public class CollidedCol
 	}
 }
 
+/// <summary>
+/// Collided units.
+/// singleton holds group of collided units
+/// </summary>
 public class CollidedUnits {
 	
 	// collision units list per column

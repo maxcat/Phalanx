@@ -37,14 +37,14 @@ public class UnitControl : MonoBehaviour {
 		{
 			relativeSpeed = m_speed - phalanxSpeed;
 			updatePlayerUnitPosition();
-			Debug.Log ("+++player  speed is " + relativeSpeed + " " + m_acceleration);
+			//Debug.Log ("+++player  speed is " + relativeSpeed + " " + m_acceleration);
 			
 		}
 		else
 		{
 			relativeSpeed = -m_speed;
 			updateEnemyUnitPosition();
-			Debug.Log ("+++enemy  speed is " + relativeSpeed + " " + m_acceleration);
+			//Debug.Log ("+++enemy  speed is " + relativeSpeed + " " + m_acceleration);
 		}
 		
 		
@@ -56,7 +56,14 @@ public class UnitControl : MonoBehaviour {
 		// update speed
 		m_speed += m_acceleration;
 	}
-	
+
+	void OnMouseDown()
+	{
+		Debug.Log("+++++player " + m_data.colIndex + "-" + m_data.rowIndex + " on mouse click+++++");
+		// tan li, pending
+		// for destroy player test
+		Destroy(gameObject);
+	}
 	
 	void Awake () {
 		// get the unit data
@@ -105,6 +112,10 @@ public class UnitControl : MonoBehaviour {
 	#endregion
 	
 	#region Internal
+	/// <summary>
+	/// Raises the collide with opponent unit event.
+	/// </summary>
+	/// <param name="opponent">Opponent unit game object.</param>
 	void OnCollideWithOpponent(GameObject opponent)
 	{
 		
@@ -127,7 +138,11 @@ public class UnitControl : MonoBehaviour {
 		}
 		
 	}
-	
+
+	/// <summary>
+	/// Raises the collide with friend unit event.
+	/// </summary>
+	/// <param name="friend">Friend unit.</param>
 	void OnCollideWithFriend(GameObject friend)
 	{
 		// get the unit data
