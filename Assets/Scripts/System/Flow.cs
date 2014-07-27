@@ -80,7 +80,7 @@ public class Flow {
 		m_isPaused = true;
 	}
 
-	public virtual void unPause()
+	public virtual void resume()
 	{
 		m_isPaused = false;
 	}

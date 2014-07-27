@@ -17,9 +17,13 @@ public class GroundControl : MonoBehaviour {
 		// reset the last ground item index
 		m_lastGroundItemIndex = transform.childCount - 1;
 
-		Flow main = new Flow(this, mainFlow());
+		SerieFlow serie = new SerieFlow(this);
+		
+		serie.addFlow(testFlow(3));
+		serie.addFlow(testFlow(2));
+		serie.addFlow(endFlow());
 
-		main.start();
+		serie.start();
 	}
 	
 	// Update is called once per frame
@@ -62,20 +66,11 @@ public class GroundControl : MonoBehaviour {
 		return transform.FindChild(m_lastGroundItemIndex.ToString()).gameObject;
 	}
 
-	IEnumerator mainFlow()
+
+	IEnumerator endFlow()
 	{
-		Flow flow1 = new Flow(this, testFlow(3));
-		Flow flow2 = new Flow(this, testFlow(2));
-
-		flow1.start();
-		yield return flow1.untilDone;
-
-		flow2.start();
-		yield return flow2.untilDone;
-
-		Debug.LogWarning("===flow 1 and flow 2 all finished===");
-
-		                 
+		Debug.LogWarning("===all flow ends====");
+		yield return null;
 	}
 
 	IEnumerator testFlow(int time)
