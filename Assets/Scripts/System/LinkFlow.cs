@@ -1,15 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class LinkFlow : MonoBehaviour {
+public class LinkFlow {
 
-	// Use this for initialization
-	void Start () {
-	
+	#region Fields
+	protected Flow m_self;
+	protected LinkFlow m_next;
+	#endregion
+
+
+	#region Getter and Setter
+	public LinkFlow next
+	{
+		get { return m_next;}
+		set { m_next = value;}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public Flow self
+	{
+		get { return m_self;}
+		set { m_self = value;}
 	}
+	#endregion
+
+	#region Constructor
+	public LinkFlow(Flow flow)
+	{
+		m_self = flow;
+		m_next = null;
+	}
+
+	public LinkFlow()
+	{
+		m_next = null;
+	}
+
+	public LinkFlow(MonoBehaviour mono, IEnumerator coroutine)
+	{
+		m_self = new Flow(mono,coroutine);
+		m_next = null;
+	}
+	#endregion
+
+	
 }

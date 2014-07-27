@@ -26,12 +26,12 @@ public class Flow {
 		set { m_mono = value;}
 	}
 
-	public bool isRunning
+	public virtual bool isRunning
 	{
 		get { return m_isRunning;}
 	}
 
-	public bool isPaused
+	public virtual bool isPaused
 	{
 		get { return m_isPaused;}
 	}
@@ -55,7 +55,7 @@ public class Flow {
 		m_isPaused = false;
 	}
 
-	public Flow(MonoBehaviour mono, IEnumerator coroutine)
+	public Flow(MonoBehaviour mono, IEnumerator coroutine = null)
 	{
 		m_coroutine = coroutine;
 		m_mono = mono;

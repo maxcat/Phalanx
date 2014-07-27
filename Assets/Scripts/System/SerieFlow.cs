@@ -22,7 +22,7 @@ public class SerieFlow : Flow {
 		m_flowList = new List<Flow>();
 	}
 
-	public SerieFlow(MonoBehaviour mono) : base()
+	public SerieFlow(MonoBehaviour mono) : base (mono)
 	{
 		m_flowList = new List<Flow>();
 		m_mono = mono;

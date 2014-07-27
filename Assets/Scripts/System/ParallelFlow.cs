@@ -21,7 +21,7 @@ public class ParallelFlow : Flow {
 		m_flowList = new List<Flow>();
 	}
 	
-	public ParallelFlow(MonoBehaviour mono) : base()
+	public ParallelFlow(MonoBehaviour mono) : base(mono)
 	{
 		m_flowList = new List<Flow>();
 		m_mono = mono;
