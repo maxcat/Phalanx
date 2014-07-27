@@ -70,7 +70,6 @@ public class Flow {
 	public virtual void start()
 	{
 		m_isRunning = true;
-		m_isPaused = false;
 
 		m_mono.StartCoroutine(doFlow());
 	}
