@@ -11,6 +11,7 @@ public class Flow {
 
 	protected bool m_isPaused;
 	protected bool m_isRunning;
+	protected float m_flowSpeed;
 	#endregion
 
 
@@ -43,6 +44,12 @@ public class Flow {
 			return m_mono.StartCoroutine(untilDoneFlow());
 		}
 	}
+
+	public float flowSpeed
+	{
+		get { return m_flowSpeed;}
+	}
+
 	#endregion
 
 	#region Constructor
@@ -67,6 +74,11 @@ public class Flow {
 
 
 	#region Public API
+	public virtual void setSpeed(float speed)
+	{
+		m_flowSpeed = speed;
+	}
+
 	public virtual void start()
 	{
 		m_isRunning = true;
