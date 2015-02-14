@@ -2,22 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class LinkFlow {
+public class LinkTask {
 
 	#region Fields
-	protected Flow m_self;
-	protected LinkFlow m_next;
+	protected Task m_self;
+	protected LinkTask m_next;
 	#endregion
 
 
 	#region Getter and Setter
-	public LinkFlow next
+	public LinkTask next
 	{
 		get { return m_next;}
 		set { m_next = value;}
 	}
 
-	public Flow self
+	public Task self
 	{
 		get { return m_self;}
 		set { m_self = value;}
@@ -25,20 +25,20 @@ public class LinkFlow {
 	#endregion
 
 	#region Constructor
-	public LinkFlow(Flow flow)
+	public LinkTask(Task task)
 	{
-		m_self = flow;
+		m_self = task;
 		m_next = null;
 	}
 
-	public LinkFlow()
+	public LinkTask()
 	{
 		m_next = null;
 	}
 
-	public LinkFlow(MonoBehaviour mono, IEnumerator coroutine)
+	public LinkTask(MonoBehaviour mono, IEnumerator coroutine)
 	{
-		m_self = new Flow(mono,coroutine);
+		m_self = new Task(mono,coroutine);
 		m_next = null;
 	}
 	#endregion

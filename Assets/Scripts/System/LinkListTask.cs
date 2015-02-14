@@ -2,22 +2,30 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class LinkListFlow : Flow {
+public class LinkListTask : Task {
 
 	#region Fields
-	protected LinkFlow m_current;
-	protected LinkFlow m_tail;
+	protected LinkTask m_current;
+	protected LinkTask m_tail;
+	#endregion
+
+
+	#region Getter and Setter
+	public bool isEmpty
+	{
+		get { return m_tail == null;}
+	}
 	#endregion
 
 
 	#region Constructor
-	public LinkListFlow() : base ()
+	public LinkListTask() : base ()
 	{
 		m_current = null;
 		m_tail = null;
 	}
 
-	public LinkListFlow(MonoBehaviour mono) : base(mono)
+	public LinkListTask(MonoBehaviour mono) : base(mono)
 	{
 		m_current = null;
 		m_tail = null;
@@ -34,7 +42,7 @@ public class LinkListFlow : Flow {
 	}
 
 
-	protected override IEnumerator doFlow ()
+	protected override IEnumerator doTask ()
 	{
 		m_current.self.start();
 
@@ -72,33 +80,33 @@ public class LinkListFlow : Flow {
 	#endregion
 
 	#region Public API
-	public void addFlow(LinkFlow flow)
+	public void addTask(LinkTask task)
 	{
 		if(m_tail == null)
 		{
-			m_tail = flow;
-			m_current = flow;
+			m_tail = task;
+			m_current = task;
 			m_tail.next = null;
 		}
 		else
 		{
-			m_tail.next = flow;
-			flow.next = null;
-			m_tail = flow;
+			m_tail.next = task;
+			task.next = null;
+			m_tail = task;
 		}
 	}
 
-	public void addFlow(Flow flow)
+	public void addTask(Task task)
 	{
-		LinkFlow link = new LinkFlow(flow);
-		addFlow(link);
+		LinkTask linkTask = new LinkTask(task);
+		addTask(linkTask);
 	}
 
-	public void addFlow(IEnumerator coroutine)
+	public void addTask(IEnumerator coroutine)
 	{
-		LinkFlow link = new LinkFlow(m_mono, coroutine);
+		LinkTask linkTask = new LinkTask(m_mono, coroutine);
 
-		addFlow(link);
+		addTask(linkTask);
 	}
 
 

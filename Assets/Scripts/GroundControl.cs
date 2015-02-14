@@ -16,14 +16,14 @@ public class GroundControl : MonoBehaviour {
 		
 		// reset the last ground item index
 		m_lastGroundItemIndex = transform.childCount - 1;
-		LinkListFlow main = new LinkListFlow(this);
+		LinkListTask main = new LinkListTask(this);
 //		ParallelFlow flow = new ParallelFlow(this);
 		
-		main.addFlow(testFlow("flow1", 3));
-		main.addFlow(testFlow("flow2", 2));
+		main.addTask(testFlow("flow1", 3));
+		main.addTask(testFlow("flow2", 2));
 
 //		main.addFlow(flow);
-		main.addFlow(endFlow());
+		main.addTask(endFlow());
 
 		main.start();
 
@@ -73,10 +73,10 @@ public class GroundControl : MonoBehaviour {
 
 	IEnumerator mainFlow()
 	{
-		ParallelFlow flow = new ParallelFlow(this);
+		ParallelTask flow = new ParallelTask(this);
 		
-		flow.addFlow(testFlow("flow1", 3));
-		flow.addFlow(testFlow("flow2", 2));
+		flow.addTask(testFlow("flow1", 3));
+		flow.addTask(testFlow("flow2", 2));
 
 		flow.start();
 

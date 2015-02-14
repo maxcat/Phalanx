@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Flow {
+public class Task {
 
 	#region Fields
 	protected IEnumerator m_coroutine;
@@ -11,7 +11,7 @@ public class Flow {
 
 	protected bool m_isPaused;
 	protected bool m_isRunning;
-	protected float m_flowSpeed;
+	protected float m_taskSpeed;
 	#endregion
 
 
@@ -47,13 +47,13 @@ public class Flow {
 
 	public float flowSpeed
 	{
-		get { return m_flowSpeed;}
+		get { return m_taskSpeed;}
 	}
 
 	#endregion
 
 	#region Constructor
-	public Flow()
+	public Task()
 	{
 		m_coroutine = null;
 		m_mono = null;
@@ -62,7 +62,7 @@ public class Flow {
 		m_isPaused = false;
 	}
 
-	public Flow(MonoBehaviour mono, IEnumerator coroutine = null)
+	public Task(MonoBehaviour mono, IEnumerator coroutine = null)
 	{
 		m_coroutine = coroutine;
 		m_mono = mono;
@@ -76,14 +76,14 @@ public class Flow {
 	#region Public API
 	public virtual void setSpeed(float speed)
 	{
-		m_flowSpeed = speed;
+		m_taskSpeed = speed;
 	}
 
 	public virtual void start()
 	{
 		m_isRunning = true;
 
-		m_mono.StartCoroutine(doFlow());
+		m_mono.StartCoroutine(doTask());
 	}
 
 	public virtual void pause()
@@ -103,7 +103,7 @@ public class Flow {
 	#endregion
 
 	#region Protected Functions
-	protected virtual IEnumerator doFlow()
+	protected virtual IEnumerator doTask()
 	{
 		while(m_isRunning)
 		{
