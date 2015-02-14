@@ -73,16 +73,9 @@ public class GroundControl : MonoBehaviour {
 
 	IEnumerator mainFlow()
 	{
-		ParallelTask flow = new ParallelTask(this);
-		
-		flow.addTask(testFlow("flow1", 3));
-		flow.addTask(testFlow("flow2", 2));
-
-		flow.start();
-
-		yield return flow.untilDone;
 
 		Debug.LogWarning("===parallel task finished");
+		yield return null;
 	}
 
 

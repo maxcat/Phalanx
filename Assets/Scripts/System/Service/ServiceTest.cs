@@ -6,9 +6,7 @@ public class ServiceTest : MonoBehaviour {
 	#region Override MonoBehaviour
 	// Use this for initialization
 	void Start () {
-		Task testTask = new Task(this, testFlow());
-
-		testTask.start();
+		new Task(this, testFlow(), true);
 	}
 	
 	// Update is called once per frame
