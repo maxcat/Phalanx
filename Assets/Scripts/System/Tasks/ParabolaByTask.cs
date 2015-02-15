@@ -29,25 +29,18 @@ public class ParabolaByTask : Task {
 
 
 		float duration;
-		Vector3 vSpeed;
-		float actualSpeed;
 
 		if(fixSpeedDirection == Vector3.right)
 		{
 			duration = Mathf.Abs(offset.x) / Mathf.Abs(speed);
-			vSpeed = new Vector3(speed, 0f, offset.z / duration);
-			actualSpeed = vSpeed.magnitude;
 		}
 		else if(fixSpeedDirection == Vector3.forward)
 		{
 			duration = Mathf.Abs(offset.z) / Mathf.Abs(speed);
-			vSpeed = new Vector3(offset.x / duration, 0f, speed);
-			actualSpeed = vSpeed.magnitude;
 		}
 		else
 		{
 			duration = offsetXZ.magnitude / Mathf.Abs(speed);
-			actualSpeed = speed;
 		}
 
 		Vector3 linearDirection = offsetXZ;
