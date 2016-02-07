@@ -16,13 +16,20 @@ public class AimingViewHandler : MonoBehaviour {
 	#endregion
 
 	#region Public API
-	public void drawDirectionLine(Vector3 input)
+	public virtual void drawDirectionLine(Vector3 input)
 	{
 		LineRenderer lineRenderer = GetComponent<LineRenderer>();
+		lineRenderer.enabled = true;
 
-		lineRenderer.useWorldSpace = false;
-		lineRenderer.SetPosition(0, Vector3.zero);
-		lineRenderer.SetPosition(1, new Vector3(input.x, 0f, input.y));
+		lineRenderer.useWorldSpace = true;
+		lineRenderer.SetPosition(0, transform.position);
+		lineRenderer.SetPosition(1, transform.position + new Vector3(input.x, 0f, input.y));
+	}
+
+	public virtual void removeLine()
+	{
+		LineRenderer lineRenderer = GetComponent<LineRenderer>();
+		lineRenderer.enabled = false;
 	}
 	#endregion
 }

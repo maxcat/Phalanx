@@ -118,13 +118,13 @@ public class UserInputHandler : MonoBehaviour {
 
 	protected void dragBall(Vector3 input)
 	{
-		Debug.Log("input is " + input);
 		m_selectedBall.GetComponent<AimingViewHandler>().drawDirectionLine(input);
 	}
 
 	protected void releaseBall(Vector3 input)
 	{
-
+		m_selectedBall.GetComponent<AimingViewHandler>().removeLine();
+		m_selectedBall.GetComponent<BallControl>().releaseBall(input);
 	}
 	#endregion
 }
