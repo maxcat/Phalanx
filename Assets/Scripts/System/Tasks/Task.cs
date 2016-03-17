@@ -123,6 +123,15 @@ public class Task
 		m_monoClass.StartCoroutine( doTask() );
 	}
 
+	public virtual void draw()
+	{
+		Color originColor = GUI.color;
+		GUI.color = Color.red;
+		GUILayout.Box("Task");
+		GUI.color = originColor;
+		
+	}
+
 	public virtual void pause()
 	{
 		m_paused = true;	

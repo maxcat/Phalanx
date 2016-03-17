@@ -30,6 +30,16 @@ public class DelayTask : Task {
 	}
 	#endregion
 
+#region Implement Virtual Functions
+	public override void draw()
+	{
+		Color originColor = GUI.color;
+		GUI.color = Color.green;
+		GUILayout.Box("DelayTask");
+		GUI.color = originColor;
+	}
+#endregion
+
 
 	#region Protected Functions
 	protected IEnumerator delayFlow(float delayInSecond)

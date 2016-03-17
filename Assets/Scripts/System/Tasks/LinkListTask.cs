@@ -43,7 +43,14 @@ public class LinkListTask : Task {
 		
 		m_monoClass.StartCoroutine( doTask() );
 	}
-
+	public override void draw()
+	{
+		Color originColor = GUI.color;
+		GUI.color = Color.blue;
+		GUILayout.Box("LinkListTask");
+		GUI.color = originColor;
+		
+	}
 
 	protected override IEnumerator doTask ()
 	{

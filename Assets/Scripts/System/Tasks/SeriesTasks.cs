@@ -31,6 +31,11 @@ public class SeriesTasks : Task {
 		}
 	}
 
+	public List<Task> taskList
+	{
+		get { return m_tasks; }
+	}
+
 	public int currentIndex
 	{
 		get {return m_currentTaskIndex;}
@@ -60,6 +65,24 @@ public class SeriesTasks : Task {
 		{
 			m_monoClass.StartCoroutine( doTask() );
 		}
+	}
+
+	public override void draw ()
+	{
+		Color originColor = GUI.color;
+		GUI.color = Color.magenta;
+
+		GUILayout.BeginVertical("box");
+		GUILayout.Label("Serie Task");
+
+		foreach(Task task in m_tasks)
+		{
+			task.draw();
+		}
+
+		GUILayout.EndVertical();
+
+		GUI.color = originColor;
 	}
 	
 	public override void pause ()

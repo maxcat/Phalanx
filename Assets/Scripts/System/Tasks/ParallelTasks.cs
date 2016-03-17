@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 public class ParallelTasks : Task {
 
-
-
-
 	#region Internal Fields
 	List<Task> m_tasks;
 	#endregion
@@ -42,6 +39,11 @@ public class ParallelTasks : Task {
 				return m_tasks.Count;
 		}
 	}
+
+	public List<Task> taskList
+	{
+		get { return m_tasks; }
+	}
 	#endregion
 
 
@@ -53,6 +55,27 @@ public class ParallelTasks : Task {
 		m_monoClass.StartCoroutine( doTask() );
 
 		
+	}
+
+	public override void draw ()
+	{
+		Color originColor = GUI.color;
+		GUI.color = Color.yellow;
+
+		GUILayout.BeginVertical("box");
+		{
+			GUILayout.Label("Parallel Task");
+			GUILayout.BeginHorizontal("box");
+
+			foreach(Task task in m_tasks)
+			{
+				task.draw();
+			}
+			GUILayout.EndHorizontal();
+		}
+		GUILayout.EndVertical();
+
+		GUI.color = originColor;
 	}
 	
 	public override void pause ()
