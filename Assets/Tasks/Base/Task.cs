@@ -53,9 +53,7 @@ public class Task
 	
 	#region Constructors
 	public Task()
-	{
-		m_monoClass = Service.get<TaskService>();
-	}
+	{}
 
 	public Task(IEnumerator coroutine) 
 		: this(null, coroutine, false)
@@ -68,27 +66,13 @@ public class Task
 
 	public Task(MonoBehaviour monoClass)
 	{
-		if(monoClass == null)
-		{
-			m_monoClass	= Service.get<TaskService>();
-		}
-		else 
-		{
-			m_monoClass = monoClass;	
-		}
+		m_monoClass = monoClass;	
 	}
 
 
 	public Task(MonoBehaviour monoClass, IEnumerator coroutine, bool immediatelyStart)
 	{
-		if(monoClass == null)
-		{
-			m_monoClass	= Service.get<TaskService>();
-		}
-		else 
-		{
-			m_monoClass = monoClass;	
-		}
+		m_monoClass = monoClass;	
 		m_coroutine = coroutine;
 		if(immediatelyStart)
 		{

@@ -4,15 +4,6 @@ using System.Collections.Generic;
 
 public class DelayTask : Task {
 
-	public static Coroutine delayForSecond(float delay)
-	{
-		DelayTask delayTask = new DelayTask(Service.get<TaskService>(), delay);
-		delayTask.start();
-
-		return delayTask.UntilDone;
-	}
-
-
 	#region Constructor
 	public DelayTask(MonoBehaviour mono, float delayInSecond)
 		:base(mono)
@@ -20,14 +11,6 @@ public class DelayTask : Task {
 		m_coroutine = delayFlow(delayInSecond);
 	}
 
-	public DelayTask(float delayInSecond) : base ()
-	{
-		m_coroutine = delayFlow(delayInSecond);
-	}
-
-	public DelayTask(int frameCount) : base ()
-	{
-	}
 	#endregion
 
 #region Implement Virtual Functions
