@@ -10,4 +10,4 @@ obj
 *.sln
 *.suo
 *.user
-
+Assets/Framework/LuaFramework/ToLua/Source/Generate/*
