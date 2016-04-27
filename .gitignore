@@ -11,4 +11,8 @@ obj
 *.suo
 *.user
 Assets/Framework/LuaFramework/ToLua/Source/Generate/*
+!Assets/Framework/LuaFramework/ToLua/Source/Generate/DelegateFactory.cs
+!Assets/Framework/LuaFramework/ToLua/Source/Generate/DelegateFactory.cs.meta
+!Assets/Framework/LuaFramework/ToLua/Source/Generate/LuaBinder.cs
+!Assets/Framework/LuaFramework/ToLua/Source/Generate/LuaBinder.cs.meta
 Assets/StreamingAssets/*
