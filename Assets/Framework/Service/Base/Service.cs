@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Service : MonoBehaviour {
 
-	#region Override MonoBehaviour
+#region Override MonoBehaviour
 	void Awake () {
 		// init all the static service inside the prefab.
 		List<Singleton> singletonList = getSingletonList();
@@ -32,11 +32,11 @@ public class Service : MonoBehaviour {
 	}
 
 	void Start () {
-	
+
 	}
-	
+
 	void Update () {
-	
+
 	}
 
 	void OnLevelWasLoaded (int level) {
@@ -61,11 +61,11 @@ public class Service : MonoBehaviour {
 			}
 		}
 	}
-	#endregion
+#endregion
 
-	#region Static Fields
+#region Static Fields
 	static GameObject serviceObject;
-	#endregion
+#endregion
 
 #region Protected Functions
 	protected List<Singleton> getSingletonList()
@@ -94,8 +94,8 @@ public class Service : MonoBehaviour {
 		return null;
 	}
 #endregion
-	
-	#region Static Public API
+
+#region Static Public API
 	public static T Get<T>() where T : Singleton
 	{
 		if(serviceObject == null)
@@ -128,5 +128,5 @@ public class Service : MonoBehaviour {
 			GameObject.Destroy(singleton);
 		}
 	}
-	#endregion
+#endregion
 }

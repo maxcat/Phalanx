@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Singleton : MonoBehaviour {
-	
+
 #region Fields
 	[SerializeField] protected bool isPersist;
 	protected bool			isInited = false;
@@ -27,17 +27,17 @@ public class Singleton : MonoBehaviour {
 
 	public virtual void OnSceneChanged(int level)
 	{
-		
+
 	}
 
 	public virtual void PreRemoved()
 	{
-		
+
 	}
 
 	public virtual void OnGamePaused()
 	{
-		
+
 	}
 #endregion
 }
