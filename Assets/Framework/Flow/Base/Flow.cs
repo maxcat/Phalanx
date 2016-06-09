@@ -15,12 +15,14 @@ public class Flow : IEnumerator {
 	{
 		source = flow;
 		nextFlow = null;
+		flowSpeed = 1f;
 	}
 
 	public Flow()
 	{
 		source = main();
 		nextFlow = null;
+		flowSpeed = 1f;
 	}
 #endregion
 
@@ -62,9 +64,9 @@ public class Flow : IEnumerator {
 		yield return null;
 	}
 
-	public virtual void SetFlowSpeed()
+	public virtual void SetFlowSpeed(float speed)
 	{
-
+		flowSpeed = speed;
 	}
 #endregion
 
