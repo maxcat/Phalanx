@@ -1,7 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FlowFactory : MonoBehaviour {
+public partial class FlowFactory : MonoBehaviour {
+
+#region Vritual Functions
+	public virtual Flow CreateFlow()
+	{
+		return null;
+	}
+#endregion
+}
+
+#if UNITY_EDITOR
+public partial class FlowFactory : MonoBehaviour {
 
 #region Editor Fields
 	[SerializeField] protected bool 		monitoringFlow = false;
@@ -15,6 +26,27 @@ public class FlowFactory : MonoBehaviour {
 	{
 		get { return monitoringFlow; }
 	}
+
+	public bool IsMonitoringFlowStarted
+	{
+		get 
+		{
+			if(createdFlow == null)
+				return false;
+			return createdFlow.IsFlowStarted;
+		}
+	}
+
+	public bool IsMonitoringFlowPaused
+	{
+		get
+		{
+			if(createdFlow == null)
+				return false;
+			return createdFlow.IsPaused;
+		}
+	}
+
 #endregion
 
 #region Override MonoBehaviour
@@ -43,15 +75,22 @@ public class FlowFactory : MonoBehaviour {
 #endregion
 
 #region Vritual Functions
-	public virtual Flow CreateFlow()
-	{
-		return null;
-	}
-
 	public virtual void OnRunFlowButtonClicked()
 	{
 		createdFlow = CreateFlow();
 		Task mainTask = new Task(this, createdFlow, true);
+	}
+
+	public virtual void OnPauseButtonClicked()
+	{
+		if(createdFlow != null && createdFlow.IsFlowStarted)
+			createdFlow.Pause();	
+	}
+
+	public virtual void OnResumeButtonClicked()
+	{
+		if(createdFlow != null && createdFlow.IsFlowStarted)
+			createdFlow.Resume();	
 	}
 
 	public virtual void UpdateMonitoringFlow()
@@ -62,4 +101,7 @@ public class FlowFactory : MonoBehaviour {
 		}
 	}
 #endregion
+
+#endif
 }
+

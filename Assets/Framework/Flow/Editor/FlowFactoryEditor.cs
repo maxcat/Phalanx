@@ -11,18 +11,39 @@ public class FlowFactoryEditor : Editor {
 		DrawDefaultInspector();
 		FlowFactory flowFactory = (FlowFactory) target;
 
-//		if(GUILayout.Button("Open Editor"))
-//		{
-//			TaskEditorWindow window = EditorWindow.GetWindow<TaskEditorWindow>();
-//
-//			window.init(taskFactory);
-//		}
+		//		if(GUILayout.Button("Open Editor"))
+		//		{
+		//			TaskEditorWindow window = EditorWindow.GetWindow<TaskEditorWindow>();
+		//
+		//			window.init(taskFactory);
+		//		}
 
 		if(Application.isPlaying)
 		{
-			if(GUILayout.Button("Run Flow"))
+			if(!flowFactory.IsMonitoringFlowStarted)
 			{
-				flowFactory.OnRunFlowButtonClicked();
+				if(GUILayout.Button("Run Flow"))
+				{
+					flowFactory.OnRunFlowButtonClicked();
+				}
+			}
+
+			if(flowFactory.IsMonitoringFlowStarted)
+			{
+				if(flowFactory.IsMonitoringFlowPaused)
+				{
+					if(GUILayout.Button("Resume Flow"))
+					{
+						flowFactory.OnResumeButtonClicked();
+					}
+				}
+				else
+				{
+					if(GUILayout.Button("Pause Flow"))
+					{
+						flowFactory.OnPauseButtonClicked();
+					}
+				}
 			}
 		}
 	}

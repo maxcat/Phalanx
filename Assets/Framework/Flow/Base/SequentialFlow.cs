@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
 public class SequentialFlow : Flow {
 
@@ -21,7 +20,13 @@ public class SequentialFlow : Flow {
 	{
 		isFlowStarted = true;
 		if(currentFlow == null)
+		{
+			isFlowStarted = false;
 			return false;
+		}
+
+		if(isPaused)
+			return true;
 
 		if(currentFlow.MoveNext())
 		{
@@ -32,10 +37,16 @@ public class SequentialFlow : Flow {
 			if(currentFlow.NextFlow != null)
 			{
 				currentFlow = currentFlow.NextFlow;
-				return currentFlow.MoveNext();
+				if(!currentFlow.MoveNext())
+				{
+					isFlowStarted = false;
+					return false;
+				}
+				return true;
 			}
 			else
 			{
+				isFlowStarted = false;
 				return false;
 			}
 		}
@@ -44,6 +55,8 @@ public class SequentialFlow : Flow {
 	public override object Current
 	{
 		get { 
+			if(isPaused)
+				return null;
 			return currentFlow.Current;
 	       	}
 	}

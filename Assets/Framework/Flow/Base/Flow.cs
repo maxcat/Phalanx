@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
 public class Flow : IEnumerator {
 
@@ -8,6 +7,7 @@ public class Flow : IEnumerator {
 	protected IEnumerator 		source;
 	protected Flow 			nextFlow;
 	protected bool 			isFlowStarted = false;
+	protected bool 			isPaused = false;
 #endregion
 
 #region Constructor
@@ -36,18 +36,46 @@ public class Flow : IEnumerator {
 	{
 		get { return isFlowStarted; }
 	}
+
+	public bool IsPaused
+	{
+		get { return isPaused; }
+	}
 #endregion
 
 #region Implement Inteface
 	public virtual bool MoveNext()
 	{
 		isFlowStarted = true;
-		return source != null ? source.MoveNext() : false;
+
+		if(source == null)
+		{
+			isFlowStarted = false;
+			return false;
+		}
+		else
+		{
+			if(isPaused)
+			{
+				return true;
+			}
+			else
+			{
+				if(!source.MoveNext())
+				{
+					isFlowStarted = false;		
+					return false;
+				}
+				return true;
+			}
+		}
 	}
 
 	public virtual object Current
 	{
 		get {
+			if(isPaused)
+				return null;
 			return source != null ? source.Current : null;
 		}
 	}
@@ -67,6 +95,18 @@ public class Flow : IEnumerator {
 	public virtual void SetFlowSpeed(float speed)
 	{
 		flowSpeed = speed;
+	}
+
+	public virtual void Pause()
+	{
+		if(!isPaused)
+			isPaused = true;
+	}
+
+	public virtual void Resume()
+	{
+		if(isPaused)
+			isPaused = false;
 	}
 #endregion
 

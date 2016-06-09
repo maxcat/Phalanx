@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MovementFlowFactory : FlowFactory {
+public partial class MovementFlowFactory : FlowFactory {
 
 #region Fields
-	[SerializeField] protected float				gizmoTimeInterval = 0.05f;
 	[SerializeField] protected bool 				relativeStartPos = false; 
 	[SerializeField] protected bool 				isLocal = false;
 	[SerializeField] protected GameObject				targetObj;
@@ -23,20 +22,28 @@ public class MovementFlowFactory : FlowFactory {
 	}
 #endregion
 
-#region Override MonoBehaviour
-	// Use this for initialization
-	void Start () {
-	}
-	
-	void OnDrawGizmosSelected () {
-		drawMovemntPath(curveData3D);
-	}
-#endregion
-
 #region Implement Virtual Functions
 	public override Flow CreateFlow()
 	{
 		return new CurveMoveFlow(targetObj, curveData3D, relativeStartPos, isLocal);
+	}
+#endregion
+}
+
+#if UNITY_EDITOR
+public partial class MovementFlowFactory : FlowFactory {
+
+#region Fields
+	[SerializeField] protected float				gizmoTimeInterval = 0.05f;
+#endregion
+
+#region Override MonoBehaviour
+	// Use this for initialization
+	void Start () {
+	}
+
+	void OnDrawGizmosSelected () {
+		drawMovemntPath(curveData3D);
 	}
 #endregion
 
@@ -67,7 +74,7 @@ public class MovementFlowFactory : FlowFactory {
 
 		// init data
 		data.Init();
-		
+
 		Vector3 drawPos = Vector3.zero;
 		if(relativeStartPos)
 		{
@@ -82,12 +89,12 @@ public class MovementFlowFactory : FlowFactory {
 		while(progress < length)
 		{
 			Vector3 nextPos = drawPos + data.GetDeltaValue(progress, gizmoTimeInterval); 
-			
+
 			if(isLocal && parentTrans != null)
 				Gizmos.DrawLine(
 						parentTrans.TransformPoint(drawPos), 
 						parentTrans.TransformPoint(nextPos)
-						);
+					       );
 			else
 				Gizmos.DrawLine(drawPos, nextPos);
 
@@ -101,10 +108,12 @@ public class MovementFlowFactory : FlowFactory {
 			Gizmos.DrawLine(
 					parentTrans.TransformPoint(drawPos),
 					parentTrans.TransformPoint(stopPos)
-					);
+				       );
 		else
 			Gizmos.DrawLine(drawPos, stopPos);
 	}
 
 #endregion
 }
+
+#endif
