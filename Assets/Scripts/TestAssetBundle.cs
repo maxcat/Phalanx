@@ -6,14 +6,11 @@ public class TestAssetBundle : MonoBehaviour {
 	// Use this for initialization
 	IEnumerator Start () {
 
-		AssetBundleLoadTask task = Service.Get<AssetBundleManager>().CreateLoadingTask("prefab1");
+		AssetBundleLoadFlow loadFlow = Service.Get<AssetBundleManager>().CreateLoadingFlow("prefab1");
 
-		task.Start();
-
-		yield return task.UntilDone;
+		yield return loadFlow;
 	
-		GameObject test  = GameObject.Instantiate(task.Output) as GameObject;
-
+		GameObject test  = GameObject.Instantiate(loadFlow.Output) as GameObject;
 
 	}
 	

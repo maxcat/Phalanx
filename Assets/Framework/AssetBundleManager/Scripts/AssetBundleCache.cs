@@ -81,5 +81,31 @@ public class AssetBundleCache
 		isCached = true;
 		Debug.Log("[INFO]AssetBundleCache->LoadBundlToCache: Load asset bundle from " + bundleName + " file size is " + bundleSize + " caching time is " + cachingTime);
 	}
+
+	public IEnumerator LoadBundleToCacheEnumerator()
+	{
+		string filePath = FilePath;
+		AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(filePath);
+		System.DateTime startTime = System.DateTime.Now;
+
+		yield return request;
+		System.DateTime endTime = System.DateTime.Now;
+
+		cachingTime = 0;
+
+		assetBundle = request.assetBundle;
+		if(assetBundle == null)
+		{
+			Debug.LogError("[ERROR]AssetBundleCache->LoadBundleToCacheEnumerator: can't find bundle at " + filePath);
+			yield break;
+		}
+
+		FileInfo fileInfo = new FileInfo(filePath);
+		bundleSize = fileInfo.Length;
+		cachingTime = (endTime - startTime).TotalSeconds;
+
+		isCached = true;
+		Debug.Log("[INFO]AssetBundleCache->LoadBundleToCacheEnumerator: Load asset bundle from " + bundleName + " file size is " + bundleSize + " caching time is " + cachingTime);
+	}
 #endregion
 }
