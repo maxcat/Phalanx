@@ -33,7 +33,7 @@ public partial class FlowFactory : MonoBehaviour {
 		{
 			if(createdFlow == null)
 				return false;
-			return createdFlow.IsFlowStarted;
+			return createdFlow.IsFlowRunning;
 		}
 	}
 
@@ -78,18 +78,18 @@ public partial class FlowFactory : MonoBehaviour {
 	public virtual void OnRunFlowButtonClicked()
 	{
 		createdFlow = CreateFlow();
-		Task mainTask = new Task(this, createdFlow, true);
+		createdFlow.Start(this);
 	}
 
 	public virtual void OnPauseButtonClicked()
 	{
-		if(createdFlow != null && createdFlow.IsFlowStarted)
+		if(createdFlow != null && createdFlow.IsFlowRunning)
 			createdFlow.Pause();	
 	}
 
 	public virtual void OnResumeButtonClicked()
 	{
-		if(createdFlow != null && createdFlow.IsFlowStarted)
+		if(createdFlow != null && createdFlow.IsFlowRunning)
 			createdFlow.Resume();	
 	}
 

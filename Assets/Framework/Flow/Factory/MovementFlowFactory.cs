@@ -56,7 +56,7 @@ public partial class MovementFlowFactory : FlowFactory {
 		if(Application.isPlaying && relativeStartPos && !monitoringFlow)
 			return;
 
-		if(monitoringFlow && (createdFlow == null || !createdFlow.IsFlowStarted))
+		if(monitoringFlow && (createdFlow == null || !createdFlow.IsFlowRunning))
 		{
 			// save target position
 			if(isLocal)

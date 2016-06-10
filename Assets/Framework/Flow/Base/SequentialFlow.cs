@@ -18,15 +18,12 @@ public class SequentialFlow : Flow {
 #region Implement Virtual Functions 
 	public override bool MoveNext()
 	{
-		isFlowStarted = true;
+		isFlowRunning = true;
 		if(currentFlow == null)
 		{
-			isFlowStarted = false;
+			isFlowRunning = false;
 			return false;
 		}
-
-		if(isPaused)
-			return true;
 
 		if(currentFlow.MoveNext())
 		{
@@ -39,14 +36,14 @@ public class SequentialFlow : Flow {
 				currentFlow = currentFlow.NextFlow;
 				if(!currentFlow.MoveNext())
 				{
-					isFlowStarted = false;
+					isFlowRunning = false;
 					return false;
 				}
 				return true;
 			}
 			else
 			{
-				isFlowStarted = false;
+				isFlowRunning = false;
 				return false;
 			}
 		}
@@ -55,10 +52,34 @@ public class SequentialFlow : Flow {
 	public override object Current
 	{
 		get { 
-			if(isPaused)
-				return null;
 			return currentFlow.Current;
 	       	}
+	}
+
+	public override void SetFlowSpeed(float speed)
+	{
+		currentFlow.SetFlowSpeed(speed);
+	}
+
+	public override void Pause()
+	{
+		if(!isPaused)
+		{
+			isPaused = true;
+			if(currentFlow != null)
+				currentFlow.Pause();
+		}		
+	}
+
+	public override void Resume()
+	{
+		if(isPaused)
+		{
+			isPaused = false;
+			if(currentFlow != null)
+				currentFlow.Resume();
+		}
+
 	}
 #endregion
 
@@ -103,7 +124,7 @@ public class SequentialFlow : Flow {
 		if(head == null)
 			return;
 
-		if(currentFlow != null && currentFlow.IsFlowStarted)
+		if(currentFlow != null && currentFlow.IsFlowRunning)
 		{
 			head.SetNext(currentFlow.NextFlow);
 			currentFlow.SetNext(head);
@@ -124,7 +145,7 @@ public class SequentialFlow : Flow {
 			return;
 
 		Flow head = new Flow(headEnumerator);
-		if(currentFlow != null && currentFlow.IsFlowStarted)
+		if(currentFlow != null && currentFlow.IsFlowRunning)
 		{
 			head.SetNext(currentFlow.NextFlow);
 			currentFlow.SetNext(head);

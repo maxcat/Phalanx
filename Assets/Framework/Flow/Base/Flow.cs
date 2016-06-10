@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 
 public class Flow : IEnumerator {
 
@@ -6,7 +7,7 @@ public class Flow : IEnumerator {
 	protected float 		flowSpeed;
 	protected IEnumerator 		source;
 	protected Flow 			nextFlow;
-	protected bool 			isFlowStarted = false;
+	protected bool 			isFlowRunning = false;
 	protected bool 			isPaused = false;
 #endregion
 
@@ -32,9 +33,9 @@ public class Flow : IEnumerator {
 		get { return nextFlow; }
 	}
 
-	public bool IsFlowStarted
+	public bool IsFlowRunning
 	{
-		get { return isFlowStarted; }
+		get { return isFlowRunning; }
 	}
 
 	public bool IsPaused
@@ -46,11 +47,11 @@ public class Flow : IEnumerator {
 #region Implement Inteface
 	public virtual bool MoveNext()
 	{
-		isFlowStarted = true;
+		isFlowRunning = true;
 
 		if(source == null)
 		{
-			isFlowStarted = false;
+			isFlowRunning = false;
 			return false;
 		}
 		else
@@ -63,7 +64,7 @@ public class Flow : IEnumerator {
 			{
 				if(!source.MoveNext())
 				{
-					isFlowStarted = false;		
+					isFlowRunning = false;		
 					return false;
 				}
 				return true;
@@ -107,6 +108,11 @@ public class Flow : IEnumerator {
 	{
 		if(isPaused)
 			isPaused = false;
+	}
+
+	public virtual void Start(MonoBehaviour mono)
+	{
+		mono.StartCoroutine(this);	
 	}
 #endregion
 
