@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ParallelFlow : Flow {
+public partial class ParallelFlow : Flow {
 
 #region Fields
 	protected List<Flow>			childFlows;
@@ -133,3 +133,31 @@ public class ParallelFlow : Flow {
 #endregion
 
 }
+
+#if UNITY_EDITOR
+public partial class ParallelFlow : Flow
+{
+#region Implement Virtual Functions
+	public override void Draw()
+	{
+		Color originColor = GUI.color;
+		GUI.color = Color.yellow;
+
+		GUILayout.BeginVertical("box");
+		{
+			GUILayout.Label("Parallel Flow");
+
+			GUILayout.BeginHorizontal("box");
+			foreach(Flow flow in childFlows)
+			{
+				flow.Draw();
+			}
+			GUILayout.EndHorizontal();
+		}
+		GUILayout.EndVertical();
+
+		GUI.color = originColor;
+	}
+#endregion	
+}
+#endif

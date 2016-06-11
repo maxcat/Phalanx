@@ -11,12 +11,12 @@ public class FlowFactoryEditor : Editor {
 		DrawDefaultInspector();
 		FlowFactory flowFactory = (FlowFactory) target;
 
-		//		if(GUILayout.Button("Open Editor"))
-		//		{
-		//			TaskEditorWindow window = EditorWindow.GetWindow<TaskEditorWindow>();
-		//
-		//			window.init(taskFactory);
-		//		}
+		if(GUILayout.Button("Open Editor"))
+		{
+			FlowEditorWindow window = EditorWindow.GetWindow<FlowEditorWindow>();
+
+			window.Init(flowFactory);
+		}
 
 		if(Application.isPlaying)
 		{

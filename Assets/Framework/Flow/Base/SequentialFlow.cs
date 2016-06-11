@@ -1,6 +1,7 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 
-public class SequentialFlow : Flow {
+public partial class SequentialFlow : Flow {
 
 #region Constructor
 	protected Flow 			currentFlow;
@@ -174,3 +175,30 @@ public class SequentialFlow : Flow {
 #endregion
 
 }
+
+#if UNITY_EDITOR
+public partial class SequentialFlow : Flow
+{
+#region Implement Virtual Functions
+	public override void Draw()
+	{
+		Color originColor = GUI.color;
+		GUI.color = Color.magenta;
+
+		GUILayout.BeginVertical("box");
+		GUILayout.Label("Sequential Flow");
+
+		Flow trackingFlow = currentFlow;
+
+		while(trackingFlow != null)
+		{
+			trackingFlow.Draw();
+			trackingFlow = trackingFlow.NextFlow;
+		}
+
+		GUILayout.EndVertical();
+		GUI.color = originColor;
+	}
+#endregion
+}
+#endif

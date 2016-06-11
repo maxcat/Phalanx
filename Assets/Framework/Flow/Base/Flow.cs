@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Flow : IEnumerator {
+public partial class Flow : IEnumerator {
 
 #region Fields
 	protected float 		flowSpeed;
@@ -134,3 +134,19 @@ public class Flow : IEnumerator {
 	}
 #endregion
 }
+
+#if UNITY_EDITOR
+public partial class Flow : IEnumerator
+{
+#region Virtual Functions
+	public virtual void Draw()
+	{
+		Color originColor = GUI.color;
+		GUI.color = Color.red;
+		GUILayout.Box("Flow");
+		GUI.color = originColor;
+	}
+#endregion
+}
+#endif
+
