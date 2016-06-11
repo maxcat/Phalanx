@@ -100,6 +100,12 @@ public partial class FlowFactory : MonoBehaviour {
 			updateFlowSpeed();
 		}
 	}
+
+	public virtual void OnKillButtonClicked()
+	{
+		if(createdFlow != null && createdFlow.IsFlowRunning)
+			createdFlow.Kill();
+	}
 #endregion
 
 #endif

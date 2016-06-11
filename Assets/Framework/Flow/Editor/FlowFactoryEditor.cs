@@ -44,6 +44,11 @@ public class FlowFactoryEditor : Editor {
 						flowFactory.OnPauseButtonClicked();
 					}
 				}
+
+				if(GUILayout.Button("Kill Flow"))
+				{
+					flowFactory.OnKillButtonClicked();					
+				}
 			}
 		}
 	}

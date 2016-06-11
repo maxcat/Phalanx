@@ -52,13 +52,16 @@ public class SequentialFlow : Flow {
 	public override object Current
 	{
 		get { 
+			if(currentFlow == null)
+				return null;
 			return currentFlow.Current;
-	       	}
+		}
 	}
 
 	public override void SetFlowSpeed(float speed)
 	{
-		currentFlow.SetFlowSpeed(speed);
+		if(currentFlow != null)
+			currentFlow.SetFlowSpeed(speed);
 	}
 
 	public override void Pause()
@@ -80,6 +83,15 @@ public class SequentialFlow : Flow {
 				currentFlow.Resume();
 		}
 
+	}
+
+	public override void Kill()
+	{
+		if(currentFlow != null)
+		{
+			currentFlow.Kill();
+			currentFlow = null;
+		}
 	}
 #endregion
 

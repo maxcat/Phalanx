@@ -101,6 +101,15 @@ public class ParallelFlow : Flow {
 		}
 	}
 
+	public override void Kill()
+	{
+		for(int i = 0; i < childFlows.Count; i ++)
+		{
+			childFlows[i].Kill();
+		}
+		childFlows.Clear();
+	}
+
 	public override void Start(MonoBehaviour mono)
 	{
 		for(int i = 0; i < childFlows.Count; i ++)

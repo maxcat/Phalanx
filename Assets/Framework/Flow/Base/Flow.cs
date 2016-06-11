@@ -88,6 +88,11 @@ public class Flow : IEnumerator {
 #endregion
 
 #region Virtual Functions
+	public virtual void Kill()
+	{
+		source = null;
+	}
+
 	protected virtual IEnumerator main()
 	{
 		yield return null;
