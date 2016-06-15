@@ -5,6 +5,7 @@ public class AssetBundleLoadFlow : SequentialFlow {
 
 #region Fields
 	protected Object 		output;
+	protected AssetBundleCache 	cache;
 #endregion
 
 #region Getter and Setter
@@ -15,16 +16,18 @@ public class AssetBundleLoadFlow : SequentialFlow {
 #endregion
 
 #region Constructor
-	public AssetBundleLoadFlow(AssetBundleCache cache, Flow cacheFlow)
+	public AssetBundleLoadFlow(AssetBundleCache cache, Flow dependenciesCacheFlow)
 		: base()
 	{
-		Add(cacheFlow);
+		this.cache = cache;
+		Add(dependenciesCacheFlow);
 		Add(loadFlow(cache));
 	}
 
 	public AssetBundleLoadFlow(AssetBundleCache cache)
 		: base ()
-	{
+	{ 
+		this.cache = cache;
 		Add(loadFlow(cache));
 	}
 #endregion
@@ -44,4 +47,13 @@ public class AssetBundleLoadFlow : SequentialFlow {
 		output = request.asset;
 	}
 #endregion
+
+#region Public API
+	public void Unload(bool unloadAllLoadedObjects)
+	{
+		output = null;
+		cache.Bundle.Unload(unloadAllLoadedObjects);	
+		cache = null;
+	}
+#endregion	
 }
