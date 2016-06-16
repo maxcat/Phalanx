@@ -7,8 +7,27 @@ public class AssetBundleManager : Singleton {
 
 #region Fields
 	[SerializeField] protected long 			bundleSizeThreadhold = 500000;
+	[SerializeField] protected int 				cacheInitCountPerFrame = 100;
 	protected Dictionary<string, AssetBundleCache>		cachePool;
 	protected AssetBundleSummary	 			summary;
+#endregion
+
+#region Getter and Setter
+	public List<AssetBundleCache> CacheList
+	{
+		get
+		{
+			List<AssetBundleCache> result = new List<AssetBundleCache>();
+			if(!GameUtilities.IsEmpty(cachePool))
+			{
+				foreach(string key in cachePool.Keys)
+				{
+					result.Add(cachePool[key]);
+				}
+			}
+			return result;
+		}
+	}
 #endregion
 
 #region Public API
@@ -17,7 +36,7 @@ public class AssetBundleManager : Singleton {
 		AssetBundleCache cache = getCache(name);
 		if(cache == null)
 			return null;
-		AssetBundleCacheFlow cacheFlow = new AssetBundleCacheFlow(generateCachingList(name), bundleSizeThreadhold);
+		AssetBundleCacheFlow cacheFlow = new AssetBundleCacheFlow(cache.CacheList, bundleSizeThreadhold);
 		return new AssetBundleLoadFlow(cache, cacheFlow);
 	}
 
@@ -46,11 +65,6 @@ public class AssetBundleManager : Singleton {
 		return result;
 	}
 
-	public void Unload(string bundleName)
-	{
-
-	}
-
 	public IEnumerator InitAsync()
 	{
 		summary = new AssetBundleSummary();
@@ -61,7 +75,7 @@ public class AssetBundleManager : Singleton {
 
 		if(!GameUtilities.IsEmpty(bundleArray))
 		{
-			for(int i = 0; i <bundleArray.Length; i ++)
+			for(int i = 0; i < bundleArray.Length; i ++)
 			{
 				AssetBundleCache cache = new AssetBundleCache(bundleArray[i]);
 				if(cache.Init())
@@ -69,32 +83,42 @@ public class AssetBundleManager : Singleton {
 					cachePool.Add(cache.BundleName, cache);
 				}
 			}	
+
+			int index = 0;
+			foreach(AssetBundleCache cache in cachePool.Values)
+			{
+				initDependencies(cache);
+				if(index % cacheInitCountPerFrame == cacheInitCountPerFrame - 1)
+				{
+					yield return null;
+				}
+			}
 		}
 	}
 #endregion
 
 #region Protected Functions
-	protected List<AssetBundleCache> generateCachingList(string name)
+	protected void initDependencies(AssetBundleCache cache)
 	{
-		AssetBundleCache cache = getCache(name); 
-		if(cache == null)
-			return null;
-
-		List<AssetBundleCache> result = new List<AssetBundleCache>();
-		result.Add(cache);
-
-		string[] dependencyArray = summary.GetAllDependencies(name);
+		string[] dependencyArray = summary.GetAllDependencies(cache.BundleName);
 		if(!GameUtilities.IsEmpty(dependencyArray))
 		{
 			for(int i = 0; i < dependencyArray.Length; i ++)
 			{
-				List<AssetBundleCache> dependencyCachList = generateCachingList(dependencyArray[i]);
-				if(!GameUtilities.IsEmpty(dependencyCachList))
-					result.AddRange(dependencyCachList);
+				AssetBundleCache dependCache = getCache(dependencyArray[i]);
+				if(dependCache != null)
+				{
+					if(!dependCache.IsDependenciesInited)
+					{
+						initDependencies(dependCache);
+					}
+					cache.Dependencies.AddUnique(dependCache);
+					cache.Dependencies.AddRangeUnique(dependCache.Dependencies);
+				}
 			}
 		}
 
-		return result;
+		cache.IsDependenciesInited = true;	
 	}
 
 	protected List<AssetBundleCache> generateCachingList(List<string> nameList)
@@ -105,9 +129,12 @@ public class AssetBundleManager : Singleton {
 		List<AssetBundleCache> result = new List<AssetBundleCache>();
 		for(int i = 0; i < nameList.Count; i ++)
 		{
-			result.AddRangeUnique(generateCachingList(nameList[i]));
+			AssetBundleCache cache = getCache(nameList[i]);
+
+			if(cache != null && cache.CacheList != null)
+				result.AddRange(cache.CacheList);
 		}
-		
+
 		return result;
 	}
 

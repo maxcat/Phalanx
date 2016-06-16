@@ -13,6 +13,8 @@ public class AssetBundleCache
 	protected bool 				isCaching = false;
 	protected long 				bundleSize;
 	protected double 			cachingTime;
+	protected List<AssetBundleCache>	dependencies;
+	protected bool 				isDependenciesInited = false;
 #endregion
 
 #region Getter and Setter
@@ -50,12 +52,45 @@ public class AssetBundleCache
 	{
 		get { return cachingTime; }
 	}
+
+	public int RefCount
+	{
+		get { return refCount; }
+	}
+
+	public List<AssetBundleCache> Dependencies
+	{
+		get { return dependencies; }
+		set { dependencies = value; }
+	}
+
+	public bool IsDependenciesInited
+	{
+		get { return isDependenciesInited; }
+		set { isDependenciesInited = value; }
+	}
+
+	public List<AssetBundleCache> CacheList
+	{
+		get
+		{
+			if(isDependenciesInited)
+			{
+				List<AssetBundleCache> result = new List<AssetBundleCache>();
+				result.Add(this);
+				result.AddRange(dependencies);
+				return result;
+			}
+			return null;
+		}
+	}
 #endregion
 
 #region Constructor
 	public AssetBundleCache(string name)
 	{
 		bundleName = name;
+		dependencies = new List<AssetBundleCache>();
 	}
 #endregion
 
@@ -63,6 +98,18 @@ public class AssetBundleCache
 	public void Aquire()
 	{
 		refCount ++;	
+	}
+
+	public void Unload(bool unloadAllLoadedObjects)
+	{
+		if(assetBundle != null)
+			assetBundle.Unload(unloadAllLoadedObjects);
+
+		Release();
+		for(int i = 0; i < dependencies.Count; i ++)
+		{
+			dependencies[i].Release();
+		}	
 	}
 
 	public void Release()
@@ -149,4 +196,5 @@ public class AssetBundleCache
 		Debug.Log("[INFO]AssetBundleCache->LoadBundleToCacheEnumerator: Load asset bundle from " + bundleName + " file size is " + bundleSize + " caching time is " + cachingTime);
 	}
 #endregion
+
 }

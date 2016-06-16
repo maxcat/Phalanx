@@ -6,11 +6,13 @@ public class TestAssetBundle : MonoBehaviour {
 
 	// Use this for initialization
 	IEnumerator Start () {
-		Service.Get<PopupService>().ShowDebugLogConsole();
-
 		yield return Service.Get<AssetBundleManager>().InitAsync();
 
-		List<string> nameList = new List<string>() {"prefab1", "prefab2"};
+		Service.Get<PopupService>().ShowAssetBundleDebugPopup();
+
+		yield return null;
+
+		List<string> nameList = new List<string>() {"prefab2","prefab1" };
 
 		List<AssetBundleLoadFlow> loadFlowList = Service.Get<AssetBundleManager>().CreateLoadingFlow(nameList);
 
@@ -24,13 +26,19 @@ public class TestAssetBundle : MonoBehaviour {
 
 		double loadTime = (System.DateTime.Now - startTime).TotalSeconds;
 		Debug.LogError("=====load flow 1 load time is " + loadTime);
+
+		for(int i = 0; i < loadFlowList.Count; i ++)
+		{
+			yield return new WaitForSeconds(3);
+			loadFlowList[i].Unload(true);;
+		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
-		
-	
+
+
 	}
 
 }

@@ -52,7 +52,7 @@ public class AssetBundleLoadFlow : SequentialFlow {
 	public void Unload(bool unloadAllLoadedObjects)
 	{
 		output = null;
-		cache.Bundle.Unload(unloadAllLoadedObjects);	
+		cache.Unload(unloadAllLoadedObjects);	
 		cache = null;
 	}
 #endregion	
