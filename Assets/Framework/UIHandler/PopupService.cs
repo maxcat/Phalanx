@@ -79,7 +79,7 @@ public partial class PopupService : Singleton {
 		yield return null;
 	}
 
-	protected void addPopup(GameObject popupObj, PopupData data, bool isPersistPopup)
+	protected void addPopup(GameObject popupObj, object data, bool isPersistPopup)
 	{
 		if(popupObj == null)
 		{

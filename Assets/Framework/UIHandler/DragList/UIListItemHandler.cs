@@ -16,7 +16,7 @@ public class UIListItemHandler : MonoBehaviour {
 #endregion
 
 #region Virtual Functions
-	public virtual void UpdateData(UIListData data)
+	public virtual void UpdateData(object data)
 	{
 
 	}

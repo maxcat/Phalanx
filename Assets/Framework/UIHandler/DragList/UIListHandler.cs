@@ -3,11 +3,6 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class UIListData
-{
-
-}
-
 public class UIListHandler : MonoBehaviour {
 
 #region Fields
@@ -50,7 +45,7 @@ public class UIListHandler : MonoBehaviour {
 #endregion
 
 #region Virtual Functions
-	public virtual void UpdateData(List<UIListData> dataList)
+	public virtual void UpdateData(object[] dataList)
 	{
 		if(itemTemplate.activeInHierarchy)
 			itemTemplate.SetActive(false);
@@ -58,18 +53,19 @@ public class UIListHandler : MonoBehaviour {
 		if(itemList == null)
 			itemList = new List<GameObject>();
 
-		int dataCount = dataList == null ? 0 : dataList.Count;
+		int dataCount = dataList == null ? 0 : dataList.Length;
 		int iterationCnt = dataCount > itemList.Count ? dataCount : itemList.Count;
 
 		for(int i = 0; i < iterationCnt; i ++)
 		{
-			UIListData data = i < dataCount ? dataList[i] : null;
+			object data = i < dataCount ? dataList[i] : null;
 			GameObject item = i < itemList.Count ? itemList[i] : null;
 
 			if(item == null && data != null)
 			{
 				item = GameObject.Instantiate(itemTemplate) as GameObject;
 				item.transform.SetParent(parentObj.transform);
+				item.transform.localScale = Vector3.one;
 				itemList.Add(item);
 				item.SetActive(true);
 				item.GetComponent<UIListItemHandler>().UpdateData(data);

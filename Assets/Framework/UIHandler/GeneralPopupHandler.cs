@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class GeneralPopupData : PopupData
+public class GeneralPopupData 
 {
 #region Fields
 	protected string 		titleStr;
@@ -68,7 +68,7 @@ public class GeneralPopupHandler : PopupHandler {
 #endregion
 
 #region Implement Virtual Functions
-	public override void Init(PopupData data, bool isPersistPopup)
+	public override void Init(object data, bool isPersistPopup)
 	{
 		base.Init(data, isPersistPopup);
 

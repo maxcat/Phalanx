@@ -1,14 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PopupData
-{
-}
-
 public class PopupHandler : MonoBehaviour {
 
 #region Fields
-	[SerializeField] protected PopupData 		popupData;
+	[SerializeField] protected object 		popupData;
 	[SerializeField] protected bool 		isPersist;
 	[SerializeField] protected TaskFactory		openAnimationTaskFactory;
 	[SerializeField] protected TaskFactory 		closeAnimationTaskFactory;
@@ -51,7 +47,7 @@ public class PopupHandler : MonoBehaviour {
 #endregion
 
 #region Virtual Functions
-	public virtual void Init(PopupData data, bool isPersistPopup)
+	public virtual void Init(object data, bool isPersistPopup)
 	{
 		isPersist = isPersistPopup;
 		popupData = data;

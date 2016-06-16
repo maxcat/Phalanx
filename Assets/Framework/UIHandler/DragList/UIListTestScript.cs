@@ -13,12 +13,12 @@ public class UIListTestScript : MonoBehaviour {
 #region Override MonoBehaviour 
 	// Use this for initialization
 	void Start () {
-		List<UIListData> dataList = new List<UIListData>();
+		List<object> dataList = new List<object>();
 
 		if(!is2DList)
 		{
 			for(int i = 0; i < dataCount; i ++)
-				dataList.Add(new UIListData());
+				dataList.Add(new object());
 		}
 		else
 		{
@@ -28,13 +28,13 @@ public class UIListTestScript : MonoBehaviour {
 				for(int j = 0; j < subItemCount; j ++)
 				{
 					if(i * subItemCount + j < dataCount)
-						data.DataList.Add(new UIListData());
+						data.DataList.Add(new object());
 				}
 				dataList.Add(data);
 			}
 		}
 
-		GetComponent<UIListHandler>().UpdateData(dataList);
+		GetComponent<UIListHandler>().UpdateData(dataList.ToArray());
 	}
 	
 	// Update is called once per frame

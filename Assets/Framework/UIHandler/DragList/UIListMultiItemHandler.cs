@@ -3,14 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class UI2DListData : UIListData
+public class UI2DListData 
 {
 #region Fields
-	protected List<UIListData> 		dataList;
+	protected List<object> 		dataList;
 #endregion
 
 #region Getter and Setter
-	public List<UIListData> DataList
+	public List<object> DataList
 	{
 		get { return dataList; }
 		set { dataList = value; }
@@ -30,10 +30,10 @@ public class UI2DListData : UIListData
 #region Constructor
 	public UI2DListData()
 	{
-		this.dataList = new List<UIListData>();
+		this.dataList = new List<object>();
 	}	
 
-	public UI2DListData (List<UIListData> dataList)
+	public UI2DListData (List<object> dataList)
 	{
 		this.dataList = dataList;
 	}
@@ -60,7 +60,7 @@ public class UIListMultiItemHandler : UIListItemHandler {
 #endregion
 
 #region Implement Virtual Functions
-	public override void UpdateData(UIListData data)
+	public override void UpdateData(object data)
 	{
 		UI2DListData data2D = new UI2DListData(); 
 
