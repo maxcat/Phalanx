@@ -13,6 +13,17 @@ public class AssetBundleBuilder {
 		typeof(Texture),
 		typeof(Sprite),
 		typeof(GameObject),
+		typeof(Shader),
+		typeof(Mesh),
+	};
+
+	static List<string>				ignoreExtersionList = new List<string>
+	{
+		".DS_Store",
+		".meta",
+		".txt",
+		".db",
+		".tps",
 	};
 #endregion
 
@@ -33,9 +44,53 @@ public class AssetBundleBuilder {
 
 		AssetDatabase.Refresh();
 	}
+
+	[MenuItem("Assets/Build selected Folder")]
+	static void BuildSelectedFolderToBundle()
+	{
+		foreach(Object obj in Selection.GetFiltered(typeof(Object), SelectionMode.Assets))	
+		{
+			string path = AssetDatabase.GetAssetPath(obj);
+
+			if(Directory.Exists(path))
+			{
+				buildFolderToBundle(path);
+			}
+		}
+
+		BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", bundleBuildList.ToArray(), BuildAssetBundleOptions.DeterministicAssetBundle, EditorUserBuildSettings.activeBuildTarget); 
+
+		AssetDatabase.Refresh();
+	}
 #endregion
 
 #region Private Static Functions
+	static void buildFolderToBundle(string path)
+	{
+		if(bundleBuildList == null)
+			bundleBuildList = new List<AssetBundleBuild>();	
+
+		AssetBundleBuild build = new AssetBundleBuild();
+		build.assetBundleName = new DirectoryInfo(path).Name;
+
+		List<string> fileList = new List<string>();
+		var files = Directory.GetFiles(path); 
+		for(int i = 0; i < files.Length; i ++)
+		{
+			string filePath = files[i];
+			FileInfo info = new FileInfo(filePath);
+			if(ignoreExtersionList.Contains(info.Extension))
+				continue;
+			fileList.AddRangeUnique(createFileList(filePath));
+		}
+		if(fileList.Count > 0)
+		{
+			build.assetNames = fileList.ToArray();
+		}
+		bundleBuildList.Add(build);
+	}
+
+
 	static void GatherToBundleBuild()
 	{
 		string toBundleDir = "Assets/Resources/ToBundle";
@@ -44,11 +99,23 @@ public class AssetBundleBuilder {
 		if(Directory.Exists(toBundleDir))
 		{
 			string [] files = Directory.GetFiles(toBundleDir, "*.prefab");
+			List<string> pathList = new List<string>();
 			if(files.Length > 0)
 			{
 				for(int i = 0; i < files.Length; i ++)
 				{
-					createBundleBuild(files[i]);
+					//createBundleBuild(files[i]);
+					pathList.AddRangeUnique(createFileList(files[i]));
+				}
+
+				for(int i = 0; i < pathList.Count; i ++ )
+				{
+					string path = pathList[i];
+					AssetBundleBuild build = new AssetBundleBuild();
+
+					build.assetBundleName = AssetDatabase.LoadAssetAtPath(path, typeof(Object)).name;
+					build.assetNames = new string[]{path};
+					bundleBuildList.Add(build);
 				}
 			}
 		}
@@ -107,6 +174,32 @@ public class AssetBundleBuilder {
 
 			}
 		}
+	}
+
+	static List<string> createFileList(string file)
+	{
+		Object obj = AssetDatabase.LoadAssetAtPath(file, typeof(Object));
+		string path = file.Replace('\\', '/');
+
+		List<string> assetList = new List<string>();
+		if(obj != null)
+		{
+			Object[] dependList = EditorUtility.CollectDependencies(new Object[] {obj});
+			if(dependList != null && dependList.Length > 0)
+			{
+				for(int i = 0; i < dependList.Length; i ++)
+				{
+					Object dependObj = dependList[i];
+					string dependPath = AssetDatabase.GetAssetPath(dependObj);
+					if(isAsset(dependObj))
+					{
+						assetList.AddUnique(dependPath);
+					}
+				}	
+			}
+			assetList.Add(path);
+		}
+		return assetList;
 	}
 
 	static bool isAsset(Object obj)

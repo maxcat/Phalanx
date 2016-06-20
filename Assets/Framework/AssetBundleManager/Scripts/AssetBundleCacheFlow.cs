@@ -96,8 +96,6 @@ public class AssetBundleCacheFlow : Flow {
 		cacheList.Sort((x, y) => x.BundleSize.CompareTo(y.BundleSize));
 
 		int index = 0;
-		List<SmallCacheCollection> smallPackList = new List<SmallCacheCollection>();
-
 		while(index < cacheList.Count)
 		{
 			AssetBundleCache cache = cacheList[index];	
@@ -118,7 +116,6 @@ public class AssetBundleCacheFlow : Flow {
 			{
 				SmallCacheCollection collection = new SmallCacheCollection(bundleSizeThreadhold);
 
-				long chunkSize = 0;
 				while(index < cacheList.Count && cache.BundleSize <= collection.SpaceLeft)
 				{
 					cache = cacheList[index];
