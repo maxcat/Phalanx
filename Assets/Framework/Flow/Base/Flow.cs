@@ -9,6 +9,8 @@ public partial class Flow : IEnumerator {
 	protected Flow 			nextFlow;
 	protected bool 			isFlowRunning = false;
 	protected bool 			isPaused = false;
+
+	protected IEnumerator 		sourcePerIternation;
 #endregion
 
 #region Constructor
@@ -44,12 +46,50 @@ public partial class Flow : IEnumerator {
 	}
 #endregion
 
+#region Protected Functions 
+	protected IEnumerator moveNext(IEnumerator parentSource)
+	{
+		if(typeof(IEnumerator).IsInstanceOfType(parentSource.Current))
+		{
+			IEnumerator currentObject = parentSource.Current as IEnumerator;
+			IEnumerator child = moveNext(currentObject);
+			if(child != null)
+			{
+				return child; 
+			}
+			else 
+			{
+				if(parentSource.MoveNext())
+				{
+					return parentSource;
+				}
+				else
+				{
+					return null;
+				}
+			}
+		}
+		else
+		{
+			if(parentSource.MoveNext())
+			{
+				return parentSource;
+			}
+			else
+			{
+				return null;
+			}
+		}
+	}
+#endregion
+
 #region Implement Inteface
 	public virtual bool MoveNext()
 	{
 		isFlowRunning = true;
 
-		if(source == null)
+		sourcePerIternation = source;
+		if(sourcePerIternation == null)
 		{
 			isFlowRunning = false;
 			return false;
@@ -62,7 +102,8 @@ public partial class Flow : IEnumerator {
 			}
 			else
 			{
-				if(!source.MoveNext())
+				sourcePerIternation = moveNext(source);
+				if(sourcePerIternation == null)
 				{
 					isFlowRunning = false;		
 					return false;
@@ -77,7 +118,7 @@ public partial class Flow : IEnumerator {
 		get {
 			if(isPaused)
 				return null;
-			return source != null ? source.Current : null;
+			return sourcePerIternation != null ? sourcePerIternation.Current : null;
 		}
 	}
 
