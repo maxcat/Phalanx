@@ -108,6 +108,6 @@ public partial class FlowFactory : MonoBehaviour {
 	}
 #endregion
 
-#endif
 }
 
+#endif
