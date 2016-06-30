@@ -6,15 +6,7 @@ public class TestData
 #region Fields
 	public int 			PublicInt;
 	protected float 		protectedFloat;
-	private string 			privateString;
 #endregion	
-
-#region Getter and Setter
-	public string PrivateString
-	{
-		get { return privateString; }
-	}
-#endregion
 
 #region Functions
 

@@ -8,6 +8,7 @@ public class TestBundleController : MonoBehaviour {
 	void Start () {
 
 		GameObject test = GameObject.Instantiate(prefab) as GameObject;
+		test.name = prefab.name;
 	
 	}
 	

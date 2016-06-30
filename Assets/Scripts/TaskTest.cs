@@ -9,7 +9,6 @@ public class TaskTest : MonoBehaviour {
 	[SerializeField] protected bool			conditionFit = true;
 	SequentialFlow mainFlow;
 	float 					time;
-	bool 					dynamicAdded = false;
 
 	void Awake ()
 	{
@@ -22,7 +21,6 @@ public class TaskTest : MonoBehaviour {
 		mainFlow = new SequentialFlow();
 		mainFlow.Add(new DelayFlow(10f));
 		mainFlow.Add(helloFlow());
-		Task main = new Task(this, mainFlow, true);
 
 	}
 

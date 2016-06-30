@@ -22,6 +22,7 @@ public class TestAssetBundle : MonoBehaviour {
 			AssetBundleLoadFlow flow = loadFlowList[i];
 			yield return flow;
 			GameObject test = GameObject.Instantiate(flow.Output) as GameObject;
+			test.name = flow.Output.name;
 		}
 
 		double loadTime = (System.DateTime.Now - startTime).TotalSeconds;
