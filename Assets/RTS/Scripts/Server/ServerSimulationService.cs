@@ -20,4 +20,11 @@ public class ServerSimulationService : MonoBehaviour {
 	}
 #endregion
 
+#region Server Flow
+	protected IEnumerator mainEnumerator()
+	{
+		yield return null;	
+	}
+#endregion
+
 }

@@ -6,8 +6,8 @@ using System.Collections.Generic;
 public class TimeStep {
 
 #region Static Fields
-	// time step duration in ms
-	public static readonly int 					TIME_STEP_DURATION = 1000;
+	// time step duration in s
+	public static readonly float 					TIME_STEP_DURATION = 1f;
 #endregion
 
 #region Fields
