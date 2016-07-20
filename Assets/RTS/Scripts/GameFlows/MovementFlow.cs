@@ -6,9 +6,9 @@ public class MovementFlow : GameFlow {
 #region Fields
 	protected GameObject 			movingObj;
 	protected GameObject 			targetObj = null;
-	protected Vector3			velocity;
 	protected float 			speed;
 	protected Vector3 			startPos;
+	protected Vector3 			destPos;
 #endregion
 
 #region Getter and Setter 
@@ -30,12 +30,13 @@ public class MovementFlow : GameFlow {
 		this.source = moveToTargetEnumerator();
 	}
 
-	public MovementFlow(GameObject movingObj, Vector2 startPos, Vector2 velocity)
+	public MovementFlow(GameObject movingObj, Vector2 startPos, float speed, Vector2 destPos)
 		: base ()
 	{
 		this.movingObj = movingObj;
-		this.velocity = (Vector3)velocity;
 		this.startPos = (Vector3)startPos;
+		this.destPos = (Vector3)startPos;
+		this.speed = speed;
 
 		this.source = moveToPosEnumerator();
 	}
@@ -48,12 +49,16 @@ public class MovementFlow : GameFlow {
 		movingObj.transform.localPosition = startPos;
 
 		float timeElapse = 0f; 
+		Vector3 velocity = (destPos - startPos).normalized * speed;
 		while(timeElapse < TimeStep.TIME_STEP_DURATION)
 		{
 			float deltaTime = Time.deltaTime;
 			timeElapse += deltaTime;
 			yield return null;
-			movingObj.transform.localPosition += velocity * deltaTime;
+			if(Vector3.Distance(movingObj.transform.localPosition, destPos) > 1f)
+			{
+				movingObj.transform.localPosition += velocity * deltaTime;
+			}
 		}
 	}
 
