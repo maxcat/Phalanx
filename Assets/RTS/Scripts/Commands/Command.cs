@@ -1,10 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class Command {
 
 #region Fields
-	[SerializeField] protected uint 		ownerID;
+	protected uint 		ownerID;
+	protected bool 		isCommandFinished = false;
+#endregion
+
+#region Getter and Setter
+	public bool IsFinished
+	{
+		get { return isCommandFinished; }
+		set { isCommandFinished = value; }
+	}
+
+	public uint OwnerID
+	{
+		get { return ownerID; }
+	}
+#endregion
+
+#region Constructor
+	public Command(uint ownerID)
+	{
+		this.ownerID = ownerID;
+		isCommandFinished = false;
+	}
 #endregion
 }
