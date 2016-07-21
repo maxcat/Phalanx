@@ -2,76 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CircularTimeSteps
-{
-#region Fields
-	protected Dictionary<uint, TimeStep> 	timeSteps;
-	protected int 				size = 10;
-	protected uint 				lastTag = 0;
-#endregion
-
-#region Constructor
-	public CircularTimeSteps(int size = 10)
-	{
-		timeSteps = new Dictionary<uint, TimeStep>(); 
-		this.size = size;
-	}
-#endregion
-
-#region Public API
-	public void Append(TimeStep step)
-	{
-		if(timeSteps.Count == 0)
-		{
-			timeSteps.Add(step.Tag, step);
-			lastTag = step.Tag;
-		}
-
-		if(timeSteps.Count > 0)	
-		{
-			if(step.Tag - lastTag == 1)
-			{
-				lastTag ++;
-				timeSteps.Add(step.Tag, step);
-				if(timeSteps.Count >= size)
-				{
-					timeSteps.Remove(lastTag - (uint)size);
-				}	
-			}	
-			else
-			{
-				Debug.LogWarning("[WARNING]CircularTimeSteps->Append: last receive time step is " + lastTag + " input time step is " + step.Tag);
-				return;
-			}
-		}
-	}
-
-	public TimeStep Get(uint tag)
-	{
-		if(timeSteps.ContainsKey(tag))
-		{
-			return timeSteps[tag];
-		}	
-
-		return null;
-	}
-
-	public List<TimeStep> GetLast(int count)
-	{
-		if(count > size || count > timeSteps.Count)
-			return null;
-
-		List<TimeStep> result = new List<TimeStep>();
-		for(int i = 0; i < count; i ++)
-		{
-			result.Add(timeSteps[lastTag + 1 - (uint)count]);
-		}
-		return result;
-	}
-#endregion
-
-}
-
 public class ClientService : MonoBehaviour {
 
 #region Fields
@@ -80,8 +10,10 @@ public class ClientService : MonoBehaviour {
 	[SerializeField] protected uint 			clientID;
 
 	[SerializeField] protected ServerSimulationService	serverSimuation;
+	[SerializeField] protected List<GameObject> 		prefabList;
 
 	protected CircularTimeSteps 				timeSteps; 
+	protected Dictionary<uint, GameObject> 			objectPool;
 #endregion
 
 #region Getter and Setter
@@ -113,6 +45,34 @@ public class ClientService : MonoBehaviour {
 	{
 		
 	}
+
+	public void AddObject(uint id, GameObject obj)
+	{
+		if(objectPool.ContainsKey(id))
+		{
+			Debug.LogWarning("[WARNING]ClientService->AddObject: id " + id + " already exist!");
+			return;
+		}
+
+		if(obj == null)
+		{
+			Debug.LogWarning("[WARNING]ClientService->AddObject: GameObject can not be null! ");
+			return;
+		}
+
+		objectPool.Add(id, obj);
+	}
+
+	public GameObject GetObject(uint id)
+	{
+		if(!objectPool.ContainsKey(id))
+		{
+			Debug.LogWarning("[WARNING]ClientService->GetObject: GameObject with id " + id + " can not be found!");
+			return null;
+		}	
+
+		return objectPool[id];
+	}
 #endregion
 
 #region Event Listener
@@ -126,6 +86,7 @@ public class ClientService : MonoBehaviour {
 	protected void init()
 	{
 		timeSteps = new CircularTimeSteps();
+		objectPool = new Dictionary<uint, GameObject>();
 	}
 #endregion
 

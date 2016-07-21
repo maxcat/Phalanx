@@ -45,7 +45,7 @@ public class MovementFlow : GameFlow {
 #region Sub Flow
 	protected IEnumerator moveToPosEnumerator()
 	{
-		GameObject movingObj = Service.Get<ClientObjectPool>().GetObject(movingObjID);
+		GameObject movingObj = clientService.GetObject(movingObjID);
 		// TODO: smooth translation to the start postion
 		movingObj.transform.localPosition = startPos;
 
@@ -65,8 +65,8 @@ public class MovementFlow : GameFlow {
 
 	protected IEnumerator moveToTargetEnumerator()
 	{
-		GameObject movingObj = Service.Get<ClientObjectPool>().GetObject(movingObjID);
-		GameObject targetObj = Service.Get<ClientObjectPool>().GetObject(targetObjID);
+		GameObject movingObj = clientService.GetObject(movingObjID);
+		GameObject targetObj = clientService.GetObject(targetObjID);
 		// TODO: smooth translation to the start postion
 		movingObj.transform.localPosition = startPos;
 
