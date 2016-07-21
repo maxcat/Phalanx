@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ComandPool : MonoBehaviour {
+public class EmptyFlow : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

@@ -15,10 +15,33 @@ public class TimeStep {
 	[SerializeField] protected uint 				timeStepTag = 0;
 #endregion
 
+#region Constructor
+	public TimeStep(uint tag)
+	{
+		timeStepTag = tag;
+		flowList = new List<GameFlow>();
+	}
+#endregion
+
 #region Getter and Setter
 	public uint Tag
 	{
 		get { return timeStepTag; }
+	}
+	
+	public List<GameFlow> GameFlows
+	{
+		get { return flowList; }
+	}
+#endregion
+
+#region PUblic API
+	public void AddGameFlows(List<GameFlow> inputList)
+	{
+		if(inputList != null)
+		{
+			flowList.AddRange(inputList);	
+		}
 	}
 #endregion
 }

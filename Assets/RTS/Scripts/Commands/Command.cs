@@ -19,6 +19,11 @@ public class Command {
 	{
 		get { return ownerID; }
 	}
+	
+	public bool IsEmpty
+	{
+		get { return ownerID <= 0; }
+	}
 #endregion
 
 #region Constructor
@@ -26,6 +31,11 @@ public class Command {
 	{
 		this.ownerID = ownerID;
 		isCommandFinished = false;
+	}
+
+	public Command()
+	{
+		this.ownerID = 0;
 	}
 #endregion
 }
