@@ -16,12 +16,12 @@ public class MovementCommand : Command {
 #endregion
 
 #region Constructor
-	public MovementCommand(uint ownerID, uint targetObjID) : base (ownerID)
+	public MovementCommand(uint tag, uint ownerID, uint targetObjID) : base (tag, ownerID)
 	{
 		this.targetObjectID = targetObjID;
 	}
 	
-	public MovementCommand(uint ownerID, Vector2 destPos) : base (ownerID)
+	public MovementCommand(uint tag, uint ownerID, Vector2 destPos) : base (tag, ownerID)
 	{
 		this.destPos = destPos;
 		this.targetObjectID = 0;

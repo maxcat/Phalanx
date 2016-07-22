@@ -6,42 +6,47 @@ public class CommandPool {
 
 #region Fields
 	protected Dictionary<uint, List<Command>>  			commandPool;	
+	protected uint 							commandHandleDelay;
+	protected uint 							maxCommandHandleDelay;
 #endregion
 
 #region Constructor
-	public CommandPool()
+	public CommandPool(uint commandHandleDelay, uint maxCommandHandleDelay)
 	{
-		commandPool = new Dictionary<uint, List<Command>>();
+		this.commandPool = new Dictionary<uint, List<Command>>();
+		this.maxCommandHandleDelay = maxCommandHandleDelay;
+		this.commandHandleDelay = commandHandleDelay;
 	}
 #endregion
 
 #region Public API
-	public void AddCommand(uint tag, Command command)
+	public void AddCommand(uint receiveTag, Command command)
 	{
-		if(commandPool.ContainsKey(tag))
+		if(commandPool.ContainsKey(receiveTag))
 		{
-			commandPool[tag].Add(command);
+			commandPool[receiveTag].Add(command);
 		}
 		else
 		{
 			List<Command> commandList = new List<Command>();
 			commandList.Add(command);
-			commandPool.Add(tag, commandList);
+			commandPool.Add(receiveTag, commandList);
 		}
 	}
 
-	public List<Command> GetCommands(uint tag)
+	public List<Command> GetCommands(uint serverTag)
 	{
+		uint tag = serverTag - commandHandleDelay;
 		if(commandPool.ContainsKey(tag))
 		{
-			return commandPool[tag];
-		}	
-		else if(tag >= 0)
-		{
-			List<Command> result = new List<Command>();
-			result.Add(new Command());
+			List<Command> result = commandPool[tag];
 			return result;
-		}
+		}	
+		return null;
+	}
+
+	public List<Command> GetInvalidCommands(uint maxCommandDelay)
+	{
 		return null;
 	}
 #endregion

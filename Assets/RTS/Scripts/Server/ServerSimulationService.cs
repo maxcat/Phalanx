@@ -6,9 +6,19 @@ public class ServerSimulationService : MonoBehaviour {
 
 #region Fields
 	[SerializeField] protected List<ClientService> 			clientList;
+	[SerializeField] protected uint 				commandDelayInStep = 1;
+	[SerializeField] protected uint 				maxCommandStepDelay = 3;
+
 	protected List<ObjectController> 				objectControllerList;
-	protected uint 							tag;
+	protected uint 							serverTag;
 	protected CommandPool 						commandPool;
+#endregion
+
+#region Getter and Setter
+	public CommandPool Commands
+	{
+		get { return commandPool; }
+	}
 #endregion
 
 #region Override MonoBehaviour
@@ -17,17 +27,17 @@ public class ServerSimulationService : MonoBehaviour {
 
 		commandPool = new CommandPool();
 		objectControllerList = new List<ObjectController>();
-		tag = 1;
+		serverTag = 1;
 
 		while(true)
 		{
-			TimeStep step = new TimeStep(tag);
-			List<Command> commandList = commandPool.GetCommands(tag - 1);
+			TimeStep step = new TimeStep(serverTag);
+			List<Command> commandList = commandPool.GetCommands(serverTag - commandDelayInStep);
 			
 			for(int i = 0; i < objectControllerList.Count; i ++)
 			{
 				ObjectController controller = objectControllerList[i];
-				step.AddGameFlows(controller.GenerateGameFlows(tag, commandList));
+				step.AddGameFlows(controller.GenerateGameFlows(serverTag, commandList));
 			}
 
 			for(int i = 0; i < clientList.Count; i ++)
@@ -37,7 +47,7 @@ public class ServerSimulationService : MonoBehaviour {
 			}
 
 			yield return new WaitForSeconds(TimeStep.TIME_STEP_DURATION);
-			tag ++;
+			serverTag++;
 		}
 	}
 	
@@ -50,7 +60,14 @@ public class ServerSimulationService : MonoBehaviour {
 #region Event Listener
 	public void OnReceiveCommands(Command command)
 	{
-		commandPool.AddCommand(tag, command);		
+		commandPool.AddCommand(serverTag, command);		
+	}
+#endregion
+
+#region Public API
+	public void AddObjectController(ObjectController controller)
+	{
+		objectControllerList.Add(controller);
 	}
 #endregion
 }

@@ -7,6 +7,7 @@ public class ObjectController {
 #region Fields
 	protected uint 						id;
 	protected Vector2 					currentPos;
+	protected uint 						currentTag;
 #endregion
 
 #region Getter and Setter

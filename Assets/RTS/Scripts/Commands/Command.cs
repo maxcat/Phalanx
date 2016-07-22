@@ -5,16 +5,10 @@ public class Command {
 
 #region Fields
 	protected uint 		ownerID;
-	protected bool 		isCommandFinished = false;
+	protected uint 		sendTag;
 #endregion
 
 #region Getter and Setter
-	public bool IsFinished
-	{
-		get { return isCommandFinished; }
-		set { isCommandFinished = value; }
-	}
-
 	public uint OwnerID
 	{
 		get { return ownerID; }
@@ -24,18 +18,18 @@ public class Command {
 	{
 		get { return ownerID <= 0; }
 	}
+
+	public uint SendTag 
+	{
+		get { return sendTag; }
+	}
 #endregion
 
 #region Constructor
-	public Command(uint ownerID)
+	public Command(uint tag, uint ownerID)
 	{
 		this.ownerID = ownerID;
-		isCommandFinished = false;
-	}
-
-	public Command()
-	{
-		this.ownerID = 0;
+		this.sendTag = tag;
 	}
 #endregion
 }
