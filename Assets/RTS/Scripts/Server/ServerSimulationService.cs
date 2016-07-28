@@ -9,42 +9,48 @@ public class ServerSimulationService : MonoBehaviour {
 	[SerializeField] protected uint 				commandDelayInStep = 1;
 	[SerializeField] protected uint 				maxCommandStepDelay = 3;
 
-	protected List<ObjectController> 				objectControllerList;
 	protected uint 							serverTag;
-	protected CommandPool 						commandPool;
-#endregion
-
-#region Getter and Setter
-	public CommandPool Commands
-	{
-		get { return commandPool; }
-	}
 #endregion
 
 #region Override MonoBehaviour
 	// Use this for initialization
 	IEnumerator Start () {
 
-		commandPool = new CommandPool();
-		objectControllerList = new List<ObjectController>();
 		serverTag = 1;
 
 		while(true)
 		{
 			TimeStep step = new TimeStep(serverTag);
-			List<Command> commandList = commandPool.GetCommands(serverTag - commandDelayInStep);
-			
-			for(int i = 0; i < objectControllerList.Count; i ++)
-			{
-				ObjectController controller = objectControllerList[i];
-				step.AddGameFlows(controller.GenerateGameFlows(serverTag, commandList));
-			}
 
-			for(int i = 0; i < clientList.Count; i ++)
+			uint startTag = CommandManager.Instance.MoveReceivedCommandToPool();
+
+			uint commandTag = serverTag - commandDelayInStep;
+			if(commandTag >= 1)
 			{
-				ClientService client = clientList[i];
-				client.OnReceiveTimeStep(step);
+				if(startTag > commandTag)
+					startTag = commandTag;
+				else if(commandTag - startTag > maxCommandStepDelay)
+					startTag = commandTag - maxCommandStepDelay;
+
+				for(uint i = startTag; i <= commandTag; i ++)
+				{
+					List<Command> commandList = CommandManager.Instance.GetCommands(i);
+					// execute commands
+					// TODO: implement command priority
+					if(commandList != null)
+					{
+						for(int j = 0; j < commandList.Count; j ++)
+						{
+							commandList[j].Execute();
+						}
+					}
+					// update object states
+					ObjectManager.Instance.UpdateState(i);
+				}
 			}
+			
+			// generate the next state
+			List<ObjectState> stateList = ObjectManager.Instance.GetStates(serverTag);
 
 			yield return new WaitForSeconds(TimeStep.TIME_STEP_DURATION);
 			serverTag++;
@@ -60,14 +66,18 @@ public class ServerSimulationService : MonoBehaviour {
 #region Event Listener
 	public void OnReceiveCommands(Command command)
 	{
-		commandPool.AddCommand(serverTag, command);		
+		CommandManager.Instance.OnReceiveCommand(command);
 	}
 #endregion
 
 #region Public API
 	public void AddObjectController(ObjectController controller)
 	{
-		objectControllerList.Add(controller);
+		ObjectManager.Instance.AddObject(controller);
 	}
 #endregion
+
+#region Protected Functions
+#endregion
+
 }

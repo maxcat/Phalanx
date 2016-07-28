@@ -32,4 +32,11 @@ public class Command {
 		this.sendTag = tag;
 	}
 #endregion
+
+#region Server Side Virtual Functions
+	public virtual void Execute()
+	{
+		
+	}
+#endregion
 }

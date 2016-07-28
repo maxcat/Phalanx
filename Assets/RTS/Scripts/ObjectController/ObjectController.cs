@@ -6,16 +6,10 @@ public class ObjectController {
 
 #region Fields
 	protected uint 						id;
-	protected Vector2 					currentPos;
-	protected uint 						currentTag;
+	Dictionary<uint, ObjectState>				States;
 #endregion
 
 #region Getter and Setter
-	public Vector2 CurrentPos
-	{
-		get { return currentPos; }
-	}
-
 	public uint ID
 	{
 		get { return id; }
@@ -23,14 +17,19 @@ public class ObjectController {
 #endregion
 
 #region Constructor
-	public ObjectController(uint id)
+	public ObjectController(uint id, uint createdTag)
 	{
 		this.id = id;
 	}
 #endregion
 
 #region Virtual Functions
-	public virtual List<GameFlow> GenerateGameFlows(uint tag, List<Command> commandList)
+	public virtual void UpdateState(uint commandTag)
+	{
+	
+	}
+
+	public virtual ObjectState GetState(uint serverTag)
 	{
 		return null;
 	}

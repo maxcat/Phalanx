@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ObjectState : MonoBehaviour {
+public class ObjectState {
 
-	// Use this for initialization
-	void Start () {
-	
+#region Fields
+	protected Vector2 					currentPos;
+#endregion
+
+#region Getter and Setter
+	public Vector2 CurrentPos
+	{
+		get { return currentPos; }
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+#endregion
+
 }

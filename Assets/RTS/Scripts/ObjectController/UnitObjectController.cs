@@ -20,16 +20,9 @@ public class UnitObjectController : ObjectController {
 #endregion
 
 #region Constructor
-	public UnitObjectController(uint id) : base (id)
+	public UnitObjectController(uint id, uint createdTag) : base (id, createdTag)
 	{
 
-	}
-#endregion
-
-#region Imlement Virtual Functions
-	public override List<GameFlow> GenerateGameFlows(uint tag, List<Command> commandList)
-	{
-		return null;
 	}
 #endregion
 }
