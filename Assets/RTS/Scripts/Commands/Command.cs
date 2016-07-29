@@ -37,7 +37,7 @@ public class Command {
 #endregion
 
 #region Server Side Virtual Functions
-	public virtual void Execute()
+	public virtual void Execute(ObjectState currentState, ObjectState nextState)
 	{
 		
 	}

@@ -9,9 +9,6 @@ public class ServerSimulationService : MonoBehaviour {
 	[SerializeField] protected uint 				commandDelayInStep = 1;
 	[SerializeField] protected uint 				maxCommandStepDelay = 3;
 
-	[SerializeField] protected float 				timeStepDuration = 1f;
-	[SerializeField] protected float 				movementStepDuration = 0.2f;
-
 	protected uint 							serverTag;
 #endregion
 

@@ -27,4 +27,11 @@ public class MovementCommand : Command {
 		this.targetObjectID = 0;
 	}
 #endregion
+
+#region Implement Virtual Functions
+	public override void Execute(ObjectState currentState, ObjectState nextState)
+	{
+		
+	}
+#endregion
 }

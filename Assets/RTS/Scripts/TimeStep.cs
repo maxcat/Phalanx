@@ -8,6 +8,7 @@ public class TimeStep {
 #region Static Fields
 	// time step duration in s
 	public static readonly float 					TIME_STEP_DURATION = 1f;
+	public static readonly int 					MOVEMENTS_PER_STEP = 5;
 #endregion
 
 #region Fields
