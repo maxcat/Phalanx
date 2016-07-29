@@ -57,11 +57,11 @@ public class ObjectManager {
 		objectPool.Add(controller.ID, controller);
 	}
 
-	public void UpdateState(uint commandTag)
+	public void UpdateState(uint commandTag, uint commandDelayInStep)
 	{
 		foreach(ObjectController controller in objectPool.Values)
 		{
-			controller.UpdateState(commandTag);
+			controller.UpdateState(commandTag, commandDelayInStep);
 		}
 	}
 

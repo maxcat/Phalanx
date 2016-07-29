@@ -6,6 +6,7 @@ public class Command {
 #region Fields
 	protected uint 		ownerID;
 	protected uint 		sendTag;
+	protected bool 		finishInThisStep = false;
 #endregion
 
 #region Getter and Setter
@@ -14,14 +15,15 @@ public class Command {
 		get { return ownerID; }
 	}
 	
-	public bool IsEmpty
-	{
-		get { return ownerID <= 0; }
-	}
-
 	public uint SendTag 
 	{
 		get { return sendTag; }
+	}
+
+	public bool FinishInThisStep
+	{
+		get { return finishInThisStep; }
+		set { finishInThisStep = value; }
 	}
 #endregion
 
@@ -30,6 +32,7 @@ public class Command {
 	{
 		this.ownerID = ownerID;
 		this.sendTag = tag;
+		this.finishInThisStep = false;
 	}
 #endregion
 

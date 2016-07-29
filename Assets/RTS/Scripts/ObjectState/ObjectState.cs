@@ -1,16 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ObjectState {
 
 #region Fields
-	protected Vector2 					currentPos;
+	protected List<Vector2> 				objectPositions;
+	protected List<Command> 				commands;
 #endregion
 
 #region Getter and Setter
-	public Vector2 CurrentPos
+	public List<Vector2> Positions
 	{
-		get { return currentPos; }
+		get { return objectPositions; }
+	}
+#endregion
+
+#region Public API
+	public virtual ObjectState GenerateNextState(List<Command> commandList)
+	{
+		return null;
 	}
 #endregion
 

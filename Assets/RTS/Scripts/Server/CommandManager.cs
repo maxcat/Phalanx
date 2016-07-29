@@ -75,6 +75,17 @@ public class CommandManager {
 
 		return null;
 	}
+
+	public List<Command> GetCommands(uint timeTag, uint ownerID)
+	{
+		if(commandPool.ContainsKey(timeTag))
+		{
+			List<Command> result = commandPool[timeTag];
+			return result.FindAll(command => command.OwnerID == ownerID);
+		}
+
+		return null;
+	}
 #endregion
 
 }

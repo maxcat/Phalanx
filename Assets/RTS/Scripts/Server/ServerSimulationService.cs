@@ -25,34 +25,23 @@ public class ServerSimulationService : MonoBehaviour {
 		{
 			TimeStep step = new TimeStep(serverTag);
 
-			uint startTag = CommandManager.Instance.MoveReceivedCommandToPool();
+			uint startCommandTag = CommandManager.Instance.MoveReceivedCommandToPool();
 
 			uint commandTag = serverTag - commandDelayInStep;
 			if(commandTag >= 1)
 			{
-				if(startTag > commandTag)
-					startTag = commandTag;
-				else if(commandTag - startTag > maxCommandStepDelay)
-					startTag = commandTag - maxCommandStepDelay;
+				if(startCommandTag > commandTag)
+					startCommandTag = commandTag;
+				else if(commandTag - startCommandTag > maxCommandStepDelay)
+					startCommandTag = commandTag - maxCommandStepDelay;
 
-				for(uint i = startTag; i <= commandTag; i ++)
+				for(uint i = startCommandTag; i <= commandTag; i ++)
 				{
-					List<Command> commandList = CommandManager.Instance.GetCommands(i);
-					// execute commands
-					// TODO: implement command priority
-					if(commandList != null)
-					{
-						for(int j = 0; j < commandList.Count; j ++)
-						{
-							commandList[j].Execute();
-						}
-					}
-					// update object states
-					ObjectManager.Instance.UpdateState(i);
+					ObjectManager.Instance.UpdateState(i, commandDelayInStep);
 				}
 			}
 			
-			// generate the next state
+			// send the latest state to the client
 			List<ObjectState> stateList = ObjectManager.Instance.GetStates(serverTag);
 
 			yield return new WaitForSeconds(TimeStep.TIME_STEP_DURATION);
