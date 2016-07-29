@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MoveToPosCommand : Command {
 
@@ -18,12 +19,16 @@ public class MoveToPosCommand : Command {
 #region Implement Virtual Functions
 	public override void Execute(ObjectState currentState, ObjectState nextState)
 	{
+		// TODO: read speed from unit data.
 		float speed = 10;
 		Vector2 startPos = currentState.Positions[currentState.Positions.Count - 1];	
 
 		Vector2 direction = destPos - startPos;
 		float distance = direction.magnitude;
 		direction.Normalize();
+
+		// reset the position of the next state.
+		nextState.Positions = new List<Vector2>(); 
 
 		for (int i = 0; i < TimeStep.MOVEMENTS_PER_STEP; i ++)
 		{

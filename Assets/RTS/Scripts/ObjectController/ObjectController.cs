@@ -17,7 +17,7 @@ public class ObjectController {
 #endregion
 
 #region Constructor
-	public ObjectController(uint id, uint createdTag)
+	public ObjectController(uint id)
 	{
 		this.id = id;
 	}
@@ -44,6 +44,16 @@ public class ObjectController {
 	public virtual ObjectState GetState(uint serverTag)
 	{
 		return null;
+	}
+
+	public virtual void Init(uint tag, Vector2 startPos)
+	{
+		states = new Dictionary<uint, ObjectState>(); 
+
+		ObjectState startState = new ObjectState(tag);
+		startState.Positions.Add(startPos);
+
+		states.Add(tag, startState);
 	}
 #endregion
 }

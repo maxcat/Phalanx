@@ -69,6 +69,7 @@ public class ObjectState {
 		newCommands.AddRange(this.PassOverCommands);
 		newCommands.AddRange(commandList);
 		newState.Commands = newCommands;
+		newState.AddPosition(positions[positions.Count - 1]);
 
 		ExecuteCommands(newState, newCommands);
 		return newState;

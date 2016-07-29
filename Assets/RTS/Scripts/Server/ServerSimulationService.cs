@@ -17,6 +17,8 @@ public class ServerSimulationService : MonoBehaviour {
 	IEnumerator Start () {
 
 		serverTag = 1;
+		// test code.
+		ObjectManager.Instance.TestInit(serverTag);
 
 		while(true)
 		{
