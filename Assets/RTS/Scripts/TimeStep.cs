@@ -12,15 +12,15 @@ public class TimeStep {
 #endregion
 
 #region Fields
-	[SerializeField] protected List<GameFlow> 			flowList;
 	[SerializeField] protected uint 				timeStepTag = 0;
+	protected Dictionary<uint, ObjectState> 			objectStates;
 #endregion
 
 #region Constructor
 	public TimeStep(uint tag)
 	{
 		timeStepTag = tag;
-		flowList = new List<GameFlow>();
+		objectStates = new Dictionary<uint, ObjectState>();
 	}
 #endregion
 
@@ -29,19 +29,25 @@ public class TimeStep {
 	{
 		get { return timeStepTag; }
 	}
-	
-	public List<GameFlow> GameFlows
+
+	public Dictionary<uint , ObjectState> ObjectStates
 	{
-		get { return flowList; }
+		get { return objectStates; }
+		set { objectStates = value; }
 	}
 #endregion
 
-#region PUblic API
-	public void AddGameFlows(List<GameFlow> inputList)
+#region Public API
+	public void AddObjectStates(uint objectID, ObjectState state)
 	{
-		if(inputList != null)
+		if(objectStates.ContainsKey(objectID))
 		{
-			flowList.AddRange(inputList);	
+			Debug.LogWarning("[WARNING]TimeStep->AddObjectStates: state already exist for object ID " + objectID);
+			objectStates[objectID] = state;
+		}		
+		else
+		{
+			objectStates.Add(objectID, state);
 		}
 	}
 #endregion

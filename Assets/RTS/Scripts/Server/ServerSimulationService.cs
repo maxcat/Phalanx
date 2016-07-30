@@ -41,7 +41,12 @@ public class ServerSimulationService : MonoBehaviour {
 			}
 			
 			// send the latest state to the client
-			List<ObjectState> stateList = ObjectManager.Instance.GetStates(serverTag);
+			step.ObjectStates = ObjectManager.Instance.GetStates(serverTag);
+
+			for(int i = 0; i < clientList.Count; i ++)
+			{
+				clientList[i].OnReceiveTimeStep(step);
+			}
 
 			yield return new WaitForSeconds(TimeStep.TIME_STEP_DURATION);
 			serverTag++;

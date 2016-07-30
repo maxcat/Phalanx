@@ -79,18 +79,19 @@ public class ObjectManager {
 		}
 	}
 
-	public List<ObjectState> GetStates(uint serverTag)
+	public Dictionary<uint, ObjectState> GetStates(uint serverTag)
 	{
-		List<ObjectState> stateList = new List<ObjectState>();
+		Dictionary<uint, ObjectState> result = new Dictionary<uint, ObjectState>();
 
-		foreach(ObjectController controller in objectPool.Values)
+		foreach(uint key in objectPool.Keys)
 		{
+			ObjectController controller = objectPool[key];
 			ObjectState state = controller.GetState(serverTag);
 			if(state != null)
-				stateList.Add(state);
+				result.Add(key, state);
 		}
 
-		return stateList;
+		return result;
 	}
 #endregion
 
