@@ -6,14 +6,14 @@ public class ClientService : MonoBehaviour {
 
 #region Fields
 	// latency in ms
-	[SerializeField] protected int 				latency = 100;
-	[SerializeField] protected uint 			clientID;
+	[SerializeField] protected int 						latency = 100;
+	[SerializeField] protected uint 					clientID;
 
-	[SerializeField] protected ServerSimulationService	serverSimuation;
-	[SerializeField] protected List<GameObject> 		prefabList;
+	[SerializeField] protected ServerSimulationService			serverSimuation;
+	[SerializeField] protected List<GameObject> 				prefabList;
 
-	protected CircularTimeSteps 				timeSteps; 
-	protected Dictionary<uint, GameObject> 			objectPool;
+	protected CircularTimeSteps 						timeSteps; 
+	protected Dictionary<uint, ObjectClientController> 			objectPool;
 #endregion
 
 #region Getter and Setter
@@ -46,7 +46,7 @@ public class ClientService : MonoBehaviour {
 		
 	}
 
-	public void AddObject(uint id, GameObject obj)
+	public void AddObject(uint id, ObjectClientController obj)
 	{
 		if(objectPool.ContainsKey(id))
 		{
@@ -63,7 +63,7 @@ public class ClientService : MonoBehaviour {
 		objectPool.Add(id, obj);
 	}
 
-	public GameObject GetObject(uint id)
+	public ObjectClientController GetObject(uint id)
 	{
 		if(!objectPool.ContainsKey(id))
 		{
@@ -79,6 +79,11 @@ public class ClientService : MonoBehaviour {
 	public void OnReceiveTimeStep(TimeStep step)
 	{
 		timeSteps.Append(step);
+
+		foreach(ObjectClientController controller in objectPool.Values)
+		{
+			controller.OnUpdateState(step.GetObjectState(controller.ObjectID));
+		}
 	}
 #endregion
 
@@ -86,7 +91,7 @@ public class ClientService : MonoBehaviour {
 	protected void init()
 	{
 		timeSteps = new CircularTimeSteps();
-		objectPool = new Dictionary<uint, GameObject>();
+		objectPool = new Dictionary<uint, ObjectClientController>();
 	}
 #endregion
 

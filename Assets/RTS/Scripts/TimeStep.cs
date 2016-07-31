@@ -50,5 +50,18 @@ public class TimeStep {
 			objectStates.Add(objectID, state);
 		}
 	}
+
+	public ObjectState GetObjectState(uint objectID)
+	{
+		if(objectStates.ContainsKey(objectID))
+		{
+			return objectStates[objectID];
+		}		
+		else
+		{
+			Debug.LogWarning("[WARNING]TimeStep->GetObjectState: state not exist for object ID " + objectID);
+			return null;
+		}
+	}
 #endregion
 }
