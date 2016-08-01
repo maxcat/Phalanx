@@ -9,6 +9,7 @@ public class TimeStep {
 	// time step duration in s
 	public static readonly float 					TIME_STEP_DURATION = 1f;
 	public static readonly int 					MOVEMENTS_PER_STEP = 5;
+	public static readonly int 					CLIENT_DELAY = 1;
 #endregion
 
 #region Fields

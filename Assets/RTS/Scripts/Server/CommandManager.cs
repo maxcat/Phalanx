@@ -84,7 +84,7 @@ public class CommandManager {
 			return result.FindAll(command => command.OwnerID == ownerID);
 		}
 
-		return null;
+		return new List<Command>();
 	}
 #endregion
 

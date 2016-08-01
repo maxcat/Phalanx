@@ -43,6 +43,8 @@ public class ObjectController {
 
 	public virtual ObjectState GetState(uint serverTag)
 	{
+		if(states.ContainsKey(serverTag))
+			return states[serverTag];
 		return null;
 	}
 

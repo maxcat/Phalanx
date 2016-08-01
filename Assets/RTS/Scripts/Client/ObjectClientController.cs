@@ -4,6 +4,20 @@ using System.Collections.Generic;
 
 public class ObjectClientController : MonoBehaviour {
 
+#region Static Functions
+	public static ObjectClientController CreateController(Transform parent, uint objectID, ObjectState initState)
+	{
+		GameObject prefab = Resources.Load("Unit" + objectID) as GameObject;
+		GameObject instance = GameObject.Instantiate(prefab) as GameObject;
+		instance.transform.SetParent(parent);	
+
+		ObjectClientController controller = instance.GetComponent<ObjectClientController>();
+		controller.Init(objectID, initState);
+
+		return controller;
+	}
+#endregion
+
 #region Fields
 	[SerializeField] protected uint 			objectID;
 	[SerializeField] protected uint 			currentTag;
@@ -36,32 +50,39 @@ public class ObjectClientController : MonoBehaviour {
 	{
 		this.objectID = objectID;
 		states = new Dictionary<uint, ObjectState>();
-		states.Add(initState.StateTag, initState);
 		this.currentTag = initState.StateTag;
-		
-		movementFlow = new ObjMovementFlow(gameObject, states, currentTag);
-		movementFlow.Start(this);
+
+		OnUpdateState(initState);
+
+		startObjectFlow();
 	}
 #endregion
 
 #region Protected Functions
-	protected void updateState()
+	protected void startObjectFlow()
 	{
-		
+		movementFlow = new ObjMovementFlow(gameObject, states, currentTag);
+		movementFlow.Start(this);
 	}
 #endregion
 
 #region Event Handler
 	public void OnUpdateState(ObjectState state)
 	{
+		Debug.Log("======recieve state for tag " + state.StateTag);
 		if(states.ContainsKey(state.StateTag))
 		{
-			Debug.LogWarning("[WARNING]ObjectClientController->OnUpdateState: state tag " + state.StateTag + " already exist.");
+			states[state.StateTag] = state;
 		}
 		else
 		{
 			states.Add(state.StateTag, state);
 		}
+	}
+
+	public void OnReceiveInput(Vector3 mousePosition)
+	{
+		
 	}
 #endregion
 }

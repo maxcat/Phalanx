@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System.Collections;
 
 public class MoveToTargetCommand : Command {
-
 #region Fields
 	protected uint 				targetObjectID;
 #endregion
@@ -24,3 +24,4 @@ public class MoveToTargetCommand : Command {
 	}
 #endregion
 }
+*/

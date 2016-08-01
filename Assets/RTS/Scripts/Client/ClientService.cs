@@ -10,7 +10,6 @@ public class ClientService : MonoBehaviour {
 	[SerializeField] protected uint 					clientID;
 
 	[SerializeField] protected ServerSimulationService			serverSimuation;
-	[SerializeField] protected List<GameObject> 				prefabList;
 
 	protected CircularTimeSteps 						timeSteps; 
 	protected Dictionary<uint, ObjectClientController> 			objectPool;
@@ -29,9 +28,11 @@ public class ClientService : MonoBehaviour {
 #endregion
 
 #region Override MonoBehaviour
+	void Awake () { 
+		init();
+       	}
 	// Use this for initialization
 	void Start () {
-		init();
 	}
 	
 	// Update is called once per frame
@@ -78,12 +79,28 @@ public class ClientService : MonoBehaviour {
 #region Event Listener
 	public void OnReceiveTimeStep(TimeStep step)
 	{
-		timeSteps.Append(step);
+		//timeSteps.Append(step);
 
-		foreach(ObjectClientController controller in objectPool.Values)
+		foreach(uint objectID in step.ObjectStates.Keys)
 		{
+			ObjectClientController controller;
+			ObjectState state = step.GetObjectState(objectID);
+			if(!objectPool.ContainsKey(objectID))	
+			{
+				controller = ObjectClientController.CreateController(transform, objectID, state);
+				objectPool.Add(objectID, controller);
+			}
+			else
+			{
+				controller = objectPool[objectID];
+			}
+
 			controller.OnUpdateState(step.GetObjectState(controller.ObjectID));
 		}
+	}
+
+	public void OnReceiveInput(Vector3 mousePosition)
+	{
 	}
 #endregion
 

@@ -20,12 +20,11 @@ public class ObjMovementFlow : ObjectFlow {
 #region Implement Virtual Functions
 	protected override IEnumerator main()
 	{
-		float stateDuration = TimeStep.TIME_STEP_DURATION;
 		float movementStepDuration = TimeStep.TIME_STEP_DURATION / TimeStep.MOVEMENTS_PER_STEP;
 
 		float timeElapse = 0f;
 		Vector3 previousPos = getNextPos();
-		Vector3 nextPos = getNextPos();
+		Vector3 nextPos = previousPos;
 		owner.transform.localPosition = previousPos;
 
 		while(true)
@@ -75,6 +74,7 @@ public class ObjMovementFlow : ObjectFlow {
 			}
 
 			// TODO: need test
+			Debug.Log("[INFO]ObjMovementFlow->getNextPos: predict state for tag " + stateTag);
 			states.Add(stateTag, state);
 		}
 		else
