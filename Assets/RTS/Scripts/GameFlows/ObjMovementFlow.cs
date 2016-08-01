@@ -49,7 +49,40 @@ public class ObjMovementFlow : ObjectFlow {
 #region Protected Functions
 	protected Vector3 getNextPos()
 	{
-		ObjectState state = states[stateTag];	
+		ObjectState state;
+		if(states.ContainsKey(stateTag))
+		{
+			state = states[stateTag];
+		}
+		else if(states.ContainsKey(stateTag - 1))
+		{
+			uint previousStateTag=  stateTag - 1;
+			ObjectState previousState = states[previousStateTag];	
+
+			// find all unfinished movement commands
+			Command movementCommand = previousState.PassOverCommands.Find(command => typeof(MoveToPosCommand).IsInstanceOfType(command));
+
+			if(movementCommand != null)
+			{
+				state = new ObjectState(stateTag);
+				movementCommand.Execute(previousState, state);
+			}
+			else
+			{
+				state = new ObjectState(stateTag);
+				state.Positions = new List<Vector2>();
+				state.Positions.Add(previousState.Positions[previousState.Positions.Count - 1]);
+			}
+
+			// TODO: need test
+			states.Add(stateTag, state);
+		}
+		else
+		{
+			Debug.LogError("[ERROR]ObjMovementFlow->getNextPos: can not find state for both tag " + stateTag + " and tag " + (stateTag - 1));
+			return Vector3.zero;
+		}
+
 		Vector3 result = Vector3.zero;
 
 		if(state.Positions.Count == 1)

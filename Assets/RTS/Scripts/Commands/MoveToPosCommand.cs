@@ -30,7 +30,8 @@ public class MoveToPosCommand : Command {
 		// reset the position of the next state.
 		nextState.Positions = new List<Vector2>(); 
 
-		for (int i = 0; i < TimeStep.MOVEMENTS_PER_STEP; i ++)
+		// reserve one more calculation for the next state
+		for (int i = 0; i <= TimeStep.MOVEMENTS_PER_STEP; i ++)
 		{
 			Vector2 pos = destPos;
 			if(distance > i * speed)
