@@ -41,5 +41,13 @@ public class Command {
 	{
 		
 	}
+
+	// TODO: test purpose, use it to deep copy the command for client.
+	public virtual Command Deserialize()
+	{
+		Command clonedCommand = new Command(this.sendTag, this.ownerID);		
+		clonedCommand.FinishInThisStep = this.finishInThisStep;
+		return clonedCommand;
+	}
 #endregion
 }

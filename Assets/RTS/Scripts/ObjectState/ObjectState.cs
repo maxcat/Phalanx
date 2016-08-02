@@ -96,6 +96,23 @@ public class ObjectState {
 #endregion
 
 #region Virtual Functions
+	// TODO: test function, deep copy the current object state for client.
+	public virtual ObjectState Deserialize()
+	{
+		ObjectState clonedState = new ObjectState(this.stateTag);
+		clonedState.Positions = this.positions.Clone();
+
+		List<Command> commandList = new List<Command>();
+		for(int i = 0; i < commands.Count; i ++)
+		{
+			commandList.Add(commands[i].Deserialize());	
+		}
+		clonedState.Commands = commandList;
+
+		clonedState.IsPrediction = this.isPrediction;	
+		return clonedState;
+	}
+
 	protected virtual void ExecuteCommands(ObjectState nextState, List<Command> commandList)
 	{
 		for(int i = 0; i < commandList.Count; i ++)

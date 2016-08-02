@@ -17,6 +17,15 @@ public class MoveToPosCommand : Command {
 #endregion
 
 #region Implement Virtual Functions
+	public override Command Deserialize()
+	{
+		MoveToPosCommand clonedCommand = new MoveToPosCommand(this.sendTag, this.ownerID, this.destPos);
+
+		clonedCommand.FinishInThisStep = this.finishInThisStep;
+
+		return clonedCommand;
+	}
+
 	public override void Execute(ObjectState currentState, ObjectState nextState)
 	{
 		// TODO: read speed from unit data.
