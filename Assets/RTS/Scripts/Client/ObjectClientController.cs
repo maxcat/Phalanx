@@ -69,20 +69,40 @@ public class ObjectClientController : MonoBehaviour {
 #region Event Handler
 	public void OnUpdateState(ObjectState state)
 	{
-		Debug.Log("======recieve state for tag " + state.StateTag);
 		if(states.ContainsKey(state.StateTag))
 		{
-			states[state.StateTag] = state;
+			if(!state.IsPrediction)
+			{
+				Debug.Log("[INFO]ObjectClientController->OnUpdateState: override the predicted state with the state from server with tag " + state.StateTag);
+				states[state.StateTag] = state;
+			}
 		}
 		else
 		{
 			states.Add(state.StateTag, state);
+			currentTag = state.StateTag;
 		}
+	}
+
+	public ObjectState PredictState(uint stateTag)
+	{
+		if(states.ContainsKey(stateTag))
+		{
+			uint nextTag = stateTag + 1;
+			ObjectState nextState = states[stateTag].GenerateNextState(null);
+			nextState.IsPrediction = true;
+			Debug.Log("[INFO]ObjectClientController->PredictState: predict state for tag " + nextTag);
+			states.Add(nextTag, nextState);
+			currentTag = nextTag;
+			return nextState;
+		}
+		return null;
 	}
 
 	public void OnReceiveInput(Vector3 mousePosition)
 	{
-		
+		Debug.LogWarning("=====input mouse position is " + mousePosition + " at tag " + currentTag);		
+
 	}
 #endregion
 }

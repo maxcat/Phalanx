@@ -8,6 +8,7 @@ public class ClientService : MonoBehaviour {
 	// latency in ms
 	[SerializeField] protected int 						latency = 100;
 	[SerializeField] protected uint 					clientID;
+	[SerializeField] protected uint 					playerObjectID;
 
 	[SerializeField] protected ServerSimulationService			serverSimuation;
 
@@ -101,6 +102,10 @@ public class ClientService : MonoBehaviour {
 
 	public void OnReceiveInput(Vector3 mousePosition)
 	{
+		if(objectPool.ContainsKey(playerObjectID))
+		{
+			objectPool[playerObjectID].OnReceiveInput(mousePosition);
+		}
 	}
 #endregion
 

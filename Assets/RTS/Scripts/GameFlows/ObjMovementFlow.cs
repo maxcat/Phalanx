@@ -6,6 +6,7 @@ public class ObjMovementFlow : ObjectFlow {
 
 #region Fields
 	protected int 				positionIndex = 0;
+	protected ObjectClientController 	controller;
 #endregion
 
 #region Constructor
@@ -13,6 +14,7 @@ public class ObjMovementFlow : ObjectFlow {
 		: base (owner, states, startTag)
 	{
 		positionIndex = 0;
+		controller = owner.GetComponent<ObjectClientController>();
 		source = main();
 	}
 #endregion
@@ -55,27 +57,8 @@ public class ObjMovementFlow : ObjectFlow {
 		}
 		else if(states.ContainsKey(stateTag - 1))
 		{
-			uint previousStateTag=  stateTag - 1;
-			ObjectState previousState = states[previousStateTag];	
-
-			// find all unfinished movement commands
-			Command movementCommand = previousState.PassOverCommands.Find(command => typeof(MoveToPosCommand).IsInstanceOfType(command));
-
-			if(movementCommand != null)
-			{
-				state = new ObjectState(stateTag);
-				movementCommand.Execute(previousState, state);
-			}
-			else
-			{
-				state = new ObjectState(stateTag);
-				state.Positions = new List<Vector2>();
-				state.Positions.Add(previousState.Positions[previousState.Positions.Count - 1]);
-			}
-
-			// TODO: need test
-			Debug.Log("[INFO]ObjMovementFlow->getNextPos: predict state for tag " + stateTag);
-			states.Add(stateTag, state);
+			uint previousStateTag = stateTag - 1;
+			state = controller.PredictState(previousStateTag); 
 		}
 		else
 		{

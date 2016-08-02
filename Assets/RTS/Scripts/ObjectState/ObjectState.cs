@@ -8,6 +8,7 @@ public class ObjectState {
 	protected List<Command> 				commands;
 	protected List<Vector2> 				positions;
 	protected uint 						stateTag;
+	protected bool 						isPrediction = false;
 #endregion
 
 #region Getter and Setter
@@ -34,6 +35,12 @@ public class ObjectState {
 	{
 		get { return stateTag; }
 	}
+
+	public bool IsPrediction
+	{
+		get { return isPrediction; }
+		set { isPrediction = value; }
+	}
 #endregion
 
 #region Constructor
@@ -42,6 +49,7 @@ public class ObjectState {
 		commands = new List<Command>();
 		positions = new List<Vector2>();
 		stateTag = tag;
+		isPrediction = false;
 	}
 #endregion
 
@@ -67,7 +75,10 @@ public class ObjectState {
 
 		List<Command> newCommands = new List<Command>();
 		newCommands.AddRange(this.PassOverCommands);
-		newCommands.AddRange(commandList);
+
+		if(commandList != null)
+			newCommands.AddRange(commandList);
+
 		newState.Commands = newCommands;
 		newState.AddPosition(positions[positions.Count - 1]);
 
