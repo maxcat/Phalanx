@@ -75,16 +75,11 @@ public class ObjectState {
 		ObjectState newState = new ObjectState(stateTag + 1);	
 
 		List<Command> newCommands = new List<Command>();
-		newCommands.AddRange(this.PassOverCommands);
+		newCommands.AddRange(cloneCommandList(this.PassOverCommands));
 
 		if(commandList != null)
-		{
-			for(int i = 0; i < commandList.Count; i ++)
-			{
-				Command command = commandList[i];
-				command.FinishInThisStep = false;
-				newCommands.Add(command);
-			}
+		{ 
+			newCommands.AddRange(cloneCommandList(commandList));
 		}
 
 		newState.Commands = newCommands;
@@ -119,6 +114,22 @@ public class ObjectState {
 		{
 			commandList[i].Execute(this, nextState);
 		}
+	}
+#endregion
+
+#region Protected Functions
+	protected List<Command> cloneCommandList(List<Command> commandList)
+	{
+		List<Command> result = new List<Command>();
+
+		if(commandList != null)
+		{
+			for (int i = 0; i < commandList.Count; i ++)
+			{
+				result.Add(commandList[i].Deserialize());
+			}
+		}
+		return result;
 	}
 #endregion
 }

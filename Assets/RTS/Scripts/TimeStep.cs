@@ -47,7 +47,7 @@ public class TimeStep {
 
 		foreach(uint key in this.objectStates.Keys)
 		{
-			clonedStep.ObjectStates.Add(key, this.objectStates[key]);
+			clonedStep.ObjectStates.Add(key, this.objectStates[key].Deserialize());
 		}
 
 		return clonedStep;

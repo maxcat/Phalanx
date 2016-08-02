@@ -46,7 +46,7 @@ public class ServerSimulationService : MonoBehaviour {
 
 			for(int i = 0; i < clientList.Count; i ++)
 			{
-				clientList[i].OnReceiveTimeStep(step);
+				clientList[i].OnReceiveTimeStep(step.Deserialize());
 			}
 
 			yield return new WaitForSeconds(TimeStep.TIME_STEP_DURATION);
