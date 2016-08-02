@@ -108,11 +108,9 @@ public class ObjectClientController : MonoBehaviour {
 
 	public void OnReceiveInput(Vector3 mousePosition)
 	{
-		Debug.LogWarning("=====input mouse position is " + mousePosition + " at tag " + currentTag);		
 		if(!commands.ContainsKey(currentTag))
 		{
 			Vector2 destPos = (Vector2)transform.InverseTransformPoint(mousePosition);	
-			Debug.LogError("=====releated pos is " + destPos);
 			MoveToPosCommand command = new MoveToPosCommand(currentTag, objectID, destPos);
 
 			List<Command> commandList = new List<Command>();

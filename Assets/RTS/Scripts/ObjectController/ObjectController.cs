@@ -31,7 +31,6 @@ public class ObjectController {
 		uint previousStateTag = commandTag + commandDelayInStep - 1;
 		uint currentStateTag = previousStateTag + 1;
 
-		Debug.LogWarning("====update state tag " + commandTag);
 		if(states.ContainsKey(previousStateTag))
 		{
 			ObjectState nextState = states[previousStateTag].GenerateNextState(objectCommands);

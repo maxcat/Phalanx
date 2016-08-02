@@ -115,10 +115,7 @@ public class ClientService : MonoBehaviour {
 
 	public void OnReceiveCommand(Command command)
 	{
-		Debug.LogError("====on receive command for object " + command.OwnerID + " at tag " + command.SendTag);
-
 		serverSimuation.OnReceiveCommands(command.Deserialize());
-		
 	}
 #endregion
 

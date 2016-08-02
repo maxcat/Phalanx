@@ -71,7 +71,6 @@ public class ObjectState {
 
 	public ObjectState GenerateNextState(List<Command> commandList)
 	{
-		Debug.LogError("====generate state from " + stateTag);
 		ObjectState newState = new ObjectState(stateTag + 1);	
 
 		List<Command> newCommands = new List<Command>();
