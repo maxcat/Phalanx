@@ -39,6 +39,20 @@ public class TimeStep {
 #endregion
 
 #region Public API
+
+	// TODO: test purpose, deep copy the time step for client.
+	public TimeStep Deserialize()
+	{
+		TimeStep clonedStep = new TimeStep(this.timeStepTag);
+
+		foreach(uint key in this.objectStates.Keys)
+		{
+			clonedStep.ObjectStates.Add(key, this.objectStates[key]);
+		}
+
+		return clonedStep;
+	}
+
 	public void AddObjectStates(uint objectID, ObjectState state)
 	{
 		if(objectStates.ContainsKey(objectID))
