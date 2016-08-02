@@ -71,13 +71,21 @@ public class ObjectState {
 
 	public ObjectState GenerateNextState(List<Command> commandList)
 	{
+		Debug.LogError("====generate state from " + stateTag);
 		ObjectState newState = new ObjectState(stateTag + 1);	
 
 		List<Command> newCommands = new List<Command>();
 		newCommands.AddRange(this.PassOverCommands);
 
 		if(commandList != null)
-			newCommands.AddRange(commandList);
+		{
+			for(int i = 0; i < commandList.Count; i ++)
+			{
+				Command command = commandList[i];
+				command.FinishInThisStep = false;
+				newCommands.Add(command);
+			}
+		}
 
 		newState.Commands = newCommands;
 		newState.AddPosition(positions[positions.Count - 1]);

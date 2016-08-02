@@ -22,6 +22,7 @@ public class MoveToPosCommand : Command {
 		// TODO: read speed from unit data.
 		float speed = 10;
 		Vector2 startPos = currentState.Positions[currentState.Positions.Count - 1];	
+		Debug.LogError("=====here with dest " + destPos + " start pos is " + startPos);
 
 		Vector2 direction = destPos - startPos;
 		float distance = direction.magnitude;
@@ -43,6 +44,7 @@ public class MoveToPosCommand : Command {
 				finishInThisStep = true;
 			}
 
+			Debug.LogError("pos is " + pos + " is finished " + finishInThisStep);
 			nextState.Positions.Add(pos);
 		}
 	}

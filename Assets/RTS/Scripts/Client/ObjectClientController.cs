@@ -18,12 +18,18 @@ public class ObjectClientController : MonoBehaviour {
 	}
 #endregion
 
+#region Events
+	public delegate void ObjectPostCommandDelegate(Command command);
+	public event ObjectPostCommandDelegate OnObjectPostCommand; 
+#endregion
+
 #region Fields
 	[SerializeField] protected uint 			objectID;
 	[SerializeField] protected uint 			currentTag;
 	protected Dictionary<uint, ObjectState> 		states;
 
 	protected ObjMovementFlow				movementFlow;
+	protected Dictionary<uint, List<Command>> 		commands;	
 #endregion
 
 #region Getter and Setter
@@ -50,6 +56,7 @@ public class ObjectClientController : MonoBehaviour {
 	{
 		this.objectID = objectID;
 		states = new Dictionary<uint, ObjectState>();
+		commands = new Dictionary<uint, List<Command>>();
 		this.currentTag = initState.StateTag;
 
 		OnUpdateState(initState);
@@ -102,7 +109,18 @@ public class ObjectClientController : MonoBehaviour {
 	public void OnReceiveInput(Vector3 mousePosition)
 	{
 		Debug.LogWarning("=====input mouse position is " + mousePosition + " at tag " + currentTag);		
+		if(!commands.ContainsKey(currentTag))
+		{
+			Vector2 destPos = (Vector2)transform.InverseTransformPoint(mousePosition);	
+			Debug.LogError("=====releated pos is " + destPos);
+			MoveToPosCommand command = new MoveToPosCommand(currentTag, objectID, destPos);
 
+			List<Command> commandList = new List<Command>();
+			commandList.Add(command);
+			commands.Add(currentTag, commandList);
+
+			OnObjectPostCommand(command);
+		}
 	}
 #endregion
 }

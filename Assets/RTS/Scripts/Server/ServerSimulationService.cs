@@ -27,6 +27,7 @@ public class ServerSimulationService : MonoBehaviour {
 			uint startCommandTag = CommandManager.Instance.MoveReceivedCommandToPool();
 
 			uint commandTag = serverTag - commandDelayInStep;
+			Debug.LogWarning("====serve step " + serverTag + " with command " + commandTag + " start command tag is " + startCommandTag);
 			if(commandTag >= 1)
 			{
 				if(startCommandTag > commandTag)

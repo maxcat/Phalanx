@@ -40,14 +40,15 @@ public class ClientService : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	void OnEnable () {
+	} 
+ 
+	void OnDisable () {
+	}
 #endregion
 
 #region Public API
-	public void PostCommand()
-	{
-		
-	}
-
 	public void AddObject(uint id, ObjectClientController obj)
 	{
 		if(objectPool.ContainsKey(id))
@@ -90,6 +91,10 @@ public class ClientService : MonoBehaviour {
 			{
 				controller = ObjectClientController.CreateController(transform, objectID, state);
 				objectPool.Add(objectID, controller);
+				if(objectID == playerObjectID)
+				{
+					controller.OnObjectPostCommand += OnReceiveCommand;
+				}
 			}
 			else
 			{
@@ -106,6 +111,14 @@ public class ClientService : MonoBehaviour {
 		{
 			objectPool[playerObjectID].OnReceiveInput(mousePosition);
 		}
+	}
+
+	public void OnReceiveCommand(Command command)
+	{
+		Debug.LogError("====on receive command for object " + command.OwnerID + " at tag " + command.SendTag);
+
+		serverSimuation.OnReceiveCommands(command);
+		
 	}
 #endregion
 

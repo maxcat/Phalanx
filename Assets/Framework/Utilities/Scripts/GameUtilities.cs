@@ -2,6 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public delegate void VoidFuncWithParam(params object[] param);
+public delegate void VoidFunc();
+public delegate object ObjectFunc();
+public delegate object ObjectFuncParam(params object[] param);
+
 public static partial class GameUtilities {
 
 #region File Path
