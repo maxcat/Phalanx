@@ -2,11 +2,31 @@
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
+public class Latency
+{
+#region Fields
+	[SerializeField] protected int 						minLatency;
+	[SerializeField] protected int 						maxLatency;
+#endregion
+
+#region Getter and Setter
+	public float LatencyInSeconds
+	{
+		get
+		{
+			float result = Random.Range(minLatency, maxLatency + 1) / 1000f;
+			return result;
+		}
+	}
+#endregion
+}
+
 public class ClientService : MonoBehaviour {
 
 #region Fields
 	// latency in ms
-	[SerializeField] protected int 						latency = 100;
+	[SerializeField] protected Latency 					latency;
 	[SerializeField] protected uint 					clientID;
 	[SerializeField] protected uint 					playerObjectID;
 
@@ -17,9 +37,9 @@ public class ClientService : MonoBehaviour {
 #endregion
 
 #region Getter and Setter
-	public int Latency
+	public float LatencyInSeconds
 	{
-		get { return latency; }
+		get { return latency.LatencyInSeconds; }
 	}
 
 	public uint ClientID
