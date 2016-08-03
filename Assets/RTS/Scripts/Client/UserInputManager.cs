@@ -14,11 +14,11 @@ public class UserInputManager : MonoBehaviour {
 		if (Input.GetButtonDown("Fire1")) {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit, 100))
+			if (Physics.Raycast(ray, out hit))
 			{
 				if(hit.transform.gameObject == this.gameObject)
 				{
-					gameObject.GetComponent<ClientService>().OnReceiveInput(Input.mousePosition);
+					gameObject.GetComponent<ClientService>().OnReceiveInput(hit.point);
 				}
 			}
 		}	

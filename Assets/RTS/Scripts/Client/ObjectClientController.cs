@@ -110,7 +110,7 @@ public class ObjectClientController : MonoBehaviour {
 	{
 		if(!commands.ContainsKey(currentTag))
 		{
-			Vector2 destPos = (Vector2)transform.InverseTransformPoint(mousePosition);	
+			Vector2 destPos = (Vector2)transform.parent.InverseTransformPoint(mousePosition);	
 			MoveToPosCommand command = new MoveToPosCommand(currentTag, objectID, destPos);
 
 			List<Command> commandList = new List<Command>();
