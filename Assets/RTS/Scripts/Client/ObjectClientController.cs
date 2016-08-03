@@ -28,7 +28,7 @@ public class ObjectClientController : MonoBehaviour {
 	[SerializeField] protected uint 			currentTag;
 	protected Dictionary<uint, ObjectState> 		states;
 
-	protected ObjMovementFlow				movementFlow;
+	protected ObjectFlow					mainFlow;
 	protected Dictionary<uint, List<Command>> 		commands;	
 #endregion
 
@@ -68,8 +68,8 @@ public class ObjectClientController : MonoBehaviour {
 #region Protected Functions
 	protected void startObjectFlow()
 	{
-		movementFlow = new ObjMovementFlow(gameObject, states, currentTag);
-		movementFlow.Start(this);
+		mainFlow = new ObjectFlow(gameObject, states, currentTag);
+		mainFlow.Start(this);
 	}
 #endregion
 
