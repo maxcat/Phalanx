@@ -102,6 +102,34 @@ public class ClientService : MonoBehaviour {
 	public void OnReceiveTimeStep(TimeStep step)
 	{
 		//timeSteps.Append(step);
+		this.StartCoroutine(receiveFlow(step));
+
+	}
+
+	public void OnReceiveInput(Vector3 mousePosition)
+	{
+		if(objectPool.ContainsKey(playerObjectID))
+		{
+			objectPool[playerObjectID].OnReceiveInput(mousePosition);
+		}
+	}
+
+	public void OnReceiveCommand(Command command)
+	{
+		this.StartCoroutine(postCommandFlow(command));
+	}
+#endregion
+
+#region Protected Functions
+	protected void init()
+	{
+		timeSteps = new CircularTimeSteps();
+		objectPool = new Dictionary<uint, ObjectClientController>();
+	}
+
+	protected IEnumerator receiveFlow(TimeStep step)
+	{
+		yield return new WaitForSeconds(LatencyInSeconds); 
 
 		foreach(uint objectID in step.ObjectStates.Keys)
 		{
@@ -125,25 +153,10 @@ public class ClientService : MonoBehaviour {
 		}
 	}
 
-	public void OnReceiveInput(Vector3 mousePosition)
+	protected IEnumerator postCommandFlow(Command command)
 	{
-		if(objectPool.ContainsKey(playerObjectID))
-		{
-			objectPool[playerObjectID].OnReceiveInput(mousePosition);
-		}
-	}
-
-	public void OnReceiveCommand(Command command)
-	{
+		yield return new WaitForSeconds(LatencyInSeconds); 
 		serverSimuation.OnReceiveCommands(command.Deserialize());
-	}
-#endregion
-
-#region Protected Functions
-	protected void init()
-	{
-		timeSteps = new CircularTimeSteps();
-		objectPool = new Dictionary<uint, ObjectClientController>();
 	}
 #endregion
 
