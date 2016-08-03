@@ -5,14 +5,14 @@ using System.Collections.Generic;
 public class ObjectClientController : MonoBehaviour {
 
 #region Static Functions
-	public static ObjectClientController CreateController(Transform parent, uint objectID, ObjectState initState, uint commandDelayInStep)
+	public static ObjectClientController CreateController(Transform parent, uint objectID, List<ObjectState> initStates, uint commandDelayInStep)
 	{
 		GameObject prefab = Resources.Load("Unit" + objectID) as GameObject;
 		GameObject instance = GameObject.Instantiate(prefab) as GameObject;
 		instance.transform.SetParent(parent);	
 
 		ObjectClientController controller = instance.GetComponent<ObjectClientController>();
-		controller.Init(objectID, initState, commandDelayInStep);
+		controller.Init(objectID, initStates, commandDelayInStep);
 
 		return controller;
 	}
@@ -53,15 +53,15 @@ public class ObjectClientController : MonoBehaviour {
 #endregion
 
 #region Public API
-	public void Init(uint objectID, ObjectState initState, uint commandDelayInStep)
+	public void Init(uint objectID, List<ObjectState> initStates, uint commandDelayInStep)
 	{
 		this.objectID = objectID;
 		this.states = new Dictionary<uint, ObjectState>();
 		this.commands = new Dictionary<uint, List<Command>>();
-		this.currentTag = initState.StateTag;
+		this.currentTag = initStates[0].StateTag;
 		this.commandDelayInStep = commandDelayInStep;
 
-		OnUpdateState(initState);
+		OnUpdateState(initStates);
 
 		startObjectFlow();
 	}
@@ -76,20 +76,24 @@ public class ObjectClientController : MonoBehaviour {
 #endregion
 
 #region Event Handler
-	public void OnUpdateState(ObjectState state)
+	public void OnUpdateState(List<ObjectState> stateList)
 	{
-		if(states.ContainsKey(state.StateTag))
+		for(int i = 0; i < stateList.Count; i ++)
 		{
-			if(!state.IsPrediction)
+			ObjectState state = stateList[i];
+			if(states.ContainsKey(state.StateTag))
 			{
-				Debug.Log("[INFO]ObjectClientController->OnUpdateState: override the predicted state with the state from server with tag " + state.StateTag);
-				states[state.StateTag] = state;
+				if(!state.IsPrediction)
+				{
+					Debug.Log("[INFO]ObjectClientController->OnUpdateState: override the predicted state with the state from server with tag " + state.StateTag);
+					states[state.StateTag] = state;
+				}
 			}
-		}
-		else
-		{
-			states.Add(state.StateTag, state);
-			currentTag = state.StateTag;
+			else
+			{
+				states.Add(state.StateTag, state);
+				currentTag = state.StateTag;
+			}
 		}
 	}
 
@@ -101,7 +105,7 @@ public class ObjectClientController : MonoBehaviour {
 
 			List<Command> commandList = null;
 
-			uint commandTag = nextTag - commandDelayInStep;
+			uint commandTag = nextTag - commandDelayInStep * (uint)TimeStep.STATES_PER_TIME_STEP;
 			if(commands.ContainsKey(commandTag))
 			{
 				commandList = commands[commandTag];
@@ -119,14 +123,15 @@ public class ObjectClientController : MonoBehaviour {
 
 	public void OnReceiveInput(Vector3 mousePosition)
 	{
-		if(!commands.ContainsKey(currentTag))
+		uint commandTag = ((currentTag - 1) / (uint)TimeStep.STATES_PER_TIME_STEP) * (uint) TimeStep.STATES_PER_TIME_STEP + 1;
+		if(!commands.ContainsKey(commandTag))
 		{
 			Vector2 destPos = (Vector2)transform.parent.InverseTransformPoint(mousePosition);	
-			MoveToPosCommand command = new MoveToPosCommand(currentTag, objectID, destPos);
+			MoveToPosCommand command = new MoveToPosCommand(commandTag, objectID, destPos);
 
 			List<Command> commandList = new List<Command>();
 			commandList.Add(command);
-			commands.Add(currentTag, commandList);
+			commands.Add(commandTag, commandList);
 
 			OnObjectPostCommand(command);
 		}

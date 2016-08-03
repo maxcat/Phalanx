@@ -6,16 +6,23 @@ public class ObjectState {
 
 #region Fields
 	protected List<Command> 				commands;
-	protected List<Vector2> 				positions;
+	protected Vector2 					startPos;
+	protected Vector2 					endPos;
 	protected uint 						stateTag;
 	protected bool 						isPrediction = false;
 #endregion
 
 #region Getter and Setter
-	public List<Vector2> Positions
+	public Vector2 StartPos
 	{
-		get { return positions; }
-		set { positions = value; }
+		get { return startPos; }
+		set { startPos = value; }
+	}
+
+	public Vector2 EndPos
+	{
+		get { return endPos; }
+		set { endPos = value; }
 	}
 
 	public List<Command> PassOverCommands
@@ -47,28 +54,12 @@ public class ObjectState {
 	public ObjectState(uint tag)
 	{
 		commands = new List<Command>();
-		positions = new List<Vector2>();
 		stateTag = tag;
 		isPrediction = false;
 	}
 #endregion
 
 #region Public API
-	public void AddPosition(Vector2 position)
-	{
-		positions.Add(position);
-	}
-
-	public void AddCommands(List<Command> commandList)
-	{
-		commands.AddRange(commandList);
-	}
-	
-	public void AddCommand(Command command)
-	{
-		commands.Add(command);
-	}
-
 	public ObjectState GenerateNextState(List<Command> commandList)
 	{
 		ObjectState newState = new ObjectState(stateTag + 1);	
@@ -82,7 +73,8 @@ public class ObjectState {
 		}
 
 		newState.Commands = newCommands;
-		newState.AddPosition(positions[positions.Count - 1]);
+		newState.StartPos = this.endPos;
+		newState.EndPos = this.endPos;
 
 		ExecuteCommands(newState, newCommands);
 		return newState;
@@ -94,7 +86,8 @@ public class ObjectState {
 	public virtual ObjectState Deserialize()
 	{
 		ObjectState clonedState = new ObjectState(this.stateTag);
-		clonedState.Positions = this.positions.Clone();
+		clonedState.StartPos = this.startPos;
+		clonedState.EndPos = this.endPos;
 
 		List<Command> commandList = new List<Command>();
 		for(int i = 0; i < commands.Count; i ++)

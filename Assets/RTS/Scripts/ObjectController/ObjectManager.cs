@@ -93,6 +93,27 @@ public class ObjectManager {
 
 		return result;
 	}
+
+	public TimeStep GenerateTimeStep(uint serverStepTag)
+	{
+		TimeStep step = new TimeStep(serverStepTag);	
+
+		Dictionary<uint, List<ObjectState>> result = new Dictionary<uint, List<ObjectState>>();
+
+		uint startTag = (serverStepTag - 1) * (uint)TimeStep.STATES_PER_TIME_STEP + 1;
+		foreach(uint key in objectPool.Keys)
+		{
+			ObjectController controller = objectPool[key];
+			List<ObjectState> stateList = new List<ObjectState>();
+			for(uint i = startTag; i < startTag + (uint)TimeStep.STATES_PER_TIME_STEP; i ++)
+			{
+				stateList.Add(controller.GetState(i));
+			}
+			result.Add(key, stateList);
+		}
+		step.ObjectStates = result;
+		return step;
+	}
 #endregion
 
 }

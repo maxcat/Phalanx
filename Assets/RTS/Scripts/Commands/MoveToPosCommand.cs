@@ -30,29 +30,21 @@ public class MoveToPosCommand : Command {
 	{
 		// TODO: read speed from unit data.
 		float speed = 10;
-		Vector2 startPos = currentState.Positions[currentState.Positions.Count - 1];	
+		Vector2 startPos = currentState.EndPos;	
+		nextState.StartPos = startPos;
 
 		Vector2 direction = destPos - startPos;
 		float distance = direction.magnitude;
 		direction.Normalize();
 
-		// reset the position of the next state.
-		nextState.Positions = new List<Vector2>(); 
-
-		// reserve one more calculation for the next state
-		for (int i = 0; i <= TimeStep.MOVEMENTS_PER_STEP; i ++)
+		if(distance > speed)
 		{
-			Vector2 pos = destPos;
-			if(distance > i * speed)
-			{
-				pos = speed * direction * i + startPos;
-			}
-			else
-			{
-				finishInThisStep = true;
-			}
-
-			nextState.Positions.Add(pos);
+			nextState.EndPos = speed * direction + startPos;
+		}
+		else
+		{
+			nextState.EndPos = destPos;
+			finishInThisStep = true;
 		}
 	}
 #endregion

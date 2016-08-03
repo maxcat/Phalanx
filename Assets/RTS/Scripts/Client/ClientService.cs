@@ -134,10 +134,10 @@ public class ClientService : MonoBehaviour {
 		foreach(uint objectID in step.ObjectStates.Keys)
 		{
 			ObjectClientController controller;
-			ObjectState state = step.GetObjectState(objectID);
+			List<ObjectState> states = step.ObjectStates[objectID];
 			if(!objectPool.ContainsKey(objectID))	
 			{
-				controller = ObjectClientController.CreateController(transform, objectID, state, serverSimuation.CommandDelayInStep);
+				controller = ObjectClientController.CreateController(transform, objectID, states, serverSimuation.CommandDelayInStep);
 				objectPool.Add(objectID, controller);
 				if(objectID == playerObjectID)
 				{
@@ -149,7 +149,7 @@ public class ClientService : MonoBehaviour {
 				controller = objectPool[objectID];
 			}
 
-			controller.OnUpdateState(step.GetObjectState(controller.ObjectID));
+			controller.OnUpdateState(states);
 		}
 	}
 

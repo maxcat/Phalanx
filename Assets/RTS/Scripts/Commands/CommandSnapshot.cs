@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InitCommand : MonoBehaviour {
+public class CommandSnapshot : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

@@ -9,19 +9,21 @@ public class TimeStep {
 	// time step duration in s
 	public static readonly float 					TIME_STEP_DURATION = 1f;
 	public static readonly int 					MOVEMENTS_PER_STEP = 5;
+	public static readonly float 					STATE_DURATION = 0.2f;
+	public static readonly int 					STATES_PER_TIME_STEP = 5;
 	public static readonly int 					CLIENT_DELAY = 1;
 #endregion
 
 #region Fields
 	[SerializeField] protected uint 				timeStepTag = 0;
-	protected Dictionary<uint, ObjectState> 			objectStates;
+	protected Dictionary<uint, List<ObjectState>> 			objectStates;
 #endregion
 
 #region Constructor
 	public TimeStep(uint tag)
 	{
 		timeStepTag = tag;
-		objectStates = new Dictionary<uint, ObjectState>();
+		objectStates = new Dictionary<uint, List<ObjectState>>();
 	}
 #endregion
 
@@ -31,7 +33,7 @@ public class TimeStep {
 		get { return timeStepTag; }
 	}
 
-	public Dictionary<uint , ObjectState> ObjectStates
+	public Dictionary<uint, List<ObjectState>> ObjectStates
 	{
 		get { return objectStates; }
 		set { objectStates = value; }
@@ -39,34 +41,13 @@ public class TimeStep {
 #endregion
 
 #region Public API
-
 	// TODO: test purpose, deep copy the time step for client.
 	public TimeStep Deserialize()
 	{
-		TimeStep clonedStep = new TimeStep(this.timeStepTag);
-
-		foreach(uint key in this.objectStates.Keys)
-		{
-			clonedStep.ObjectStates.Add(key, this.objectStates[key].Deserialize());
-		}
-
-		return clonedStep;
+		return this;
 	}
 
-	public void AddObjectStates(uint objectID, ObjectState state)
-	{
-		if(objectStates.ContainsKey(objectID))
-		{
-			Debug.LogWarning("[WARNING]TimeStep->AddObjectStates: state already exist for object ID " + objectID);
-			objectStates[objectID] = state;
-		}		
-		else
-		{
-			objectStates.Add(objectID, state);
-		}
-	}
-
-	public ObjectState GetObjectState(uint objectID)
+	public List<ObjectState> GetObjectStates(uint objectID)
 	{
 		if(objectStates.ContainsKey(objectID))
 		{
