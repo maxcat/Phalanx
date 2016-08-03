@@ -137,7 +137,7 @@ public class ClientService : MonoBehaviour {
 			ObjectState state = step.GetObjectState(objectID);
 			if(!objectPool.ContainsKey(objectID))	
 			{
-				controller = ObjectClientController.CreateController(transform, objectID, state);
+				controller = ObjectClientController.CreateController(transform, objectID, state, serverSimuation.CommandDelayInStep);
 				objectPool.Add(objectID, controller);
 				if(objectID == playerObjectID)
 				{

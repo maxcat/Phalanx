@@ -5,14 +5,14 @@ using System.Collections.Generic;
 public class ObjectClientController : MonoBehaviour {
 
 #region Static Functions
-	public static ObjectClientController CreateController(Transform parent, uint objectID, ObjectState initState)
+	public static ObjectClientController CreateController(Transform parent, uint objectID, ObjectState initState, uint commandDelayInStep)
 	{
 		GameObject prefab = Resources.Load("Unit" + objectID) as GameObject;
 		GameObject instance = GameObject.Instantiate(prefab) as GameObject;
 		instance.transform.SetParent(parent);	
 
 		ObjectClientController controller = instance.GetComponent<ObjectClientController>();
-		controller.Init(objectID, initState);
+		controller.Init(objectID, initState, commandDelayInStep);
 
 		return controller;
 	}
@@ -30,6 +30,7 @@ public class ObjectClientController : MonoBehaviour {
 
 	protected ObjectFlow					mainFlow;
 	protected Dictionary<uint, List<Command>> 		commands;	
+	protected uint 						commandDelayInStep;
 #endregion
 
 #region Getter and Setter
@@ -52,12 +53,13 @@ public class ObjectClientController : MonoBehaviour {
 #endregion
 
 #region Public API
-	public void Init(uint objectID, ObjectState initState)
+	public void Init(uint objectID, ObjectState initState, uint commandDelayInStep)
 	{
 		this.objectID = objectID;
-		states = new Dictionary<uint, ObjectState>();
-		commands = new Dictionary<uint, List<Command>>();
+		this.states = new Dictionary<uint, ObjectState>();
+		this.commands = new Dictionary<uint, List<Command>>();
 		this.currentTag = initState.StateTag;
+		this.commandDelayInStep = commandDelayInStep;
 
 		OnUpdateState(initState);
 
@@ -96,7 +98,16 @@ public class ObjectClientController : MonoBehaviour {
 		if(states.ContainsKey(stateTag))
 		{
 			uint nextTag = stateTag + 1;
-			ObjectState nextState = states[stateTag].GenerateNextState(null);
+
+			List<Command> commandList = null;
+
+			uint commandTag = nextTag - commandDelayInStep;
+			if(commands.ContainsKey(commandTag))
+			{
+				commandList = commands[commandTag];
+			}
+
+			ObjectState nextState = states[stateTag].GenerateNextState(commandList);
 			nextState.IsPrediction = true;
 			Debug.Log("[INFO]ObjectClientController->PredictState: predict state for tag " + nextTag);
 			states.Add(nextTag, nextState);

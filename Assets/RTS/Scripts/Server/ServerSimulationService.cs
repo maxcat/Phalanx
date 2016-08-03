@@ -12,6 +12,13 @@ public class ServerSimulationService : MonoBehaviour {
 	protected uint 							serverTag;
 #endregion
 
+#region Getter and Setter
+	public uint CommandDelayInStep
+	{
+		get { return commandDelayInStep; }
+	}
+#endregion
+
 #region Override MonoBehaviour
 	// Use this for initialization
 	IEnumerator Start () {
