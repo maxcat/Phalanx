@@ -100,7 +100,7 @@ public class ObjectManager {
 
 		Dictionary<uint, List<ObjectState>> result = new Dictionary<uint, List<ObjectState>>();
 
-		uint startTag = (serverStepTag - 1) * (uint)TimeStep.STATES_PER_TIME_STEP + 1;
+		uint startTag = TimeStep.GET_STATE_TAG(serverStepTag);
 		foreach(uint key in objectPool.Keys)
 		{
 			ObjectController controller = objectPool[key];

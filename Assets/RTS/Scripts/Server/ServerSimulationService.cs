@@ -35,7 +35,7 @@ public class ServerSimulationService : MonoBehaviour {
 			// initial states should cover commandDelayInStep * TimeStep.STATE_PER_TIME_STEP states.
 			if(serverTag - commandDelayInStep >= 1)
 			{
-				uint commandTag = (serverTag - commandDelayInStep - 1) * (uint)TimeStep.STATES_PER_TIME_STEP + 1;
+				uint commandTag = TimeStep.GET_STATE_TAG(serverTag - commandDelayInStep);
 				if(startCommandTag > commandTag || startCommandTag == 0)
 					startCommandTag = commandTag;
 				else if(commandTag - startCommandTag > maxCommandStepDelay * (uint)TimeStep.STATES_PER_TIME_STEP)
@@ -55,14 +55,13 @@ public class ServerSimulationService : MonoBehaviour {
 				clientList[i].OnReceiveTimeStep(step.Deserialize());
 			}
 
-			//yield return new WaitForSeconds(TimeStep.STATES_PER_TIME_STEP * TimeStep.STATE_DURATION);
-			while(timeElapse < TimeStep.STATES_PER_TIME_STEP * TimeStep.STATE_DURATION)
+			while(timeElapse < TimeStep.STEP_DURATION)
 			{
 				float deltaTime = Time.deltaTime;
 				yield return null;
 				timeElapse += deltaTime;
 			}
-			timeElapse -= TimeStep.STATES_PER_TIME_STEP * TimeStep.STATE_DURATION;
+			timeElapse -= TimeStep.STEP_DURATION;
 			serverTag ++;
 		}
 	}

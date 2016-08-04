@@ -7,11 +7,20 @@ public class TimeStep {
 
 #region Static Fields
 	// time step duration in s
-	public static readonly float 					TIME_STEP_DURATION = 1f;
-	public static readonly int 					MOVEMENTS_PER_STEP = 5;
 	public static readonly float 					STATE_DURATION = 0.2f;
 	public static readonly int 					STATES_PER_TIME_STEP = 5;
-	public static readonly int 					CLIENT_DELAY = 1;
+#endregion
+
+#region Static Functions
+	public static float STEP_DURATION
+	{
+		get { return STATE_DURATION * STATES_PER_TIME_STEP; }
+	}
+
+	public static uint GET_STATE_TAG(uint stepTag)
+	{
+		return (stepTag - 1) * (uint)STATES_PER_TIME_STEP + 1;
+	}
 #endregion
 
 #region Fields
