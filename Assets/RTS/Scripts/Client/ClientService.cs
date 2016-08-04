@@ -32,7 +32,6 @@ public class ClientService : MonoBehaviour {
 
 	[SerializeField] protected ServerSimulationService			serverSimuation;
 
-	protected CircularTimeSteps 						timeSteps; 
 	protected Dictionary<uint, ObjectClientController> 			objectPool;
 #endregion
 
@@ -101,8 +100,6 @@ public class ClientService : MonoBehaviour {
 #region Event Listener
 	public void OnReceiveTimeStep(TimeStep step)
 	{
-		//timeSteps.Append(step);
-		receiveStep(step);
 		if(LatencyInSeconds <= 0)
 		{
 			receiveStep(step);
@@ -130,7 +127,6 @@ public class ClientService : MonoBehaviour {
 #region Protected Functions
 	protected void init()
 	{
-		timeSteps = new CircularTimeSteps();
 		objectPool = new Dictionary<uint, ObjectClientController>();
 	}
 
