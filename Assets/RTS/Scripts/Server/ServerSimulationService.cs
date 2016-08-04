@@ -68,7 +68,6 @@ public class ServerSimulationService : MonoBehaviour {
 #region Event Listener
 	public void OnReceiveCommands(Command command)
 	{
-		Debug.LogError("===receive command " + command.SendTag + " owner " + command.OwnerID);
 		CommandManager.Instance.OnReceiveCommand(command);
 	}
 #endregion

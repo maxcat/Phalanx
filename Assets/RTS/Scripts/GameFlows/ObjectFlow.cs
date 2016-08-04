@@ -7,17 +7,16 @@ public class ObjectFlow : Flow {
 #region Fields
 	protected Dictionary<uint, ObjectState>		states;
 	protected GameObject 				owner;
-	protected uint 					stateTag;
 	protected ObjectClientController 		controller;
+	protected float 				duration;
 #endregion
 
 #region Constructor
-	public ObjectFlow(GameObject owner, Dictionary<uint, ObjectState> states, uint startTag)
+	public ObjectFlow(GameObject owner, Dictionary<uint, ObjectState> states)
 		: base ()
 	{
 		this.owner = owner;
 		this.states = states;
-		this.stateTag = startTag;
 
 		this.controller = owner.GetComponent<ObjectClientController>();
 		source = main();
@@ -38,6 +37,7 @@ public class ObjectFlow : Flow {
 		{
 			float deltaTime = Time.deltaTime;
 			yield return null;
+			duration += deltaTime;
 			
 			timeElapse += deltaTime;
 
@@ -55,27 +55,12 @@ public class ObjectFlow : Flow {
 #region Protected Functions
 	protected Vector3 getNextPos()
 	{
-		ObjectState state;
-		if(states.ContainsKey(stateTag))
-		{
-			state = states[stateTag];
-		}
-		else if(states.ContainsKey(stateTag - 1))
-		{
-			uint previousStateTag = stateTag - 1;
-			state = controller.PredictState(previousStateTag); 
-		}
-		else
-		{
-			Debug.LogError("[ERROR]ObjectFlow->getNextPos: can not find state for both tag " + stateTag + " and previous tag " + (stateTag - 1));
+		ObjectState state = controller.GetNextState();
+
+		if(state == null)
 			return Vector3.zero;
-		}
-
-		Vector3 result = state.StartPos;
-
-		stateTag ++;
-
-		return result;
+		else
+			return state.StartPos;
 	}
 #endregion
 

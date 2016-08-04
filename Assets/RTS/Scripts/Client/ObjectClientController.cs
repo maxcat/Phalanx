@@ -70,34 +70,11 @@ public class ObjectClientController : MonoBehaviour {
 #region Protected Functions
 	protected void startObjectFlow()
 	{
-		mainFlow = new ObjectFlow(gameObject, states, currentTag);
+		mainFlow = new ObjectFlow(gameObject, states);
 		mainFlow.Start(this);
 	}
-#endregion
 
-#region Event Handler
-	public void OnUpdateState(List<ObjectState> stateList)
-	{
-		for(int i = 0; i < stateList.Count; i ++)
-		{
-			ObjectState state = stateList[i];
-			if(states.ContainsKey(state.StateTag))
-			{
-				if(!state.IsPrediction)
-				{
-					Debug.Log("[INFO]ObjectClientController->OnUpdateState: override the predicted state with the state from server with tag " + state.StateTag);
-					states[state.StateTag] = state;
-				}
-			}
-			else
-			{
-				states.Add(state.StateTag, state);
-				currentTag = state.StateTag;
-			}
-		}
-	}
-
-	public ObjectState PredictState(uint stateTag)
+	public ObjectState predictState(uint stateTag)
 	{
 		if(states.ContainsKey(stateTag))
 		{
@@ -115,11 +92,34 @@ public class ObjectClientController : MonoBehaviour {
 			nextState.IsPrediction = true;
 			Debug.Log("[INFO]ObjectClientController->PredictState: predict state for tag " + nextTag);
 			states.Add(nextTag, nextState);
-			currentTag = nextTag;
 			return nextState;
 		}
 		return null;
 	}
+#endregion
+
+#region Event Handler
+	public void OnUpdateState(List<ObjectState> stateList)
+	{
+		for(int i = 0; i < stateList.Count; i ++)
+		{
+			ObjectState state = stateList[i];
+			if(states.ContainsKey(state.StateTag))
+			{
+				if(!state.IsPrediction)
+				{
+					Debug.Log("[INFO]ObjectClientController->OnUpdateState: override the predicted state with the state from server with tag " + state.StateTag + " for object " + objectID);
+					states[state.StateTag] = state;
+				}
+				//Debug.LogError(objectID + "=====here===" + state.StateTag);
+			}
+			else
+			{
+				states.Add(state.StateTag, state);
+			}
+		}
+	}
+
 
 	public void OnReceiveInput(Vector3 mousePosition)
 	{
@@ -135,6 +135,27 @@ public class ObjectClientController : MonoBehaviour {
 
 			OnObjectPostCommand(command);
 		}
+	}
+
+	public ObjectState GetNextState()
+	{
+		ObjectState state;
+		if(states.ContainsKey(currentTag))
+		{
+			state = states[currentTag];
+		}
+		else if(states.ContainsKey(currentTag - 1))
+		{
+			uint previousStateTag = currentTag - 1;
+			state = predictState(previousStateTag); 
+		}
+		else
+		{
+			Debug.LogError("[ERROR]ObjectClientController->GetNextState: can not find state for both tag " + currentTag + " and previous tag " + (currentTag - 1));
+			return null;
+		}
+		currentTag ++;
+		return state;
 	}
 #endregion
 }

@@ -61,7 +61,6 @@ public class ObjectController {
 		}
 		else
 		{
-			Debug.LogError("=====" + stateTag);
 			return null;
 		}
 	}

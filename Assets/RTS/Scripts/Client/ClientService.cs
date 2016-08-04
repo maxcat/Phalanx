@@ -147,9 +147,9 @@ public class ClientService : MonoBehaviour {
 			else
 			{
 				controller = objectPool[objectID];
+				controller.OnUpdateState(states);
 			}
 
-			controller.OnUpdateState(states);
 		}
 	}
 
