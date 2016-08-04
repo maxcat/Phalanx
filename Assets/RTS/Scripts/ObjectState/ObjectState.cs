@@ -35,6 +35,7 @@ public class ObjectState {
 
 	public List<Command> Commands
 	{
+		get { return commands; }
 		set { commands = value; }
 	}
 

@@ -26,6 +26,7 @@ public class ServerSimulationService : MonoBehaviour {
 		serverTag = 1;
 		// test code.
 		ObjectManager.Instance.TestInit(serverTag);
+		float timeElapse = 0f;
 
 		while(true)
 		{
@@ -54,7 +55,14 @@ public class ServerSimulationService : MonoBehaviour {
 				clientList[i].OnReceiveTimeStep(step.Deserialize());
 			}
 
-			yield return new WaitForSeconds(TimeStep.STATES_PER_TIME_STEP * TimeStep.STATE_DURATION);
+			//yield return new WaitForSeconds(TimeStep.STATES_PER_TIME_STEP * TimeStep.STATE_DURATION);
+			while(timeElapse < TimeStep.STATES_PER_TIME_STEP * TimeStep.STATE_DURATION)
+			{
+				float deltaTime = Time.deltaTime;
+				yield return null;
+				timeElapse += deltaTime;
+			}
+			timeElapse -= TimeStep.STATES_PER_TIME_STEP * TimeStep.STATE_DURATION;
 			serverTag ++;
 		}
 	}

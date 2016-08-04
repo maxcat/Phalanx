@@ -102,8 +102,15 @@ public class ClientService : MonoBehaviour {
 	public void OnReceiveTimeStep(TimeStep step)
 	{
 		//timeSteps.Append(step);
-		this.StartCoroutine(receiveFlow(step));
-
+		receiveStep(step);
+		if(LatencyInSeconds <= 0)
+		{
+			receiveStep(step);
+		}
+		else
+		{
+			this.StartCoroutine(receiveFlow(step));
+		}
 	}
 
 	public void OnReceiveInput(Vector3 mousePosition)
@@ -127,10 +134,8 @@ public class ClientService : MonoBehaviour {
 		objectPool = new Dictionary<uint, ObjectClientController>();
 	}
 
-	protected IEnumerator receiveFlow(TimeStep step)
+	protected void receiveStep(TimeStep step)
 	{
-		yield return new WaitForSeconds(LatencyInSeconds); 
-
 		foreach(uint objectID in step.ObjectStates.Keys)
 		{
 			ObjectClientController controller;
@@ -149,8 +154,13 @@ public class ClientService : MonoBehaviour {
 				controller = objectPool[objectID];
 				controller.OnUpdateState(states);
 			}
-
 		}
+	}
+
+	protected IEnumerator receiveFlow(TimeStep step)
+	{
+		yield return new WaitForSeconds(LatencyInSeconds); 
+		receiveStep(step);
 	}
 
 	protected IEnumerator postCommandFlow(Command command)

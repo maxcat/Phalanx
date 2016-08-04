@@ -108,10 +108,9 @@ public class ObjectClientController : MonoBehaviour {
 			{
 				if(!state.IsPrediction)
 				{
-					Debug.Log("[INFO]ObjectClientController->OnUpdateState: override the predicted state with the state from server with tag " + state.StateTag + " for object " + objectID);
+					Debug.Log("[INFO]ObjectClientController->OnUpdateState: override the predicted state with the state from server with tag " + state.StateTag + " for object " + objectID + " on client " + transform.parent.gameObject.name);
 					states[state.StateTag] = state;
 				}
-				//Debug.LogError(objectID + "=====here===" + state.StateTag);
 			}
 			else
 			{

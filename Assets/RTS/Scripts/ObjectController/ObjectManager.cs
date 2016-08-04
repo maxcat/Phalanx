@@ -35,13 +35,13 @@ public class ObjectManager {
 	public void TestInit(uint tag)
 	{
 		ObjectController ctrl1 = new ObjectController(1);
-		//ObjectController ctrl2 = new ObjectController(2);
+		ObjectController ctrl2 = new ObjectController(2);
 
 		ctrl1.Init(tag, Vector2.right * - 50);
-		//ctrl2.Init(tag, Vector2.right * 50);
+		ctrl2.Init(tag, Vector2.right * 50);
 
 		objectPool.Add(1, ctrl1);
-		//objectPool.Add(2, ctrl2);
+		objectPool.Add(2, ctrl2);
 	}
 #endregion
 
