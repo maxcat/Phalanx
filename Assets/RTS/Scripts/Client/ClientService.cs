@@ -155,7 +155,7 @@ public class ClientService : MonoBehaviour {
 	protected IEnumerator postCommandFlow(Command command)
 	{
 		yield return new WaitForSeconds(LatencyInSeconds); 
-		serverSimuation.OnReceiveCommands(command.Deserialize());
+		serverSimuation.OnReceiveCommands(command);
 	}
 #endregion
 

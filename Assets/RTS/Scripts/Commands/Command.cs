@@ -6,7 +6,6 @@ public class Command {
 #region Fields
 	protected uint 		ownerID;
 	protected uint 		sendTag;
-	protected bool 		finishInThisStep = false;
 #endregion
 
 #region Getter and Setter
@@ -19,12 +18,6 @@ public class Command {
 	{
 		get { return sendTag; }
 	}
-
-	public bool FinishInThisStep
-	{
-		get { return finishInThisStep; }
-		set { finishInThisStep = value; }
-	}
 #endregion
 
 #region Constructor
@@ -32,22 +25,13 @@ public class Command {
 	{
 		this.ownerID = ownerID;
 		this.sendTag = tag;
-		this.finishInThisStep = false;
 	}
 #endregion
 
 #region Server Side Virtual Functions
-	public virtual void Execute(ObjectState currentState, ObjectState nextState)
+	public virtual bool Execute(ObjectState currentState, ObjectState nextState)
 	{
-		
-	}
-
-	// TODO: test purpose, use it to deep copy the command for client.
-	public virtual Command Deserialize()
-	{
-		Command clonedCommand = new Command(this.sendTag, this.ownerID);		
-		clonedCommand.FinishInThisStep = this.finishInThisStep;
-		return clonedCommand;
+		return true;	
 	}
 #endregion
 }

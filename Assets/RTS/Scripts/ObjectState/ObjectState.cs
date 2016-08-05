@@ -9,7 +9,7 @@ public class ObjectState {
 #endregion
 
 #region Fields
-	protected List<Command> 				commands;
+	protected List<CommandSnapshot> 			commandSnapshots;
 	protected Vector2 					startPos;
 	protected Vector2 					endPos;
 	protected uint 						stateTag;
@@ -29,18 +29,18 @@ public class ObjectState {
 		set { endPos = value; }
 	}
 
-	public List<Command> PassOverCommands
+	public List<CommandSnapshot> PassOverCommands
 	{
 		get
 		{
-			return commands.FindAll(command => !command.FinishInThisStep);
+			return commandSnapshots.FindAll(command => !command.FinishedInThisState);
 		}
 	}
 
-	public List<Command> Commands
+	public List<CommandSnapshot> CommandSnapshots
 	{
-		get { return commands; }
-		set { commands = value; }
+		get { return commandSnapshots; }
+		set { commandSnapshots = value; }
 	}
 
 	public uint StateTag
@@ -58,7 +58,7 @@ public class ObjectState {
 #region Constructor
 	public ObjectState(uint tag)
 	{
-		commands = new List<Command>();
+		commandSnapshots = new List<CommandSnapshot>();
 		stateTag = tag;
 		isPrediction = false;
 	}
@@ -69,64 +69,60 @@ public class ObjectState {
 	{
 		ObjectState newState = new ObjectState(stateTag + 1);	
 
-		List<Command> newCommands = new List<Command>();
-		newCommands.AddRange(cloneCommandList(this.PassOverCommands));
+		List<CommandSnapshot> snapshotList = new List<CommandSnapshot>();
+		snapshotList.AddRange(takeCommandSnapshots(this.PassOverCommands));
 
 		if(commandList != null)
 		{ 
-			newCommands.AddRange(cloneCommandList(commandList));
+			snapshotList.AddRange(takeCommandSnapshots(commandList));
 		}
 
-		newState.Commands = newCommands;
+		newState.CommandSnapshots = snapshotList;
 		newState.StartPos = this.endPos;
 		newState.EndPos = this.endPos;
 
-		ExecuteCommands(newState, newCommands);
+		ExecuteCommands(newState, snapshotList);
 		return newState;
 	}
 #endregion
 
 #region Virtual Functions
-	// TODO: test function, deep copy the current object state for client.
-	public virtual ObjectState Deserialize()
+	protected virtual void ExecuteCommands(ObjectState nextState, List<CommandSnapshot> snapshotList)
 	{
-		ObjectState clonedState = new ObjectState(this.stateTag);
-		clonedState.StartPos = this.startPos;
-		clonedState.EndPos = this.endPos;
-
-		List<Command> commandList = new List<Command>();
-		for(int i = 0; i < commands.Count; i ++)
+		for(int i = 0; i < snapshotList.Count; i ++)
 		{
-			commandList.Add(commands[i].Deserialize());	
-		}
-		clonedState.Commands = commandList;
-
-		clonedState.IsPrediction = this.isPrediction;	
-		return clonedState;
-	}
-
-	protected virtual void ExecuteCommands(ObjectState nextState, List<Command> commandList)
-	{
-		for(int i = 0; i < commandList.Count; i ++)
-		{
-			commandList[i].Execute(this, nextState);
+			snapshotList[i].Execute(this, nextState);
 		}
 	}
 #endregion
 
 #region Protected Functions
-	protected List<Command> cloneCommandList(List<Command> commandList)
+	protected List<CommandSnapshot> takeCommandSnapshots(List<Command> commandList)
 	{
-		List<Command> result = new List<Command>();
+		List<CommandSnapshot> snapshots = new List<CommandSnapshot>();	
 
 		if(commandList != null)
 		{
 			for (int i = 0; i < commandList.Count; i ++)
 			{
-				result.Add(commandList[i].Deserialize());
+				snapshots.Add(new CommandSnapshot(commandList[i]));
 			}
 		}
-		return result;
+		return snapshots;
+	}
+
+	protected List<CommandSnapshot> takeCommandSnapshots(List<CommandSnapshot> snapshotList)
+	{
+		List<CommandSnapshot> snapshots = new List<CommandSnapshot>();	
+
+		if(snapshotList != null)
+		{
+			for (int i = 0; i < snapshotList.Count; i ++)
+			{
+				snapshots.Add(new CommandSnapshot(snapshotList[i].Base));
+			}
+		}
+		return snapshots;
 	}
 #endregion
 }

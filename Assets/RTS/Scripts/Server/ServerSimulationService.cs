@@ -42,8 +42,6 @@ public class ServerSimulationService : MonoBehaviour {
 
 				for(uint i = startTag; i < serverTag; i ++)
 				{
-					uint commandTag = startTag - commandDelayInState;
-
 					ObjectManager.Instance.UpdateState(i, commandDelayInState);
 				}
 			}
