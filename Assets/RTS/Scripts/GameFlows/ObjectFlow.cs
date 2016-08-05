@@ -26,7 +26,7 @@ public class ObjectFlow : Flow {
 #region Implement Virtual Functions
 	protected override IEnumerator main()
 	{
-		float stateDuration = TimeStep.STATE_DURATION;
+		float stateDuration = ObjectState.DURATION;
 
 		float timeElapse = 0f;
 		Vector3 previousPos = getNextPos();

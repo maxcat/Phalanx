@@ -6,16 +6,16 @@ public class ServerSimulationService : MonoBehaviour {
 
 #region Fields
 	[SerializeField] protected List<ClientService> 			clientList;
-	[SerializeField] protected uint 				commandDelayInStep = 1;
-	[SerializeField] protected uint 				maxCommandStepDelay = 3;
+	[SerializeField] protected uint 				commandDelayInState = 1;
+	[SerializeField] protected uint 				maxCommandStateDelay = 3;
 
 	protected uint 							serverTag;
 #endregion
 
 #region Getter and Setter
-	public uint CommandDelayInStep
+	public uint CommandDelayInState
 	{
-		get { return commandDelayInStep; }
+		get { return commandDelayInState; }
 	}
 #endregion
 
@@ -32,36 +32,39 @@ public class ServerSimulationService : MonoBehaviour {
 		{
 			uint startCommandTag = CommandManager.Instance.MoveReceivedCommandToPool();
 
-			// initial states should cover commandDelayInStep * TimeStep.STATE_PER_TIME_STEP states.
-			if(serverTag - commandDelayInStep >= 1)
+			if(serverTag > commandDelayInState)
 			{
-				uint commandTag = TimeStep.GET_STATE_TAG(serverTag - commandDelayInStep);
-				if(startCommandTag > commandTag || startCommandTag == 0)
-					startCommandTag = commandTag;
-				else if(commandTag - startCommandTag > maxCommandStepDelay * (uint)TimeStep.STATES_PER_TIME_STEP)
-					startCommandTag = commandTag - maxCommandStepDelay * (uint)TimeStep.STATES_PER_TIME_STEP;
+				uint startTag = startCommandTag + commandDelayInState;
+				if(startTag > serverTag || startCommandTag == 0)
+					startTag = serverTag;
+				else if(serverTag - startTag > maxCommandStateDelay)
+					startTag = serverTag - maxCommandStateDelay;
 
-				for(uint i = startCommandTag; i <= commandTag; i += (uint)TimeStep.STATES_PER_TIME_STEP)
+				for(uint i = startTag; i < serverTag; i ++)
 				{
-					ObjectManager.Instance.UpdateState(i, commandDelayInStep);
+					uint commandTag = startTag - commandDelayInState;
+
+					ObjectManager.Instance.UpdateState(i, commandDelayInState);
 				}
 			}
 
+			ObjectManager.Instance.UpdateState(serverTag, commandDelayInState);
+
 			// send the latest state to the client
-			TimeStep step = ObjectManager.Instance.GenerateTimeStep(serverTag);
+			ObjectStatesData stateData = ObjectManager.Instance.GenerateStateData(serverTag);
 
 			for(int i = 0; i < clientList.Count; i ++)
 			{
-				clientList[i].OnReceiveTimeStep(step.Deserialize());
+				clientList[i].OnReceiveStates(stateData);
 			}
 
-			while(timeElapse < TimeStep.STEP_DURATION)
+			while(timeElapse < ObjectState.DURATION)
 			{
 				float deltaTime = Time.deltaTime;
 				yield return null;
 				timeElapse += deltaTime;
 			}
-			timeElapse -= TimeStep.STEP_DURATION;
+			timeElapse -= ObjectState.DURATION;
 			serverTag ++;
 		}
 	}

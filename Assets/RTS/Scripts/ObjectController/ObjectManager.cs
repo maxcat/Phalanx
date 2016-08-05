@@ -71,11 +71,11 @@ public class ObjectManager {
 		objectPool.Add(controller.ID, controller);
 	}
 
-	public void UpdateState(uint commandTag, uint commandDelayInStep)
+	public void UpdateState(uint tag, uint commandDelayInState)
 	{
 		foreach(ObjectController controller in objectPool.Values)
 		{
-			controller.UpdateState(commandTag, commandDelayInStep);
+			controller.UpdateState(tag, commandDelayInState);
 		}
 	}
 
@@ -94,25 +94,17 @@ public class ObjectManager {
 		return result;
 	}
 
-	public TimeStep GenerateTimeStep(uint serverStepTag)
+	public ObjectStatesData GenerateStateData(uint serverStateTag)
 	{
-		TimeStep step = new TimeStep(serverStepTag);	
+		ObjectStatesData data = new ObjectStatesData();
 
-		Dictionary<uint, List<ObjectState>> result = new Dictionary<uint, List<ObjectState>>();
-
-		uint startTag = TimeStep.GET_STATE_TAG(serverStepTag);
 		foreach(uint key in objectPool.Keys)
 		{
 			ObjectController controller = objectPool[key];
-			List<ObjectState> stateList = new List<ObjectState>();
-			for(uint i = startTag; i < startTag + (uint)TimeStep.STATES_PER_TIME_STEP; i ++)
-			{
-				stateList.Add(controller.GetState(i));
-			}
-			result.Add(key, stateList);
+			data.AddState(controller.ID, controller.GetState(serverStateTag));
 		}
-		step.ObjectStates = result;
-		return step;
+
+		return data;
 	}
 #endregion
 

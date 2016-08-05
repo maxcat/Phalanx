@@ -24,32 +24,25 @@ public class ObjectController {
 #endregion
 
 #region Virtual Functions
-	public virtual void UpdateState(uint commandTag, uint commandDelayInStep)
+	public virtual void UpdateState(uint tag, uint commandDelayInState)
 	{
-		List<Command> objectCommands = CommandManager.Instance.GetCommands(commandTag, id);
+		List<Command> objectCommands = new List<Command>();
+		if(tag > commandDelayInState)
+		{
+			uint commandTag = tag - commandDelayInState;
+			objectCommands = CommandManager.Instance.GetCommands(commandTag, id);
+		}	
 
-		uint previousStateTag = commandTag + commandDelayInStep * (uint)TimeStep.STATES_PER_TIME_STEP - 1;
-		uint currentStateTag = previousStateTag + 1;
-
+		uint previousStateTag = tag - 1;
 		if(states.ContainsKey(previousStateTag))
 		{
-			for(int i = 0; i < TimeStep.STATES_PER_TIME_STEP; i ++ )
-			{
-				ObjectState nextState = null;
-				if(i == 0)
-					nextState = states[previousStateTag].GenerateNextState(objectCommands);
-				else
-					nextState = states[previousStateTag].GenerateNextState(null);
+			ObjectState nextState = null;
+			nextState = states[previousStateTag].GenerateNextState(objectCommands);
 
-
-				if(states.ContainsKey(currentStateTag))
-					states[currentStateTag] = nextState;
-				else
-					states.Add(currentStateTag, nextState);
-
-				previousStateTag ++;
-				currentStateTag ++;
-			}
+			if(states.ContainsKey(tag))
+				states[tag] = nextState;
+			else
+				states.Add(tag, nextState);
 		}
 	}
 
@@ -69,15 +62,12 @@ public class ObjectController {
 	{
 		states = new Dictionary<uint, ObjectState>(); 
 
-		for(int i = 0; i < TimeStep.STATES_PER_TIME_STEP; i ++)
-		{
-			uint stateTag = tag + (uint)i;
-			ObjectState startState = new ObjectState(stateTag);
-			startState.StartPos = startPos;
-			startState.EndPos = startPos;
+		uint stateTag = tag;
+		ObjectState startState = new ObjectState(stateTag);
+		startState.StartPos = startPos;
+		startState.EndPos = startPos;
 
-			states.Add(stateTag, startState);
-		}
+		states.Add(stateTag, startState);
 	}
 #endregion
 }

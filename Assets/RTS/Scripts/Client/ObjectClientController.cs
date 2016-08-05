@@ -5,14 +5,14 @@ using System.Collections.Generic;
 public class ObjectClientController : MonoBehaviour {
 
 #region Static Functions
-	public static ObjectClientController CreateController(Transform parent, uint objectID, List<ObjectState> initStates, uint commandDelayInStep)
+	public static ObjectClientController CreateController(Transform parent, uint objectID, ObjectState initState, uint commandDelayInState)
 	{
 		GameObject prefab = Resources.Load("Unit" + objectID) as GameObject;
 		GameObject instance = GameObject.Instantiate(prefab) as GameObject;
 		instance.transform.SetParent(parent);	
 
 		ObjectClientController controller = instance.GetComponent<ObjectClientController>();
-		controller.Init(objectID, initStates, commandDelayInStep);
+		controller.Init(objectID, initState, commandDelayInState);
 
 		return controller;
 	}
@@ -30,7 +30,7 @@ public class ObjectClientController : MonoBehaviour {
 
 	protected ObjectFlow					mainFlow;
 	protected Dictionary<uint, List<Command>> 		commands;	
-	protected uint 						commandDelayInStep;
+	protected uint 						commandDelayInState;
 #endregion
 
 #region Getter and Setter
@@ -53,15 +53,15 @@ public class ObjectClientController : MonoBehaviour {
 #endregion
 
 #region Public API
-	public void Init(uint objectID, List<ObjectState> initStates, uint commandDelayInStep)
+	public void Init(uint objectID, ObjectState initState, uint commandDelayInState)
 	{
 		this.objectID = objectID;
 		this.states = new Dictionary<uint, ObjectState>();
 		this.commands = new Dictionary<uint, List<Command>>();
-		this.currentTag = initStates[0].StateTag;
-		this.commandDelayInStep = commandDelayInStep;
+		this.currentTag = initState.StateTag;
+		this.commandDelayInState = commandDelayInState;
 
-		OnUpdateState(initStates);
+		OnUpdateState(initState);
 
 		startObjectFlow();
 	}
@@ -82,7 +82,7 @@ public class ObjectClientController : MonoBehaviour {
 
 			List<Command> commandList = null;
 
-			uint commandTag = nextTag - commandDelayInStep * (uint)TimeStep.STATES_PER_TIME_STEP;
+			uint commandTag = nextTag - commandDelayInState;
 			if(commands.ContainsKey(commandTag))
 			{
 				commandList = commands[commandTag];
@@ -99,30 +99,26 @@ public class ObjectClientController : MonoBehaviour {
 #endregion
 
 #region Event Handler
-	public void OnUpdateState(List<ObjectState> stateList)
+	public void OnUpdateState(ObjectState state)
 	{
-		for(int i = 0; i < stateList.Count; i ++)
+		if(this.states.ContainsKey(state.StateTag))
 		{
-			ObjectState state = stateList[i];
-			if(states.ContainsKey(state.StateTag))
+			if(!state.IsPrediction)
 			{
-				if(!state.IsPrediction)
-				{
-					Debug.Log("[INFO]ObjectClientController->OnUpdateState: override the predicted state with the state from server with tag " + state.StateTag + " for object " + objectID + " on client " + transform.parent.gameObject.name);
-					states[state.StateTag] = state;
-				}
+				Debug.Log("[INFO]ObjectClientController->OnUpdateState: override the predicted state with the state from server with tag " + state.StateTag + " for object " + objectID + " on client " + transform.parent.gameObject.name);
+				states[state.StateTag] = state;
 			}
-			else
-			{
-				states.Add(state.StateTag, state);
-			}
+		}	
+		else
+		{
+			states.Add(state.StateTag, state);
 		}
 	}
 
 
 	public void OnReceiveInput(Vector3 mousePosition)
 	{
-		uint commandTag = ((currentTag - 1) / (uint)TimeStep.STATES_PER_TIME_STEP) * (uint) TimeStep.STATES_PER_TIME_STEP + 1;
+		uint commandTag = currentTag;
 		if(!commands.ContainsKey(commandTag))
 		{
 			Vector2 destPos = (Vector2)transform.parent.InverseTransformPoint(mousePosition);	

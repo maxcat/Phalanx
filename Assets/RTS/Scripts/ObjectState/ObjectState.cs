@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 public class ObjectState {
 
+#region Static Fields
+	public static readonly float 				DURATION = 0.2f;
+#endregion
+
 #region Fields
 	protected List<Command> 				commands;
 	protected Vector2 					startPos;

@@ -98,16 +98,9 @@ public class ClientService : MonoBehaviour {
 #endregion
 
 #region Event Listener
-	public void OnReceiveTimeStep(TimeStep step)
+	public void OnReceiveStates(ObjectStatesData data)
 	{
-		if(LatencyInSeconds <= 0)
-		{
-			receiveStep(step);
-		}
-		else
-		{
-			this.StartCoroutine(receiveFlow(step));
-		}
+		this.StartCoroutine(receiveFlow(data));	
 	}
 
 	public void OnReceiveInput(Vector3 mousePosition)
@@ -130,15 +123,15 @@ public class ClientService : MonoBehaviour {
 		objectPool = new Dictionary<uint, ObjectClientController>();
 	}
 
-	protected void receiveStep(TimeStep step)
+	protected void receiveStates(ObjectStatesData data)
 	{
-		foreach(uint objectID in step.ObjectStates.Keys)
+		foreach(uint objectID in data.Data.Keys)
 		{
 			ObjectClientController controller;
-			List<ObjectState> states = step.ObjectStates[objectID];
+			ObjectState state = data.Data[objectID];
 			if(!objectPool.ContainsKey(objectID))	
 			{
-				controller = ObjectClientController.CreateController(transform, objectID, states, serverSimuation.CommandDelayInStep);
+				controller = ObjectClientController.CreateController(transform, objectID, state, serverSimuation.CommandDelayInState);
 				objectPool.Add(objectID, controller);
 				if(objectID == playerObjectID)
 				{
@@ -148,15 +141,15 @@ public class ClientService : MonoBehaviour {
 			else
 			{
 				controller = objectPool[objectID];
-				controller.OnUpdateState(states);
+				controller.OnUpdateState(state);
 			}
 		}
 	}
 
-	protected IEnumerator receiveFlow(TimeStep step)
+	protected IEnumerator receiveFlow(ObjectStatesData data)
 	{
-		yield return new WaitForSeconds(LatencyInSeconds); 
-		receiveStep(step);
+		yield return new WaitForSeconds(LatencyInSeconds);
+		receiveStates(data);
 	}
 
 	protected IEnumerator postCommandFlow(Command command)
