@@ -60,7 +60,6 @@ public class DebugLogConsoleHandler : PopupHandler {
 	[SerializeField] protected Text 				label;
 	[SerializeField] protected int 					maxLogCount = 9999;
 	[SerializeField] protected ScrollRect				scrollRect;
-	protected string 						LogTestStr;
 	protected bool 							isLocked = true;
 	[SerializeField] protected bool					infoEnabled = true;
 	[SerializeField] protected bool 				warningEnabled = true;
@@ -68,7 +67,7 @@ public class DebugLogConsoleHandler : PopupHandler {
 	[SerializeField] protected bool 				isRunningInBackground = false;
 	[SerializeField] protected GameObject 				backgroundRunningObj;
 	
-	protected List<LogData>						LogDataList;
+	protected List<LogData>						logDataList;
 #endregion
 
 #region Override  MonoBehaviour
@@ -95,12 +94,12 @@ public class DebugLogConsoleHandler : PopupHandler {
 #region Protected Functions
 	protected void showLog()
 	{
-		if(LogDataList == null)
+		if(logDataList == null)
 			return;
 		string result = string.Empty; 
-		for(int i = 0; i < LogDataList.Count; i ++)
+		for(int i = 0; i < logDataList.Count; i ++)
 		{
-			LogData data = LogDataList[i];
+			LogData data = logDataList[i];
 
 			switch(data.Type)
 			{
@@ -128,13 +127,13 @@ public class DebugLogConsoleHandler : PopupHandler {
 #region Log Event Handler
 	protected void onLogMessageReceived(string logString, string stackTrace, LogType type)
 	{
-		if(LogDataList == null)
-			LogDataList = new List<LogData>();
+		if(logDataList == null)
+			logDataList = new List<LogData>();
 
-		if(LogDataList.Count >= maxLogCount)
-			LogDataList.RemoveAt(0);
+		if(logDataList.Count >= maxLogCount)
+			logDataList.RemoveAt(0);
 
-		LogDataList.Add(new LogData(logString, stackTrace, type));
+		logDataList.Add(new LogData(logString, stackTrace, type));
 
 		showLog();
 	}
@@ -174,9 +173,9 @@ public class DebugLogConsoleHandler : PopupHandler {
 
 	public void OnClearClicked()
 	{
-		if(LogDataList != null)
+		if(logDataList != null)
 		{
-			LogDataList.Clear();
+			logDataList.Clear();
 			showLog();
 		}
 	}
