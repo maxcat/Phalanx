@@ -108,15 +108,15 @@ public partial class PopupService : Singleton {
 		popupObj.transform.SetSiblingIndex(getTailIndex(isPersistPopup));
 
 		handler.Init(data, false);
-		Task animationTask = handler.openAnimationTask;
+		Flow animationFlow = handler.OpenAnimationFlow;
 
-		if(animationTask != null)
+		if(animationFlow != null)
 		{
-			SeriesTasks mainTask = new SeriesTasks(this);
-			mainTask.AddTask(ShowInvisibleBlockingFlow());
-			mainTask.AddTask(animationTask);
-			mainTask.AddTask(CloseInvisibleBlockingFlow());
-			mainTask.Start();
+			SequentialFlow mainFlow = new SequentialFlow();
+			mainFlow.Add(ShowInvisibleBlockingFlow());
+			mainFlow.Add(animationFlow);
+			mainFlow.Add(CloseInvisibleBlockingFlow());
+			mainFlow.Start(this);
 		}
 	}
 #endregion
@@ -130,20 +130,19 @@ public partial class PopupService : Singleton {
 		{
 			GameObject popupObj = stack[stack.Count - 1];
 			stack.RemoveAt(stack.Count - 1);
-			SeriesTasks mainTask = new SeriesTasks(this);
 
-			Task animationTask = popupObj.GetComponent<PopupHandler>().closeAnimationTask;
-
-			if(animationTask != null)
+			SequentialFlow mainFlow = new SequentialFlow();
+			Flow animationFlow = popupObj.GetComponent<PopupHandler>().CloseAnimationFlow;
+			if(animationFlow != null)
 			{
-				mainTask.AddTask(ShowInvisibleBlockingFlow());
-				mainTask.AddTask(animationTask);
+				mainFlow.Add(ShowInvisibleBlockingFlow());
+				mainFlow.Add(animationFlow);
 			}
-			mainTask.AddTask(destroyFlow(popupObj, isPersistPopup));
-			if(animationTask != null)
-				mainTask.AddTask(CloseInvisibleBlockingFlow());
+			mainFlow.Add(destroyFlow(popupObj, isPersistPopup));
+			if(animationFlow != null)
+				mainFlow.Add(CloseInvisibleBlockingFlow());
 
-			mainTask.Start();
+			mainFlow.Start(this);
 		}
 	}
 

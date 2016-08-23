@@ -6,30 +6,30 @@ public class PopupHandler : MonoBehaviour {
 #region Fields
 	[SerializeField] protected object 		popupData;
 	[SerializeField] protected bool 		isPersist;
-	[SerializeField] protected TaskFactory		openAnimationTaskFactory;
-	[SerializeField] protected TaskFactory 		closeAnimationTaskFactory;
+	[SerializeField] protected FlowFactory 		openAnimationFlowFactory;
+	[SerializeField] protected FlowFactory 		closeAnimationFlowFactory;
 #endregion
 
 #region Getter and Setter
-	public Task openAnimationTask
+	public Flow OpenAnimationFlow
 	{
 		get 
 		{
-			if(openAnimationTaskFactory == null)
+			if(openAnimationFlowFactory == null)
 				return null;
 
-			return openAnimationTaskFactory.CreateTask();
+			return openAnimationFlowFactory.CreateFlow();
 		}
 	}
 
-	public Task closeAnimationTask
+	public Flow CloseAnimationFlow
 	{
 		get 
 		{
-			if(closeAnimationTaskFactory == null)
+			if(closeAnimationFlowFactory == null)
 				return null;
 
-			return closeAnimationTaskFactory.CreateTask();
+			return closeAnimationFlowFactory.CreateFlow();
 		}
 	}
 #endregion

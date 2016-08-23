@@ -5,9 +5,8 @@ public class SampleUIScript : MonoBehaviour {
 
 #region Override
 	// Use this for initialization
-	void Start () {
-		Task task = new Task(this, initFlow(), false);
-		task.Start();
+	IEnumerator Start () {
+		yield return initFlow();
 	}
 	
 	// Update is called once per frame
