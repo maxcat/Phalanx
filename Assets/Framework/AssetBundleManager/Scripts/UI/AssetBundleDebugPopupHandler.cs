@@ -32,7 +32,7 @@ public class AssetBundleDebugPopupHandler : PopupHandler {
 	
 	// Update is called once per frame
 	void Update () {
-		listHandler.UpdateData(Service.Get<AssetBundleManager>().CacheList.ToArray());
+		listHandler.UpdateData(AssetBundleManager.Instance.CacheList.ToArray());
 	}
 #endregion
 }

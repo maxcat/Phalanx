@@ -3,19 +3,15 @@ using System.Collections;
 
 public class Singleton : MonoBehaviour {
 
-#region Fields
+#region Remove 
 	[SerializeField] protected bool isPersist;
 	protected bool			isInited = false;
-#endregion
 
-#region Getter and Setter
 	public virtual bool IsPersist
 	{
 		get { return isPersist; }
 	}
-#endregion
 
-#region Virtual Functions
 	public virtual void Init()
 	{
 		if(!isInited)
@@ -36,6 +32,18 @@ public class Singleton : MonoBehaviour {
 	}
 
 	public virtual void OnGamePaused()
+	{
+
+	}
+#endregion
+
+#region Virtual Functions
+	protected virtual void init()
+	{
+		
+	}
+
+	protected virtual void clear()
 	{
 
 	}

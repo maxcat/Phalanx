@@ -59,7 +59,7 @@ public class PopupHandler : MonoBehaviour {
 
 	public virtual void CloseThisPopup()
 	{
-		Service.Get<PopupService>().CloseTopPopup(isPersist);
+		PopupService.Instance.CloseTopPopup(isPersist);
 	}
 #endregion
 }

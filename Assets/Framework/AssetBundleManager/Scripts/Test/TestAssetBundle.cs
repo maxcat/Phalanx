@@ -6,15 +6,15 @@ public class TestAssetBundle : MonoBehaviour {
 
 	// Use this for initialization
 	IEnumerator Start () {
-		yield return Service.Get<AssetBundleManager>().InitAsync();
+		yield return AssetBundleManager.Instance.InitAsync();
 
-		Service.Get<PopupService>().ShowAssetBundleDebugPopup();
+		PopupService.Instance.ShowAssetBundleDebugPopup();
 
 		yield return null;
 
 		List<string> nameList = new List<string>() {"prefab2","prefab1" };
 
-		List<AssetBundleLoadFlow> loadFlowList = Service.Get<AssetBundleManager>().CreateLoadingFlow(nameList);
+		List<AssetBundleLoadFlow> loadFlowList = AssetBundleManager.Instance.CreateLoadingFlow(nameList);
 
 		System.DateTime startTime = System.DateTime.Now;
 		for(int i = 0; i < loadFlowList.Count; i ++)

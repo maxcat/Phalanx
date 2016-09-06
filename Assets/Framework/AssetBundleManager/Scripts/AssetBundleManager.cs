@@ -5,6 +5,35 @@ using System.IO;
 
 public class AssetBundleManager : Singleton {
 
+#region Static Fields
+	static GameObject 			parentObj;
+	static AssetBundleManager 			instance;
+#endregion
+	
+#region Static Getter and Setter
+	public static AssetBundleManager Instance
+	{
+		get {
+			if (parentObj == null)
+			{
+				parentObj = new GameObject("AssetBundleManager");
+				DontDestroyOnLoad(parentObj);
+				instance = parentObj.AddComponent<AssetBundleManager>();
+				instance.Init();
+			}
+			return instance;
+		}
+	}
+#endregion
+	
+#region Static Functions
+	public static void Remove()
+	{
+		instance.clear();
+		Destroy(parentObj);
+	}
+#endregion
+
 #region Fields
 	[SerializeField] protected long 			bundleSizeThreadhold = 500000;
 	[SerializeField] protected int 				cacheInitCountPerFrame = 100;
@@ -157,15 +186,4 @@ public class AssetBundleManager : Singleton {
 		}
 	}
 #endregion
-
-#region Implement Virtual Functions
-	public override void Init()
-	{
-		if(!isInited)
-		{
-			isPersist = true;
-
-		}
-#endregion
-	}
 }

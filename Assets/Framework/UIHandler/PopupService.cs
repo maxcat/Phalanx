@@ -5,6 +5,35 @@ using System.Collections.Generic;
 // use partial class so that users can define their own factory function in individual popup handler.
 public partial class PopupService : Singleton {
 
+#region Static Fields
+	static GameObject 			parentObj;
+	static PopupService 			instance;
+#endregion
+	
+#region Static Getter and Setter
+	public static PopupService Instance
+	{
+		get {
+			if (parentObj == null)
+			{
+				parentObj = new GameObject("PopupService");
+				DontDestroyOnLoad(parentObj);
+				instance = parentObj.AddComponent<PopupService>();
+				instance.Init();
+			}
+			return instance;
+		}
+	}
+#endregion
+	
+#region Static Functions
+	public static void Remove()
+	{
+		instance.clear();
+		Destroy(parentObj);
+	}
+#endregion
+
 #region Fields
 	[SerializeField] protected int 		popupSortOrder = 0x7fff;
 	protected GameObject 			basePopupUI;
@@ -159,21 +188,22 @@ public partial class PopupService : Singleton {
 #endregion
 
 #region Implement Virtual Functions
-	public override void Init()
+	protected override void init()
 	{
-		if(!isInited)
-		{
-			isPersist = true;
-			popupStack = new List<GameObject>();
-			persistPopupStack = new List<GameObject>();
-			isInited = true;
-		}
+		popupStack = new List<GameObject>();
+		persistPopupStack = new List<GameObject>();
 	}
 
-	public override void OnSceneChanged(int level)
+	protected override void clear()
 	{
 		popupStack.Clear();	
 	}
+#endregion
 
+#region Override MonoBehaviour
+	void OnLevelWasLoaded(int level)
+	{
+		clear();
+	}
 #endregion
 }

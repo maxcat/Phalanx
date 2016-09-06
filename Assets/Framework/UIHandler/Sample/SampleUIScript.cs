@@ -19,7 +19,7 @@ public class SampleUIScript : MonoBehaviour {
 	protected IEnumerator initFlow()
 	{
 		yield return new WaitForSeconds(1f);	
-		PopupService service = Service.Get<PopupService>(); 
+		PopupService service = PopupService.Instance; 
 		service.Init();
 
 
