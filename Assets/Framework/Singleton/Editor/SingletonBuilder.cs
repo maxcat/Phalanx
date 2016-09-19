@@ -107,7 +107,7 @@ public class SingletonBuilder {
 		if(isPersist)
 			ifBlock.AddChild(new LineBlock("DontDestroyOnLoad(parentObj);"));
 		ifBlock.AddChild(new LineBlock("instance = parentObj.AddComponent<" + fileName + ">();"));
-		ifBlock.AddChild(new LineBlock("instance.Init();"));
+		ifBlock.AddChild(new LineBlock("instance.init();"));
 		getterBlock.AddChild(ifBlock);
 		getterBlock.AddChild(new LineBlock("return instance;"));
 

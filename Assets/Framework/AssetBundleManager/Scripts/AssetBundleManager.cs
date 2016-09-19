@@ -6,7 +6,7 @@ using System.IO;
 public class AssetBundleManager : Singleton {
 
 #region Static Fields
-	static GameObject 			parentObj;
+	static GameObject 				parentObj;
 	static AssetBundleManager 			instance;
 #endregion
 	
@@ -19,7 +19,7 @@ public class AssetBundleManager : Singleton {
 				parentObj = new GameObject("AssetBundleManager");
 				DontDestroyOnLoad(parentObj);
 				instance = parentObj.AddComponent<AssetBundleManager>();
-				instance.Init();
+				instance.init();
 			}
 			return instance;
 		}

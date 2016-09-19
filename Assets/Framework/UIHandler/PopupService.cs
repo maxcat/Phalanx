@@ -19,7 +19,7 @@ public partial class PopupService : Singleton {
 				parentObj = new GameObject("PopupService");
 				DontDestroyOnLoad(parentObj);
 				instance = parentObj.AddComponent<PopupService>();
-				instance.Init();
+				instance.init();
 			}
 			return instance;
 		}
@@ -87,7 +87,7 @@ public partial class PopupService : Singleton {
 
 	protected int getTailIndex(bool isPersistPopup)
 	{
-		if(isPersist)
+		if(isPersistPopup)
 			return persistPopupStack == null ? 0 : persistPopupStack.Count;
 		else
 			return popupStack == null ? 0 : popupStack.Count;

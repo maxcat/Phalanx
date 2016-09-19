@@ -20,8 +20,6 @@ public class SampleUIScript : MonoBehaviour {
 	{
 		yield return new WaitForSeconds(1f);	
 		PopupService service = PopupService.Instance; 
-		service.Init();
-
 
 		service.ShowDebugLogConsole();
 		for(int i = 0; i < 2; i ++)
