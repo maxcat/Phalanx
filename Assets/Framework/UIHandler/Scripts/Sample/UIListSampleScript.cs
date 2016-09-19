@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class UIListTestScript : MonoBehaviour {
+public class UIListSampleScript : MonoBehaviour {
 
 #region Fields
 	[SerializeField] protected int 					dataCount = 10;

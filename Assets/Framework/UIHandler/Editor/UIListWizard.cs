@@ -210,20 +210,26 @@ public class UIListWizard : EditorWindow {
 	protected GameObject createTemplate()
 	{
 		GameObject template = null; 
+
+		RectTransform scrollTrans = scrollRect.GetComponent<RectTransform>();
+		// get the height of the horizontal scroll bar
+		float horizontalScrollbarHeight = scrollRect.horizontalScrollbar.GetComponent<RectTransform>().rect.height;
+		// get the width of the vertical scroll bar
+		float verticalScrollbarWidth = scrollRect.verticalScrollbar.GetComponent<RectTransform>().rect.width;
+
 		if(hasTemplate)
 		{
 			template = GameObject.Instantiate(templateObject) as GameObject;
 			setDefaultElementSize(template);
 
 			LayoutElement element = template.GetComponent<LayoutElement>();
-			RectTransform scrollTrans = scrollRect.GetComponent<RectTransform>();
 			if(listType == LIST_TYPE.VERTICAL)
 			{
-				scrollTrans.sizeDelta = new Vector2(element.preferredWidth, scrollTrans.sizeDelta.y);
+				scrollTrans.sizeDelta = new Vector2(element.preferredWidth + verticalScrollbarWidth, scrollTrans.sizeDelta.y);
 			}
 			else
 			{
-				scrollTrans.sizeDelta = new Vector2(scrollTrans.sizeDelta.x, element.preferredHeight);
+				scrollTrans.sizeDelta = new Vector2(scrollTrans.sizeDelta.x, element.preferredHeight + horizontalScrollbarHeight);
 			}
 		}
 		else
@@ -337,7 +343,7 @@ public class UIListWizard : EditorWindow {
 				}
 				else
 				{
-					
+
 				}
 			}
 			else
@@ -398,6 +404,6 @@ public class UIListWizard : EditorWindow {
 				scrollRect = selectedObject.GetComponentInChildren<ScrollRect>();
 		}
 	}
-	#endregion
+#endregion
 }
 
