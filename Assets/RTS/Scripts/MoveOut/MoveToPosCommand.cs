@@ -1,15 +1,15 @@
-﻿using UnityEngine;
+﻿using HRGameLogic;
 using System.Collections;
 using System.Collections.Generic;
 
 public class MoveToPosCommand : Command {
 
 #region Fields
-	protected Vector2 				destPos;
+	protected HRVector2D 				destPos;
 #endregion
 
 #region Constructor
-	public MoveToPosCommand(uint tag, uint ownerID, Vector2 destPos)
+	public MoveToPosCommand(uint tag, uint ownerID, HRVector2D destPos)
 	       	: base (tag, ownerID)
 	{
 		this.destPos = destPos;
@@ -22,10 +22,10 @@ public class MoveToPosCommand : Command {
 		// TODO: read speed from unit data.
 		bool finishedInThisState = false;
 		float speed = 10;
-		Vector2 startPos = currentState.EndPos;	
+		HRVector2D startPos = currentState.EndPos;	
 		nextState.StartPos = startPos;
 
-		Vector2 direction = destPos - startPos;
+		HRVector2D direction = destPos - startPos;
 		float distance = direction.magnitude;
 		direction.Normalize();
 

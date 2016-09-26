@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using HRGameLogic;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -122,7 +123,7 @@ public class ObjectClientController : MonoBehaviour {
 		if(!commands.ContainsKey(commandTag))
 		{
 			Vector2 destPos = (Vector2)transform.parent.InverseTransformPoint(mousePosition);	
-			MoveToPosCommand command = new MoveToPosCommand(commandTag, objectID, destPos);
+			MoveToPosCommand command = new MoveToPosCommand(commandTag, objectID, destPos.Convert());
 
 			List<Command> commandList = new List<Command>();
 			commandList.Add(command);

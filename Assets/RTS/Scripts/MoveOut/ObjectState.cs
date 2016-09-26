@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using HRGameLogic;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,20 +10,20 @@ public class ObjectState {
 
 #region Fields
 	protected List<CommandSnapshot> 			commandSnapshots;
-	protected Vector2 					startPos;
-	protected Vector2 					endPos;
+	protected HRVector2D 					startPos;
+	protected HRVector2D 					endPos;
 	protected uint 						stateTag;
 	protected bool 						isPrediction = false;
 #endregion
 
 #region Getter and Setter
-	public Vector2 StartPos
+	public HRVector2D StartPos
 	{
 		get { return startPos; }
 		set { startPos = value; }
 	}
 
-	public Vector2 EndPos
+	public HRVector2D EndPos
 	{
 		get { return endPos; }
 		set { endPos = value; }

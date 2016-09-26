@@ -60,7 +60,7 @@ public class ObjectFlow : Flow {
 		if(state == null)
 			return Vector3.zero;
 		else
-			return state.StartPos;
+			return (Vector3)state.StartPos.Convert();
 	}
 #endregion
 

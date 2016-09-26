@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using HRGameLogic;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -37,8 +37,8 @@ public class ObjectManager {
 		ObjectController ctrl1 = new ObjectController(1);
 		ObjectController ctrl2 = new ObjectController(2);
 
-		ctrl1.Init(tag, Vector2.right * - 50);
-		ctrl2.Init(tag, Vector2.right * 50);
+		ctrl1.Init(tag, HRVector2D.right * -50);
+		ctrl2.Init(tag, HRVector2D.right * 50);
 
 		objectPool.Add(1, ctrl1);
 		objectPool.Add(2, ctrl2);
@@ -58,13 +58,13 @@ public class ObjectManager {
 	{
 		if(controller == null)
 		{
-			Debug.LogError("[ERROR] ObjectManager->AddObject: input object is null.");
+			//Debug.LogError("[ERROR] ObjectManager->AddObject: input object is null.");
 			return;
 		}
 
 		if(objectPool.ContainsKey(controller.ID))
 		{
-			Debug.LogError("[ERROR] ObjectManager->AddObject: id " + controller.ID + " already added.");
+			//Debug.LogError("[ERROR] ObjectManager->AddObject: id " + controller.ID + " already added.");
 			return;
 		}
 

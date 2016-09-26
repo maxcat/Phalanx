@@ -1,4 +1,4 @@
-﻿using UnityEngine;			// for vector only
+﻿using HRGameLogic;			
 using System.Collections;
 using System.Collections.Generic;
 
@@ -58,7 +58,7 @@ public class ObjectController {
 		}
 	}
 
-	public virtual void Init(uint tag, Vector2 startPos)
+	public virtual void Init(uint tag, HRVector2D startPos)
 	{
 		states = new Dictionary<uint, ObjectState>(); 
 
