@@ -1,40 +1,42 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-public class ObjectStatesData {
+namespace HRGameLogic
+{
+
+	public class ObjectStatesData {
 
 #region Fields
-	protected Dictionary<uint, ObjectState> 			states;
+		protected Dictionary<uint, ObjectState> 			states;
 #endregion
 
 #region Constructor
-	public ObjectStatesData()
-	{
-		states = new Dictionary<uint, ObjectState>();
-	}
+		public ObjectStatesData()
+		{
+			states = new Dictionary<uint, ObjectState>();
+		}
 #endregion
 
 #region Getter and Setter
-	public Dictionary<uint, ObjectState> Data
-	{
-		get { return states; }
-		set { states = value; }
-	}
+		public Dictionary<uint, ObjectState> Data
+		{
+			get { return states; }
+			set { states = value; }
+		}
 #endregion
 
 #region Public API
-	public void AddState(uint objectID, ObjectState state)
-	{
-		if(states.ContainsKey(objectID))
+		public void AddState(uint objectID, ObjectState state)
 		{
-			Debug.LogWarning("[WARNING]ObjectStatesData->AddState: object ID " + objectID + " already exist."); 
-			states[objectID] = state;
+			if(states.ContainsKey(objectID))
+			{
+				//Debug.LogWarning("[WARNING]ObjectStatesData->AddState: object ID " + objectID + " already exist."); 
+				states[objectID] = state;
+			}
+			else
+			{
+				states.Add(objectID, state);
+			}
 		}
-		else
-		{
-			states.Add(objectID, state);
-		}
-	}
 #endregion
+	}
 }

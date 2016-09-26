@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using HRGameLogic;
-using System.Collections;
 using System.Collections.Generic;
 
 public class ObjectClientController : MonoBehaviour {

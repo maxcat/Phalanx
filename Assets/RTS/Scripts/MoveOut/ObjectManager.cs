@@ -1,111 +1,112 @@
-﻿using HRGameLogic;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-public class ObjectManager {
+namespace HRGameLogic
+{
+	public class ObjectManager {
 
 #region Static Fields
-	private static ObjectManager 		instance;
+		private static ObjectManager 		instance;
 #endregion
 
 #region Static Functions
-	public static ObjectManager Instance
-	{
-		get 
+		public static ObjectManager Instance
 		{
-			if (instance == null)
-				instance = new ObjectManager();
-			return instance;
+			get 
+			{
+				if (instance == null)
+					instance = new ObjectManager();
+				return instance;
+			}
 		}
-	}
 #endregion
 
 #region Fields
-	protected Dictionary<uint, ObjectController>		objectPool;
+		protected Dictionary<uint, ObjectController>		objectPool;
 #endregion
 
 #region Constructor
-	public ObjectManager()
-	{
-		objectPool = new Dictionary<uint, ObjectController>();
-	}
+		public ObjectManager()
+		{
+			objectPool = new Dictionary<uint, ObjectController>();
+		}
 #endregion
 
 #region Test Functions
-	public void TestInit(uint tag)
-	{
-		ObjectController ctrl1 = new ObjectController(1);
-		ObjectController ctrl2 = new ObjectController(2);
+		public void TestInit(uint tag)
+		{
+			ObjectController ctrl1 = new ObjectController(1);
+			ObjectController ctrl2 = new ObjectController(2);
 
-		ctrl1.Init(tag, HRVector2D.right * -50);
-		ctrl2.Init(tag, HRVector2D.right * 50);
+			ctrl1.Init(tag, HRVector2D.right * -50);
+			ctrl2.Init(tag, HRVector2D.right * 50);
 
-		objectPool.Add(1, ctrl1);
-		objectPool.Add(2, ctrl2);
-	}
+			objectPool.Add(1, ctrl1);
+			objectPool.Add(2, ctrl2);
+		}
 #endregion
 
 #region Public API
-	public ObjectController GetObject(uint id)
-	{
-		if(objectPool.ContainsKey(id))
-			return objectPool[id];	
-		
-		return null;
-	}
-
-	public void AddObject(ObjectController controller)
-	{
-		if(controller == null)
+		public ObjectController GetObject(uint id)
 		{
-			//Debug.LogError("[ERROR] ObjectManager->AddObject: input object is null.");
-			return;
+			if(objectPool.ContainsKey(id))
+				return objectPool[id];	
+
+			return null;
 		}
 
-		if(objectPool.ContainsKey(controller.ID))
+		public void AddObject(ObjectController controller)
 		{
-			//Debug.LogError("[ERROR] ObjectManager->AddObject: id " + controller.ID + " already added.");
-			return;
+			if(controller == null)
+			{
+				//Debug.LogError("[ERROR] ObjectManager->AddObject: input object is null.");
+				return;
+			}
+
+			if(objectPool.ContainsKey(controller.ID))
+			{
+				//Debug.LogError("[ERROR] ObjectManager->AddObject: id " + controller.ID + " already added.");
+				return;
+			}
+
+			objectPool.Add(controller.ID, controller);
 		}
 
-		objectPool.Add(controller.ID, controller);
-	}
-
-	public void UpdateState(uint tag, uint commandDelayInState)
-	{
-		foreach(ObjectController controller in objectPool.Values)
+		public void UpdateState(uint tag, uint commandDelayInState)
 		{
-			controller.UpdateState(tag, commandDelayInState);
-		}
-	}
-
-	public Dictionary<uint, ObjectState> GetStates(uint serverTag)
-	{
-		Dictionary<uint, ObjectState> result = new Dictionary<uint, ObjectState>();
-
-		foreach(uint key in objectPool.Keys)
-		{
-			ObjectController controller = objectPool[key];
-			ObjectState state = controller.GetState(serverTag);
-			if(state != null)
-				result.Add(key, state);
+			foreach(ObjectController controller in objectPool.Values)
+			{
+				controller.UpdateState(tag, commandDelayInState);
+			}
 		}
 
-		return result;
-	}
-
-	public ObjectStatesData GenerateStateData(uint serverStateTag)
-	{
-		ObjectStatesData data = new ObjectStatesData();
-
-		foreach(uint key in objectPool.Keys)
+		public Dictionary<uint, ObjectState> GetStates(uint serverTag)
 		{
-			ObjectController controller = objectPool[key];
-			data.AddState(controller.ID, controller.GetState(serverStateTag));
+			Dictionary<uint, ObjectState> result = new Dictionary<uint, ObjectState>();
+
+			foreach(uint key in objectPool.Keys)
+			{
+				ObjectController controller = objectPool[key];
+				ObjectState state = controller.GetState(serverTag);
+				if(state != null)
+					result.Add(key, state);
+			}
+
+			return result;
 		}
 
-		return data;
-	}
+		public ObjectStatesData GenerateStateData(uint serverStateTag)
+		{
+			ObjectStatesData data = new ObjectStatesData();
+
+			foreach(uint key in objectPool.Keys)
+			{
+				ObjectController controller = objectPool[key];
+				data.AddState(controller.ID, controller.GetState(serverStateTag));
+			}
+
+			return data;
+		}
 #endregion
 
+	}
 }
