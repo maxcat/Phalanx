@@ -6,7 +6,7 @@ namespace HRGameLogic
 
 #region Fields
 		protected uint 						id;
-		Dictionary<uint, ObjectState>				states;
+		Dictionary<uint, ObjectState>				states;		// key is the time tag of the state.
 #endregion
 
 #region Getter and Setter
