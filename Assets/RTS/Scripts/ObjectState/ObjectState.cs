@@ -81,13 +81,13 @@ public class ObjectState {
 		newState.StartPos = this.endPos;
 		newState.EndPos = this.endPos;
 
-		ExecuteCommands(newState, snapshotList);
+		executeCommands(newState, snapshotList);
 		return newState;
 	}
 #endregion
 
 #region Virtual Functions
-	protected virtual void ExecuteCommands(ObjectState nextState, List<CommandSnapshot> snapshotList)
+	protected virtual void executeCommands(ObjectState nextState, List<CommandSnapshot> snapshotList)
 	{
 		for(int i = 0; i < snapshotList.Count; i ++)
 		{
