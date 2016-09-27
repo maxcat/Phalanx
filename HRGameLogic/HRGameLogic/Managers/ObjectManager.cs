@@ -34,6 +34,7 @@ namespace HRGameLogic
 #region Test Functions
 		public void TestInit(uint tag)
 		{
+			HRLog.Info("=======test init=====");
 			ObjectController ctrl1 = new ObjectController(1);
 			ObjectController ctrl2 = new ObjectController(2);
 
@@ -58,13 +59,13 @@ namespace HRGameLogic
 		{
 			if(controller == null)
 			{
-				//Debug.LogError("[ERROR] ObjectManager->AddObject: input object is null.");
+				HRLog.Error("[ERROR] ObjectManager->AddObject: input object is null.");
 				return;
 			}
 
 			if(objectPool.ContainsKey(controller.ID))
 			{
-				//Debug.LogError("[ERROR] ObjectManager->AddObject: id " + controller.ID + " already added.");
+				HRLog.Error("[ERROR] ObjectManager->AddObject: id " + controller.ID + " already added.");
 				return;
 			}
 

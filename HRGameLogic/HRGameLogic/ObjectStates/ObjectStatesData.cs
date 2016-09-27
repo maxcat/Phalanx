@@ -29,7 +29,7 @@ namespace HRGameLogic
 		{
 			if(states.ContainsKey(objectID))
 			{
-				//Debug.LogWarning("[WARNING]ObjectStatesData->AddState: object ID " + objectID + " already exist."); 
+				HRLog.Warning("[WARNING]ObjectStatesData->AddState: object ID " + objectID + " already exist."); 
 				states[objectID] = state;
 			}
 			else

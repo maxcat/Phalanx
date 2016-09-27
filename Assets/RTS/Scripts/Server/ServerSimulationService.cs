@@ -25,6 +25,8 @@ public class ServerSimulationService : MonoBehaviour {
 	IEnumerator Start () {
 
 		serverTag = 1;
+		// init debug log
+		HRLog.Init(new HRUnityLog());
 		// test code.
 		ObjectManager.Instance.TestInit(serverTag);
 		float timeElapse = 0f;

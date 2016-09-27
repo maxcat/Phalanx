@@ -41,7 +41,7 @@ namespace HRGameLogic
 				}	
 				else
 				{
-					//Debug.LogWarning("[WARNING]CircularObjectStates->Append: last receive time state is " + lastTag + " input time state is " + state.StateTag);
+					HRLog.Warning("[WARNING]CircularObjectStates->Append: last receive time state is " + lastTag + " input time state is " + state.StateTag);
 					return;
 				}
 			}
