@@ -37,6 +37,7 @@ namespace HRGameLogic
 			if(states.ContainsKey(previousStateTag))
 			{
 				ObjectState nextState = null;
+				// TODO: add check for invalid commands.
 				nextState = states[previousStateTag].GenerateNextState(objectCommands);
 
 				if(states.ContainsKey(tag))
