@@ -67,10 +67,10 @@ namespace HRGameLogic
 			this.y = 0f;
 
 			if(dict.ContainsKey("x"))
-				this.x = (float)dict["x"];
+				this.x = System.Convert.ToSingle(dict["x"]);
 
 			if(dict.ContainsKey("y"))
-				this.y = (float)dict["y"];	
+				this.y = System.Convert.ToSingle(dict["y"]);	
 
 			sqrMagnitude = x * x + y * y;
 			magnitude = Convert.ToSingle((Double)Math.Sqrt(sqrMagnitude));

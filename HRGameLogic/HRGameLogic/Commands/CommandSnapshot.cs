@@ -57,10 +57,8 @@ namespace HRGameLogic
 			if(dict.ContainsKey("command") && 
 					dict.ContainsKey("commandType"))
 			{
-				System.Type commandType = (System.Type)dict["commandType"];	
-				this.command = (Command)System.Activator.CreateInstance(commandType); 
-
-				this.command.Deserialize(dict["command"] as Dictionary<string, object>);
+				System.Type commandType = System.Type.GetType((string)dict["commandType"]);	
+				this.command = (Command)System.Activator.CreateInstance(commandType, dict); 
 			}
 
 			if(dict.ContainsKey("finishedInThisState"))

@@ -51,10 +51,10 @@ namespace HRGameLogic
 		public virtual void Deserialize(Dictionary<string, object> dict)
 		{
 			if(dict.ContainsKey("ownerID"))
-				ownerID = (uint)dict["ownerID"];	
+				ownerID = System.Convert.ToUInt32(dict["ownerID"]);	
 
 			if(dict.ContainsKey("sendTag"))
-				sendTag = (uint)dict["sendTag"];
+				sendTag = System.Convert.ToUInt32(dict["sendTag"]);
 		}
 #endregion
 

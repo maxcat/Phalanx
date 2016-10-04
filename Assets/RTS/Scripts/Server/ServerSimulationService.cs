@@ -79,7 +79,9 @@ public class ServerSimulationService : MonoBehaviour {
 #region Event Listener
 	public void OnReceiveCommands(Command command)
 	{
-		CommandManager.Instance.OnReceiveCommand(command);
+		//CommandManager.Instance.OnReceiveCommand(command);
+		CommandData data = new CommandData(command);
+		CommandManager.Instance.OnReceiveCommand(MiniJSON.Json.Serialize(data.Serialize()));
 	}
 #endregion
 
