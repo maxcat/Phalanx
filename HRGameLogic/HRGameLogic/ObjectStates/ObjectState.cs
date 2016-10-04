@@ -3,7 +3,7 @@
 namespace HRGameLogic
 {
 
-	public class ObjectState {
+	public class ObjectState : IData {
 
 #region Static Fields
 		public static readonly float 				DURATION = 0.2f;
@@ -62,6 +62,54 @@ namespace HRGameLogic
 			commandSnapshots = new List<CommandSnapshot>();
 			stateTag = tag;
 			isPrediction = false;
+		}
+
+		public ObjectState(Dictionary<string, object> dict)
+		{
+			Deserialize(dict);
+		}
+#endregion
+
+#region Implement Interface Functions
+		public Dictionary<string, object> Serialize()
+		{
+			var result = new Dictionary<string, object>();
+
+			var commandDictList = new List<Dictionary<string, object>>();
+			for(int i = 0; i < commandSnapshots.Count; i ++)
+			{
+				commandDictList.Add(commandSnapshots[i].Serialize());	
+			}
+			result.Add("commandSnapshots", commandDictList);
+
+			result.Add("startPos", startPos.ToDict());
+			result.Add("endPos", endPos.ToDict());
+			result.Add("stateTag", stateTag);
+
+			return result;
+		}
+
+		public void Deserialize(Dictionary<string, object> dict)
+		{
+			if(dict.ContainsKey("startPos"))
+				this.startPos = new HRVector2D(dict["startPos"] as Dictionary<string, object>);
+
+			if(dict.ContainsKey("endPos"))
+				this.endPos = new HRVector2D(dict["endPos"] as Dictionary<string, object>);
+
+			if(dict.ContainsKey("stateTag"))
+				this.stateTag = (uint)dict["stateTag"];
+
+			if(dict.ContainsKey("commandSnapshots"))
+			{
+				this.commandSnapshots = new List<CommandSnapshot>();
+
+				foreach(object obj in dict["commandSnapshots"] as List<object>)
+				{
+					CommandSnapshot shot = new CommandSnapshot(obj as Dictionary<string, object>);
+					this.commandSnapshots.Add(shot);
+				}
+			}
 		}
 #endregion
 

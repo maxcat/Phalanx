@@ -1,6 +1,8 @@
-﻿namespace HRGameLogic
+﻿using System.Collections.Generic;
+
+namespace HRGameLogic
 {
-	public class Command {
+	public class Command : IData {
 
 #region Fields
 		protected uint 		ownerID;
@@ -24,6 +26,35 @@
 		{
 			this.ownerID = ownerID;
 			this.sendTag = tag;
+		}
+
+		public Command(Dictionary<string, object> dict)
+		{
+			this.Deserialize(dict);
+		}
+
+		public Command()
+		{
+		}
+#endregion
+
+#region Implement Interface
+		public virtual Dictionary<string, object> Serialize()
+		{
+			Dictionary<string, object> result = new Dictionary<string, object>();
+			result.Add("ownerID", ownerID);
+			result.Add("sendTag", sendTag);
+			
+			return result;
+		}
+
+		public virtual void Deserialize(Dictionary<string, object> dict)
+		{
+			if(dict.ContainsKey("ownerID"))
+				ownerID = (uint)dict["ownerID"];	
+
+			if(dict.ContainsKey("sendTag"))
+				sendTag = (uint)dict["sendTag"];
 		}
 #endregion
 

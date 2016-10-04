@@ -3,7 +3,7 @@
 namespace HRGameLogic
 {
 
-	public class CircularObjectStates
+	public class CircularObjectStates 
 	{
 #region Fields
 		protected Dictionary<uint, ObjectState>		 	objectStates;
