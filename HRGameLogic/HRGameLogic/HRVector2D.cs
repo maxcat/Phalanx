@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HRGameLogic
 {
@@ -59,6 +60,22 @@ namespace HRGameLogic
 			magnitude = Convert.ToSingle((Double)Math.Sqrt(sqrMagnitude));
 			update();
 		}
+
+		public HRVector2D(Dictionary<string, object> dict)
+		{
+			this.x = 0f;
+			this.y = 0f;
+
+			if(dict.ContainsKey("x"))
+				this.x = System.Convert.ToSingle(dict["x"]);
+
+			if(dict.ContainsKey("y"))
+				this.y = System.Convert.ToSingle(dict["y"]);	
+
+			sqrMagnitude = x * x + y * y;
+			magnitude = Convert.ToSingle((Double)Math.Sqrt(sqrMagnitude));
+			update();
+		}
 #endregion
 
 #region Private Functions
@@ -101,6 +118,15 @@ namespace HRGameLogic
 		public override int GetHashCode()
 		{
 			return x.GetHashCode() ^ y.GetHashCode();			
+		}
+
+		public Dictionary<string, object> ToDict()
+		{
+			Dictionary<string, object> result = new Dictionary<string, object>();
+			result.Add("x", x);
+			result.Add("y", y);
+
+			return result;
 		}
 #endregion
 

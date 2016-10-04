@@ -1,4 +1,6 @@
-﻿namespace HRGameLogic
+﻿using System.Collections.Generic;
+
+namespace HRGameLogic
 {
 
 	public class MoveToPosCommand : Command {
@@ -12,6 +14,31 @@
 			: base (tag, ownerID)
 		{
 			this.destPos = destPos;
+		}
+
+		public MoveToPosCommand(Dictionary<string, object> dict)
+		{
+			this.Deserialize(dict);
+		}
+#endregion
+
+#region Implement Interface
+		public override Dictionary<string, object> Serialize()
+		{
+			Dictionary<string, object> result = base.Serialize();
+			result.Add("destPos", destPos.ToDict());
+
+			return result;
+		}
+
+		public override void Deserialize(Dictionary<string, object> dict)
+		{
+			base.Deserialize(dict);	
+
+			if(dict.ContainsKey("destPos"))
+			{
+				this.destPos = 	new HRVector2D(dict["destPos"] as Dictionary<string, object>);
+			}
 		}
 #endregion
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MiniJSON;
 
 namespace HRGameLogic
 {
@@ -39,6 +40,14 @@ namespace HRGameLogic
 		public void OnReceiveCommand(Command command)
 		{
 			receivedCommandList.Add(command);
+		}
+
+		public void OnReceiveCommand(string json)
+		{
+			var dict = Json.Deserialize(json) as Dictionary<string, object>;
+			CommandData data = new CommandData(dict);			
+
+			receivedCommandList.Add(data.Data);
 		}
 
 		public uint MoveReceivedCommandToPool()

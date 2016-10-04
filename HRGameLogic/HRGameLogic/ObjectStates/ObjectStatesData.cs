@@ -3,7 +3,7 @@
 namespace HRGameLogic
 {
 
-	public class ObjectStatesData {
+	public class ObjectStatesData : IData {
 
 #region Fields
 		protected Dictionary<uint, ObjectState> 			states;
@@ -21,6 +21,36 @@ namespace HRGameLogic
 		{
 			get { return states; }
 			set { states = value; }
+		}
+#endregion
+
+#region Implement Interface
+		public Dictionary<string, object> Serialize()
+		{
+			var result = new Dictionary<string, object>();
+			var statesDict = new Dictionary<uint, Dictionary<string, object>>();
+			
+			foreach(uint key in states.Keys)
+			{
+				statesDict.Add(key, states[key].Serialize());
+			}
+
+			result.Add("states", statesDict);
+
+			return result;
+		}
+
+		public void Deserialize(Dictionary<string, object> dict)
+		{
+			if(dict.ContainsKey("states"))
+			{
+				states = new Dictionary<uint, ObjectState>();
+				var statesDict = dict["states"] as Dictionary<uint, object>;
+				foreach(uint key in statesDict.Keys)
+				{
+					states.Add(key, new ObjectState(statesDict[key] as Dictionary<string, object>));
+				}	
+			}	
 		}
 #endregion
 
