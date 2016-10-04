@@ -57,9 +57,19 @@ public partial class SequentialFlow : Flow {
 				return null;
 			return currentFlow.Current;
 		}
-	}
+    }
 
-	public override void SetFlowSpeed(float speed)
+    public Flow CurrentFlow
+    {
+        get
+        {
+            if (currentFlow == null)
+                return null;
+            return currentFlow;
+        }
+    }
+
+    public override void SetFlowSpeed(float speed)
 	{
 		if(currentFlow != null)
 			currentFlow.SetFlowSpeed(speed);
