@@ -44,6 +44,7 @@ namespace HRGameLogic
 
 		public void OnReceiveCommand(string json)
 		{
+			HRLog.Info("[INFO]CommandManager->OnReceiveCommand: Server recieves commmand: " + json);
 			var dict = Json.Deserialize(json) as Dictionary<string, object>;
 			CommandData data = new CommandData(dict);			
 

@@ -98,7 +98,7 @@ namespace HRGameLogic
 				this.endPos = new HRVector2D(dict["endPos"] as Dictionary<string, object>);
 
 			if(dict.ContainsKey("stateTag"))
-				this.stateTag = (uint)dict["stateTag"];
+				this.stateTag = System.Convert.ToUInt32(dict["stateTag"]);
 
 			if(dict.ContainsKey("commandSnapshots"))
 			{

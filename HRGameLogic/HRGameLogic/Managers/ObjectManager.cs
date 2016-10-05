@@ -107,6 +107,13 @@ namespace HRGameLogic
 
 			return data;
 		}
+
+		public Dictionary<string, object> GenerateStateDataDic(uint serverStateTag)
+		{
+			ObjectStatesData data = GenerateStateData(serverStateTag);	
+
+			return data.Serialize();
+		}
 #endregion
 
 	}

@@ -14,6 +14,11 @@ namespace HRGameLogic
 		{
 			states = new Dictionary<uint, ObjectState>();
 		}
+
+		public ObjectStatesData(Dictionary<string, object> dataDict)
+		{
+			Deserialize(dataDict);
+		}
 #endregion
 
 #region Getter and Setter
@@ -45,10 +50,10 @@ namespace HRGameLogic
 			if(dict.ContainsKey("states"))
 			{
 				states = new Dictionary<uint, ObjectState>();
-				var statesDict = dict["states"] as Dictionary<uint, object>;
-				foreach(uint key in statesDict.Keys)
+				var statesDict = dict["states"] as Dictionary<string, object>;
+				foreach(string key in statesDict.Keys)
 				{
-					states.Add(key, new ObjectState(statesDict[key] as Dictionary<string, object>));
+					states.Add(System.Convert.ToUInt32(key), new ObjectState(statesDict[key] as Dictionary<string, object>));
 				}	
 			}	
 		}
