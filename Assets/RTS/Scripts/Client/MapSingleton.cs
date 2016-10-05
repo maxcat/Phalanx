@@ -84,7 +84,6 @@ public class MapSingleton : Singleton
         GridSquare.transform.localPosition = new Vector3(gridPosX, gridPosY, GridSquare.transform.position.z);
 
         GridSquare.enabled = true;
-        Debug.Log("Touched singl grid");
 
         //TODO: if touch ended with phase TouchPhase.Ended do action and disappear
         if (touch.phase == TouchPhase.Ended)
@@ -97,7 +96,6 @@ public class MapSingleton : Singleton
     public void TouchClear()
     {
         GridSquare.enabled = false;
-        Debug.Log("Clear Touch");
     }
 #endregion
 }

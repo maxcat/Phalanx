@@ -3,9 +3,12 @@ using System.Collections;
 
 public class UserInputHeroSelectedStateFlow : UserInputStateFlow
 {
+    PlayerAction action;
+    GameObject selectedObject;
 
     public UserInputHeroSelectedStateFlow(SequentialFlow seqFlow) : base(seqFlow)
     {
+        action = new HeroPlayerAction();
     }
 
     protected override IEnumerator main()
@@ -21,15 +24,38 @@ public class UserInputHeroSelectedStateFlow : UserInputStateFlow
 
     public override void OnTouchEvent(RaycastHit[] hits, Touch touch)
     {
-        for (int i = 0; i < hits.Length; i++)
-        {
-            RaycastHit hit = hits[i];
-            CapsuleCollider receiver = hit.transform.GetComponent<CapsuleCollider>();
 
-            if (receiver != null)
+        bool result = action.TouchSelection(hits, touch, out selectedObject);
+        if (!result)
+        {
+            if (selectedObject != null)
             {
-                nextInputFlow = new UserInputCardSelectedStateFlow(this.sequentialFlow);
+                MapSingleton mapReceiver = selectedObject.GetComponent<MapSingleton>();
+
+                if (mapReceiver != null)
+                {
+                    mapReceiver.TouchReceive(touch);
+
+                    //TODO : remove/change highlight between objects
+                }
+                else
+                {
+                    MapSingleton.Instance.TouchClear();
+                }
+            }
+            else
+            {
+                MapSingleton.Instance.TouchClear();
             }
         }
+
+        if (touch.phase == TouchPhase.Ended)
+        {
+            //TODO : remove highlight from object
+
+            nextInputFlow = new UserInputIdleStateFlow(this.sequentialFlow);
+            MapSingleton.Instance.TouchClear();
+        }
+
     }
 }

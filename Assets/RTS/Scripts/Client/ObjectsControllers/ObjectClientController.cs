@@ -25,7 +25,9 @@ public class ObjectClientController : MonoBehaviour {
 
 #region Fields
 	[SerializeField] protected uint 			objectID;
-	[SerializeField] protected uint 			currentTag;
+    [SerializeField] protected uint             playerID;
+    [SerializeField] protected uint             teamID;
+    [SerializeField] protected uint 			currentTag;
 	protected Dictionary<uint, ObjectState> 		states;
 
 	protected ObjectFlow					mainFlow;
@@ -37,12 +39,20 @@ public class ObjectClientController : MonoBehaviour {
 	public uint ObjectID
 	{
 		get { return objectID; }
-	}
-#endregion
+    }
+    public uint PlayerID
+    {
+        get { return playerID; }
+    }
+    public uint TeamID
+    {
+        get { return teamID; }
+    }
+    #endregion
 
-#region Override MonoBehaviour
-	// Use this for initialization
-	void Start () {
+    #region Override MonoBehaviour
+    // Use this for initialization
+    void Start () {
 	
 	}
 	

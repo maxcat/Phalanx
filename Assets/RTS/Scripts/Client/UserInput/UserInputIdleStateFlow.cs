@@ -27,7 +27,7 @@ public class UserInputIdleStateFlow : UserInputStateFlow
 
             if (receiver != null)
             {
-                nextInputFlow = new UserInputCardSelectedStateFlow(this.sequentialFlow);
+                nextInputFlow = new UserInputHeroSelectedStateFlow(this.sequentialFlow);
             }
         }
     }
