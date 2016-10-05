@@ -53,10 +53,11 @@ public class ServerSimulationService : MonoBehaviour {
 
 			// send the latest state to the client
 			ObjectStatesData stateData = ObjectManager.Instance.GenerateStateData(serverTag);
-
+			string dataStr = MiniJSON.Json.Serialize(stateData.Serialize());
+			
 			for(int i = 0; i < clientList.Count; i ++)
 			{
-				clientList[i].OnReceiveStates(stateData);
+				clientList[i].OnReceiveStates(dataStr);
 			}
 
 			while(timeElapse < ObjectState.DURATION)

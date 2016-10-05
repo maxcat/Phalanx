@@ -105,6 +105,12 @@ public class ClientService : MonoBehaviour {
 		this.StartCoroutine(receiveFlow(data));	
 	}
 
+	public void OnReceiveStates(string dataStr)
+	{
+		Debug.Log("[INFO]ClientService->OnReceiveStates: client " + clientID + " receives: " + dataStr);
+		OnReceiveStates(new ObjectStatesData(MiniJSON.Json.Deserialize(dataStr) as Dictionary<string, object>));	
+	}
+
 	public void OnReceiveInput(Vector3 mousePosition)
 	{
 		if(objectPool.ContainsKey(playerObjectID))
@@ -151,14 +157,12 @@ public class ClientService : MonoBehaviour {
 	protected IEnumerator receiveFlow(ObjectStatesData data)
 	{
 		yield return new WaitForSeconds(LatencyInSeconds);
-		Debug.LogWarning(Json.Serialize(data.Serialize()));
 		receiveStates(data);
 	}
 
 	protected IEnumerator postCommandFlow(Command command)
 	{
 		yield return new WaitForSeconds(LatencyInSeconds); 
-		Debug.LogError(MiniJSON.Json.Serialize(command.Serialize()));
 		serverSimuation.OnReceiveCommands(command);
 	}
 #endregion
